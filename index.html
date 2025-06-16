@@ -1068,6 +1068,7 @@
         </footer>
     </div>
 
+    <!-- Modal per la creazione di una nuova manovra -->
     <div id="createManeuverModal" class="modal-overlay hidden">
         <div class="modal-content">
             <h3 class="text-xl font-semibold mb-6 text-center text-[#6F6051]">Crea la Tua Manovra</h3>
@@ -1094,6 +1095,25 @@
         </div>
     </div>
 
+    <!-- Nuovo Modal per l'inserimento del nickname -->
+    <div id="nicknameModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="text-xl font-semibold mb-6 text-center text-[#6F6051]">Benvenuto Avventuriero!</h3>
+            <p class="text-center text-gray-600 mb-4">Per creare manovre e contribuire alla community, inserisci un nome o nickname.</p>
+            <form id="nicknameForm" class="space-y-4">
+                <div>
+                    <label for="nicknameInput" class="block text-sm font-medium text-gray-700">Il tuo Nickname (es. "Mastro del Dado")</label>
+                    <input type="text" id="nicknameInput" class="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A4907C] focus:border-[#A4907C] sm:text-sm" required>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="cancelNicknameBtn" class="modal-btn bg-gray-500 hover:bg-gray-600">Annulla</button>
+                    <button type="submit" id="saveNicknameBtn" class="modal-btn">Salva Nickname</button>
+                </div>
+            </form>
+            <div id="nicknameFormMessage" class="text-center mt-4 text-sm text-red-600"></div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -1110,71 +1130,55 @@
           measurementId: "G-GKN3W5EXHN"
 };
 
-        // Utilizziamo il Project ID di Firebase come appId per le regole di Firestore
         let appId;
-
         let app;
         let db;
         let auth;
-        let currentUserId = 'anonymous'; // ID utente attuale
-        let currentUserDisplayName = 'Anonimo'; // Nome visualizzato dell'utente attuale
+        let currentUserId = 'anonymous'; 
+        let currentUserDisplayName = 'Anonimo';
 
-        // Verifica che la configurazione Firebase sia completa prima di inizializzare
+        const createManeuverBtn = document.getElementById('createManeuverBtn');
+        const currentUserIdDisplay = document.getElementById('currentUserId');
+        const createManeuverModal = document.getElementById('createManeuverModal');
+        const nicknameModal = document.getElementById('nicknameModal');
+        const nicknameForm = document.getElementById('nicknameForm');
+        const nicknameInput = document.getElementById('nicknameInput');
+        const nicknameFormMessage = document.getElementById('nicknameFormMessage');
+        const cancelNicknameBtn = document.getElementById('cancelNicknameBtn');
+
+        // Inizializza Firebase solo se la configurazione è valida
         if (firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId) {
             app = initializeApp(firebaseConfig);
             db = getFirestore(app);
             auth = getAuth(app);
-            appId = firebaseConfig.projectId; // Imposta appId usando il Project ID
+            appId = firebaseConfig.projectId;
 
             // Listener per i cambiamenti dello stato di autenticazione
             onAuthStateChanged(auth, async (user) => {
-                const createManeuverBtn = document.getElementById('createManeuverBtn');
-                const currentUserIdDisplay = document.getElementById('currentUserId');
-
                 if (user) {
                     currentUserId = user.uid;
-                    // Se l'utente è anonimo e non ha ancora un display name
-                    if (user.isAnonymous && !user.displayName) {
-                        let displayNameInput = prompt("Benvenuto! Dato che sei un utente anonimo, per favore inserisci un nome o nickname per le tue manovre (puoi usare 'Anonimo' se preferisci):");
-                        if (displayNameInput && displayNameInput.trim() !== '') {
-                            currentUserDisplayName = displayNameInput.trim();
-                            // Opzionalmente, salva il display name nel profilo utente Firebase (persistente)
-                            await updateProfile(user, { displayName: currentUserDisplayName });
-                        } else {
-                            currentUserDisplayName = 'Anonimo'; // Fallback se l'utente annulla o lascia vuoto
-                        }
-                    } else {
-                        currentUserDisplayName = user.displayName || 'Anonimo'; // Usa display name esistente o Anonimo
-                    }
-                    
-                    // Mostra l'ID utente completo nell'interfaccia come richiesto per le app multi-utente
+                    currentUserDisplayName = user.displayName || 'Anonimo';
                     currentUserIdDisplay.textContent = `ID Utente: ${currentUserDisplayName} (${currentUserId})`;
                     console.log("Authenticated with Firebase UID:", currentUserId, "Display Name:", currentUserDisplayName);
                     
-                    // Abilita il pulsante di creazione manovra
-                    if (createManeuverBtn) createManeuverBtn.disabled = false;
-                    
-                    // Avvia l'ascolto delle manovre utente solo dopo l'autenticazione
-                    listenForUserManeuvers();
+                    if (createManeuverBtn) createManeuverBtn.disabled = false; // Abilita il pulsante
+                    listenForUserManeuvers(); // Inizia ad ascoltare le manovre
                 } else {
                     console.log("Nessun utente autenticato. Tentativo di accesso anonimo.");
                     try {
-                        // Per il deploy su GitHub Pages, ci autentichiamo anonimamente
                         await signInAnonymously(auth);
-                        // Il listener onAuthStateChanged si attiverà di nuovo con il nuovo utente anonimo
+                        // onAuthStateChanged si riattiverà con l'utente anonimo
                     } catch (error) {
                         console.error("Autenticazione anonima Firebase fallita:", error);
                         currentUserIdDisplay.textContent = `ID Utente: Errore di autenticazione`;
-                        // Mantieni il pulsante disabilitato se l'autenticazione fallisce
-                        if (createManeuverBtn) createManeuverBtn.disabled = true;
+                        if (createManeuverBtn) createManeuverBtn.disabled = true; // Disabilita se fallisce
                     }
                 }
             });
         } else {
             console.warn("Configurazione Firebase non trovata o incompleta. La funzionalità delle manovre utente non sarà disponibile.");
-            document.getElementById('currentUserId').textContent = `ID Utente: Non disponibile (Firebase non configurato)`;
-            const createManeuverBtn = document.getElementById('createManeuverBtn');
-            if (createManeuverBtn) createManeuverBtn.disabled = true; // Assicurati che sia disabilitato
+            currentUserIdDisplay.textContent = `ID Utente: Non disponibile (Firebase non configurato)`;
+            if (createManeuverBtn) createManeuverBtn.disabled = true;
             const userManeuversTableContainer = document.getElementById('userManeuversTableContainer');
             if (userManeuversTableContainer) userManeuversTableContainer.innerHTML = '<p class="text-center text-gray-500">Funzionalità manovre utente non disponibile senza configurazione Firebase.</p>';
             const userManeuversLoading = document.getElementById('userManeuversLoading');
@@ -1183,13 +1187,13 @@
 
         // Funzione per ascoltare gli aggiornamenti in tempo reale delle manovre utente
         function listenForUserManeuvers() {
-            if (!db || !appId) { // Assicurati che db e appId siano inizializzati
+            if (!db || !appId) {
                 console.error("Firestore o appId non inizializzati. Impossibile ascoltare le manovre utente.");
                 return;
             }
 
             const userManeuversCollectionRef = collection(db, `artifacts/${appId}/public/data/user_maneuvers`);
-            const q = userManeuversCollectionRef; // Nessun orderBy per evitare problemi di indice in Firestore
+            const q = userManeuversCollectionRef;
 
             onSnapshot(q, (snapshot) => {
                 const userManeuvers = [];
@@ -1228,11 +1232,10 @@
             `;
 
             if (maneuvers.length > 0) {
-                // Ordina le manovre per data di creazione (più recenti prima)
                 maneuvers.sort((a, b) => {
                     const dateA = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate() : new Date(0);
                     const dateB = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate() : new Date(0);
-                    return dateB - dateA; // Dal più recente al meno recente
+                    return dateB - dateA;
                 });
 
                 maneuvers.forEach(maneuver => {
@@ -1265,7 +1268,6 @@
             const gradeBonuses = { 'D': 2, 'C': 4, 'B': 6, 'A': 8, 'S': 10 };
 
             const maneuversData = [
-                // Geometrie Arcane
                 { name: "Proiettile Magico", type: "Arcane", costST: 1, description: "Un singolo colpo diretto verso un bersaglio, rapido e preciso." },
                 { name: "Doppio Proiettile", type: "Arcane", costST: 2, description: "Due colpi in rapida successione, anche verso bersagli diversi." },
                 { name: "Sfera", type: "Arcane", costST: 2, description: "Un’esplosione centrata su un punto, colpisce in un raggio." },
@@ -1287,7 +1289,6 @@
                 { name: "Impulso Radiale", type: "Arcane", costST: 2, description: "Un’esplosione istantanea che parte dal mago e si diffonde." },
                 { name: "Infusione", type: "Arcane", costST: 1, description: "Infonde l'equipaggiamento con l'elemento posseduto." },
                 { name: "Minion", type: "Arcane", costST: 1, description: "Crea una piccola creatura elementale, grandezza e abilità aggiungono costi superiori alla Concentrazione." },
-                // Manovre Fisiche (Esempio)
                 { name: "Colpo Semplice", type: "Base", costST: 1, description: "Un singolo attacco base con arma o mani nude." },
                 { name: "Doppio Colpo", type: "Combo", costST: 2, description: "Due attacchi rapidi consecutivi." },
                 { name: "Attacco Pesante", type: "Potente", costST: 3, description: "Un colpo più lento ma devastante." },
@@ -1641,24 +1642,73 @@
                 });
             });
 
-            const createManeuverBtn = document.getElementById('createManeuverBtn');
-            const createManeuverModal = document.getElementById('createManeuverModal');
             const cancelManeuverBtn = document.getElementById('cancelManeuverBtn');
             const saveManeuverBtn = document.getElementById('saveManeuverBtn');
             const maneuverForm = document.getElementById('maneuverForm');
             const maneuverFormLoading = document.getElementById('maneuverFormLoading');
             const maneuverFormMessage = document.getElementById('maneuverFormMessage');
-            const userManeuversTableContainer = document.getElementById('userManeuversTableContainer');
-            const userManeuversLoading = document.getElementById('userManeuversLoading');
-
+            
+            // Gestione click sul pulsante "Crea Nuova Manovra"
             if (createManeuverBtn) {
                 createManeuverBtn.addEventListener('click', () => {
-                    createManeuverModal.classList.remove('hidden');
-                    maneuverFormMessage.textContent = '';
-                    maneuverFormLoading.style.display = 'none';
+                    if (auth.currentUser && auth.currentUser.displayName) {
+                        // Utente autenticato e con nickname, apri subito il modal manovra
+                        createManeuverModal.classList.remove('hidden');
+                        maneuverFormMessage.textContent = '';
+                        maneuverFormLoading.style.display = 'none';
+                    } else if (auth.currentUser) {
+                        // Utente autenticato ma senza nickname, apri il modal nickname
+                        nicknameModal.classList.remove('hidden');
+                        nicknameInput.value = ''; // Pulisci il campo
+                        nicknameFormMessage.textContent = '';
+                    } else {
+                        // Non autenticato (dovrebbe essere raro dato il signInAnonymously all'inizio)
+                        maneuverFormMessage.textContent = "Errore: Autenticazione non completa. Riprova o ricarica la pagina.";
+                    }
                 });
             }
 
+            // Gestione chiusura modal nickname
+            if (cancelNicknameBtn) {
+                cancelNicknameBtn.addEventListener('click', () => {
+                    nicknameModal.classList.add('hidden');
+                    nicknameForm.reset();
+                });
+            }
+
+            // Gestione salvataggio nickname
+            if (nicknameForm) {
+                nicknameForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const newNickname = nicknameInput.value.trim();
+
+                    if (!newNickname) {
+                        nicknameFormMessage.textContent = "Il nickname non può essere vuoto.";
+                        return;
+                    }
+
+                    if (auth.currentUser) {
+                        try {
+                            await updateProfile(auth.currentUser, { displayName: newNickname });
+                            currentUserDisplayName = newNickname; // Aggiorna la variabile globale
+                            currentUserIdDisplay.textContent = `ID Utente: ${currentUserDisplayName} (${auth.currentUser.uid})`;
+                            nicknameModal.classList.add('hidden'); // Chiudi il modal nickname
+                            // Apri il modal di creazione manovra subito dopo aver impostato il nickname
+                            createManeuverModal.classList.remove('hidden');
+                            maneuverFormMessage.textContent = '';
+                            maneuverFormLoading.style.display = 'none';
+                        } catch (error) {
+                            nicknameFormMessage.textContent = `Errore salvataggio nickname: ${error.message}`;
+                            console.error("Error setting display name:", error);
+                        }
+                    } else {
+                        nicknameFormMessage.textContent = "Errore: Utente non autenticato per salvare il nickname.";
+                    }
+                });
+            }
+
+
+            // Gestione chiusura modal manovra
             if (cancelManeuverBtn) {
                 cancelManeuverBtn.addEventListener('click', () => {
                     createManeuverModal.classList.add('hidden');
@@ -1666,13 +1716,15 @@
                 });
             }
 
+            // Gestione salvataggio manovra
             if (maneuverForm) {
                 maneuverForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
 
-                    if (!db || !auth.currentUser) {
-                        maneuverFormMessage.textContent = "Errore: Utente non autenticato. Accedi o attendi l'autenticazione.";
-                        console.error("Firebase non configurato o utente non autenticato.");
+                    // Assicurati che l'utente sia autenticato e abbia un display name
+                    if (!db || !auth.currentUser || !auth.currentUser.displayName) {
+                        maneuverFormMessage.textContent = "Errore: Utente non autenticato o nickname non impostato. Imposta il tuo nickname prima di salvare.";
+                        console.error("Firebase not configured, user not authenticated, or display name not set.");
                         return;
                     }
 
@@ -1700,7 +1752,7 @@
                             costST: costST,
                             description: effect,
                             userId: auth.currentUser.uid,
-                            creatorDisplayName: currentUserDisplayName, // Usa il nome visualizzato acquisito
+                            creatorDisplayName: auth.currentUser.displayName, // Usa il display name dal profilo utente
                             createdAt: new Date()
                         };
 
@@ -1718,1705 +1770,6 @@
                         maneuverFormMessage.textContent = `Errore durante il salvataggio: ${error.message}`;
                         maneuverFormMessage.style.color = 'red';
                         console.error("Errore durante l'aggiunta della manovra utente:", error);
-                    } finally {
-                        maneuverFormLoading.style.display = 'none';
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forsaken Eons - Gioco di Ruolo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #FDFBF8;
-            color: #4A4A4A;
-        }
-        .tab-button {
-            transition: all 0.3s ease;
-        }
-        .tab-button.active {
-            background-color: #8D7B68;
-            color: #FDFBF8;
-            border-color: #8D7B68;
-        }
-        .tab-button:not(.active):hover {
-            background-color: #EAE3D9;
-        }
-        .calculator-card {
-            background-color: #FFFFFF;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            border: 1px solid #EAE3D9;
-        }
-        .result-display {
-            background-color: #F8F4EF;
-            border-top: 1px solid #EAE3D9;
-        }
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: #A4907C;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-        .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: #A4907C;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-        .generate-btn, .suggest-btn, .create-maneuver-btn, .modal-btn, .nav-button {
-            background-color: #A4907C;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
-        }
-        .generate-btn:hover, .suggest-btn:hover, .create-maneuver-btn:hover, .modal-btn:hover, .nav-button:hover {
-            background-color: #8D7B68;
-        }
-        .loading-indicator {
-            display: none;
-            text-align: center;
-            margin-top: 1rem;
-            color: #A4907C;
-        }
-        .maneuver-table-container {
-            margin-top: 1.5rem;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #EAE3D9;
-            border-radius: 0.5rem;
-        }
-        .maneuver-table-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .maneuver-table-container th, .maneuver-table-container td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #EAE3D9;
-        }
-        .maneuver-table-container th {
-            background-color: #F8F4EF;
-            font-weight: 600;
-            color: #6F6051;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        .maneuver-table-container tr:last-child td {
-            border-bottom: none;
-        }
-        .suggested-maneuver {
-            background-color: #F8F4EF;
-            border: 1px dashed #A4907C;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-        }
-        .suggested-maneuver h5 {
-            font-weight: bold;
-            color: #6F6051;
-            margin-bottom: 0.5rem;
-        }
-        .maneuver-description {
-            background-color: #F8F4EF;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border: 1px solid #EAE3D9;
-            color: #333;
-            font-style: italic;
-            line-height: 1.6;
-            margin-top: 1.5rem;
-            transition: opacity 0.5s ease-in-out;
-            opacity: 0;
-        }
-        .maneuver-description.show {
-            opacity: 1;
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background-color: #FFFFFF;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 500px;
-        }
-        .formula-box {
-            background-color: #F0F4F8;
-            border-left: 4px solid #60A5FA;
-        }
-        .example-box {
-            background-color: #F0FDF4;
-            border-left: 4px solid #34D399;
-        }
-        .toc-container {
-            background-color: #FFFFFF;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            border: 1px solid #EAE3D9;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .toc-container h2 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #8D7B68;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        .toc-container ul {
-            list-style: none;
-            padding: 0;
-        }
-        .toc-container li {
-            margin-bottom: 0.5rem;
-        }
-        .toc-container a {
-            color: #A4907C;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            display: block;
-            padding: 0.25rem 0;
-        }
-        .toc-container a:hover {
-            color: #6F6051;
-            text-decoration: underline;
-        }
-        .toc-container li ul {
-            padding-left: 1rem;
-            margin-top: 0.25rem;
-            font-size: 0.9rem;
-        }
-        .toc-container li ul li {
-            margin-bottom: 0.2rem;
-        }
-        .classes-table tbody tr:nth-child(odd) {
-            background-color: #F8F4EF;
-        }
-        .classes-table tbody tr:nth-child(even) {
-            background-color: #FFFFFF;
-        }
-    </style>
-</head>
-<body class="antialiased">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-
-        <header class="text-center mb-10 md:mb-16">
-            <h1 class="text-3xl md:text-4xl font-bold text-[#6F6051]">Forsaken Eons - Gioco di Ruolo</h1>
-        </header>
-
-        <div class="text-center mb-8">
-            <a href="regole_estese_page.html" class="nav-button inline-block px-6 py-3 text-lg">Vai alle Regole Estese ✨</a>
-        </div>
-
-        <main class="space-y-12">
-            <section id="table-of-contents" class="max-w-xl mx-auto toc-container">
-                <h2>Sommario</h2>
-                <ul>
-                    <li><a href="#regolamento-section">Regolamento</a>
-                        <ul>
-                            <li><a href="#caratteristiche-derivate">Caratteristiche e Derivate</a></li>
-                            <li><a href="#classi-specializzazioni">Classi & Specializzazioni</a></li>
-                            <li><a href="#generazione-attacchi-incantesimi">Generazione di Attacchi e Incantesimi</a></li>
-                            <li><a href="#calcolo-danno-fisico">Calcolo del Danno Fisico</a></li>
-                            <li><a href="#calcolo-danno-magico">Calcolo del Danno Magico</a></li>
-                            <li><a href="#character-progression">Progressione Personaggio</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#bonus-system">Sistema Grado Bonus</a></li>
-                    <li><a href="#calculators">Calcolatore di Danno</a>
-                        <ul>
-                            <li><a href="#physical-damage">Danno Fisico</a></li>
-                            <li><a href="#magic-damage">Danno Magico</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#maneuvers">Lista Manovre</a></li>
-                    <li><a href="#esempio-di-gioco">Esempio di Gioco</a></li>
-                    <li><a href="regole_estese_page.html">Regole Estese</a></li>
-                    <li><a href="#user-maneuvers">Manovre Utente</a></li>
-                    <li><a href="#strategic-interactions">Interazioni Strategiche</a></li>
-                </ul>
-            </section>
-
-            <section id="regolamento-section" class="max-w-4xl mx-auto calculator-card p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">Regolamento</h2>
-                <p class="mt-2 text-gray-600">Questa sezione è pensata per aiutarti a capire come funziona il calcolo del danno e le meccaniche di base del sistema di combattimento.</p>
-                
-                <h5 id="caratteristiche-derivate" class="font-bold text-md text-[#6F6051] mt-6">Caratteristiche e Derivate</h5>
-                <p class="mt-2 text-gray-700">Le caratteristiche di base definiscono le capacità innate del tuo personaggio, mentre le derivate influenzano aspetti specifici del combattimento e del movimento.</p>
-                <h6 class="font-bold text-sm text-[#6F6051] mt-4">Generazione delle Caratteristiche:</h6>
-                <p class="mt-2 text-gray-700">Puoi generare le caratteristiche del tuo personaggio in due modi:</p>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-2">
-                    <li><strong>Lancio dei Dadi:</strong> Tira 4 dadi a sei facce (4d6) per ogni caratteristica e scarta il risultato più basso. La somma dei tre dadi rimanenti sarà il valore della tua caratteristica.</li>
-                    <li><strong>Punti da Distribuire:</strong> Ti vengono assegnati 20 punti da distribuire liberamente tra le tue caratteristiche. Ogni punto speso aumenta il valore della caratteristica di 1.</li>
-                </ul>
-                <h6 class="font-bold text-sm text-[#6F6051] mt-4">Caratteristiche Principali:</h6>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-2">
-                    <li><strong>Vigore:</strong> Rappresenta la resistenza e la stamina del personaggio.</li>
-                    <li><strong>Potenza:</strong> Rappresenta la forza fisica e l'atleticità.</li>
-                    <li><strong>Agilità:</strong> Determina la velocità, la destrezza e la coordinazione del personaggio.</li>
-                    <li><strong>Sensi:</strong> Indica le conoscenze, la manipolazione arcana e la saggezza del personaggio.</li>
-                    <li><strong>Spirito:</strong> Misura la connessione spirituale, il potere divino e la saggezza interiore.</li>
-                    <li><strong>Influenza:</strong> Riflette l'ascendente sociale, il carisma e la capacità di persuasione.</li>
-                </ul>
-                <h6 class="font-bold text-sm text-[#6F6051] mt-4">Derivate:</h6>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-2">
-                    <li><strong>Stamina:</strong> Serve per spendere punti nelle Manovre Fisiche (calcolata come Vigore + Bonus di Specie).</li>
-                    <li><strong>Concentrazione:</strong> Necessaria per lanciare Incantesimi personalizzati (calcolata come Spirito + Bonus di Classe).</li>
-                    <li><strong>Velocità:</strong> I metri che il personaggio può muoversi in un turno (calcolata come Agilità/2).</li>
-                    <li><strong>Punti Ferita:</strong> Rappresentano la salute del personaggio e si aggiungono al dado lanciato spendendo punti EXP.</li>
-                </ul>
-                <p class="mt-4 text-gray-700"><strong>Competenza:</strong> Indica quanto il personaggio sia addestrato nell'infliggere danno con una determinata arma, un incantesimo o anche una prova di abilità. Partendo da una base di 1d4 a salire (D4, D6, D8, D10, D12).</p>
-                <p class="mt-2 text-gray-700"><strong>Maestria:</strong> Valore che indica la bravura con cui colpisce o infligge danno, ma quanto effettivamente sia portato a effettuare determinate azioni o prove di abilità. Questo si trasforma nel quantitativo di danni da lanciare (generalmente indicato Maestria 1, Maestria 2, e così via).</p>
-
-                <h3 class="font-bold text-xl text-[#6F6051] mt-8 mb-4">🎯 Tabella Semplificata delle CD (Classe Difficoltà)</h3>
-                <div class="overflow-x-auto mb-8">
-                    <table class="min-w-full divide-y divide-gray-200 calculator-card">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difficoltà</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CD</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrizione Pratica</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chi ci riesce?</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Banale</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Aprire una porta sbloccata, scalare una collinetta</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Chiunque con un po’ di Stat</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Facile</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Saltare da un tetto basso, mentire a un contadino</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Stat media + 1–2 dadi</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Normale</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">16</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Schivare un colpo, scalare con fatica</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Stat media + 2–3 dadi</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Difficile</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">20</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Scassinare una serratura, sfondare una porta rinforzata</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Stat alta + 3–4 dadi</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Molto Difficile</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">25</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Combattere al buio, parlare a un nobile con successo</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Stat alta + 4–5 dadi</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Estrema</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">30</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Sollevare un cancello d’acciaio, convincere un re</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Stat 18–20 + 5 dadi</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Eroica / Leggendaria</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">35+</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Acrobazie in volo, miracoli, gesta sovrumane</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Solo eroi esperti o con aiuti speciali</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3 class="font-bold text-xl text-[#6F6051] mt-8 mb-4">📌 Consiglio Rapido per i Master</h3>
-                <div class="overflow-x-auto mb-8">
-                    <table class="min-w-full divide-y divide-gray-200 calculator-card">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CD Range</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quando Usarle</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">12–16</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Usale spesso, per sfide interessanti ma superabili.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">20–25</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Per situazioni tese, quando il successo conta davvero.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">30+</td>
-                                <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">Usale con parsimonia, come eventi drammatici o epici.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h5 id="classi-specializzazioni" class="font-bold text-md text-[#6F6051] mt-8">Classi & Specializzazioni</h5>
-                <p class="mt-2 text-gray-700">Ogni personaggio può scegliere una classe per definire il proprio ruolo e stile di gioco, acquisendo abilità uniche e bonus specifici.</p>
-                
-                <div class="overflow-x-auto mt-6">
-                    <table class="min-w-full divide-y divide-gray-200 calculator-card classes-table">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classe</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ruolo / Stat Bonus</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Meccanica di Classe</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Manovre Uniche</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Equipaggiamento Base</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Striker</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <strong>Ruolo:</strong> Offensivo, rapido, imprevedibile.<br>
-                                    <strong>Stat Bonus:</strong> +1 Agilità o +1 Potenza, +1 Sensi
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <strong>Assalto Furtivo:</strong> Se non visto dal nemico, la prima manovra standard (es. Colpo Semplice, Doppio Colpo) costa 0 ST.
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li><strong>Tiro Deviante</strong> – Colpo a distanza che devia per colpire un secondo bersaglio. Il secondo colpo subisce -2 dadi. (Costo 2 ST)</li>
-                                        <li><strong>Trappola Istantanea</strong> – Usa oggetti o l’ambiente per piazzare una trappola che immobilizza o rallenta il nemico (test su Sensi vs Sensi avversari). (Costo: 3 ST)</li>
-                                        <li><strong>Attacco in Caduta</strong> – Salto dall’alto per infliggere danno bonus, se colpisce da sopra. (Costo 3 ST)</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Spada lunga o Filolama</li>
-                                        <li>Arco corto o daghe bilanciate</li>
-                                        <li>Cappuccio da esploratore, set da imboscata</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Protector</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <strong>Ruolo:</strong> Difensivo, supportivo, fedele, interazioni sociali.<br>
-                                    <strong>Stat Bonus:</strong> +1 Vigore oppure +1 Influenza, +3 Concentrazione
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <strong>Guardia Invalicabile:</strong> Una volta per turno, può intercettare una manovra avversaria destinata a sé o a un alleato.
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li><strong>Mano Ristoratrice</strong> – Cura una quantità di PV pari a 1 dado + modificatore Spirito. (Costo 2 CO, scala con Spirito e Grado)</li>
-                                        <li><strong>Appello alla Fede</strong> – Interrompe per 1 round un’abilità nemica. (Costo 3 CO)</li>
-                                        <li><strong>Muraglia Umana</strong> – Riduce del 50% il danno subito da un alleato adiacente. (Costo 3 ST)</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Scudo pesante</li>
-                                        <li>Mazzafrusto o martello</li>
-                                        <li>Corazza leggera o media, simbolo sacro</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Arcanist</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <strong>Ruolo:</strong> Magie elementali, effetti arcani, conoscenze mistiche<br>
-                                    <strong>Stat Bonus:</strong> +2 Spirito oppure +1 Spirito, +1 Sensi, +3 Concentrazione
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <strong>Risonanza Arcana:</strong> Può modificare l’elemento di un incantesimo conosciuto pagando +3 CO.
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li><strong>Barrage Elementale</strong> – 2 CO per 1 dardo, +2 CO per ogni dardo successivo (max 5). Danni elementali.</li>
-                                        <li><strong>Sigillo Temporaneo</strong> – Blocca un oggetto/zona per 1 round. (Costo 3 CO)</li>
-                                        <li><strong>Nova Instabile</strong> – Esplosione ad area di un elemento posseduto (o casuale), colpisce nemici in raggio. (Costo 4 CO)</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Bastone incantato o grimorio</li>
-                                        <li>3 cristalli di mana</li>
-                                        <li>Tunica o mantello runico</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h5 id="generazione-attacchi-incantesimi" class="font-bold text-md text-[#6F6051] mt-8">Generazione di Attacchi e Incantesimi</h5>
-                <p class="mt-2 text-gray-700">
-                    Il giocatore, se sceglie di compiere un Attacco fisico, valuta il quantitativo di Punti Stamina e decide quanti spenderne dichiarando il numero di Manovre che vorrebbe eseguire.
-                </p>
-                <p class="mt-4 text-gray-700">
-                    Per quanto riguarda gli Incantesimi, il Giocatore combina sul momento <a href="#tab-arcane-geometries" class="text-blue-600 hover:underline">Geometria Arcana</a> ed un <a href="#tab-elements" class="text-blue-600 hover:underline">Elemento</a> che conosce oppure ha appreso per creare incantesimi personalizzati. Successivamente si passa al calcolo del danno.
-                </p>
-
-                <h5 id="calcolo-danno-fisico" class="font-bold text-md text-[#6F6051] mt-8">Calcolo del Danno Fisico</h5>
-                <p class="mt-2 text-gray-700">Il danno fisico dipende dalla tua abilità con l'arma, dalla tua forza e dal grado della manovra. Ecco la formula:</p>
-                <div class="bg-gray-100 p-4 rounded-md mt-3 text-sm font-mono text-gray-800 formula-box">
-                    <p><strong>Danno Fisico = Maestria × Competenza + (Statistica ÷ 5 + Bonus Grado)</strong></p>
-                </div>
-                <ul class="list-disc list-inside mt-4 text-gray-700 space-y-2">
-                    <li><strong>Maestria:</strong> Quanti dadi tiri per il danno (es. 2 = 2 dadi).</li>
-                    <li><strong>Competenza:</strong> Il tipo di dado che usi (D4, D6, D8, D10, D12, D20). Un D8 significa che ogni dado può dare un risultato da 1 a 8.</li>
-                    <li><strong>Statistica:</strong> Di solito Potenza (POT) o Agilità (AGI). Il suo valore viene diviso per 5 per un bonus fisso (es. POT 14 = 14 ÷ 5 = 2.8, arrotondato a 2).</li>
-                    <li><strong>Bonus Grado:</strong> Un bonus extra che dipende dalla "difficoltà" o potenza della manovra. Puoi consultare la <a href="#bonus-system" class="text-blue-600 hover:underline">tabella "Sistema Grado Bonus"</a> qui sotto per i valori esatti.</li>
-                </ul>
-                <p class="mt-4 text-gray-700"><strong>Esempio Pratico:</strong> Immagina di avere Maestria 2, Competenza D8, Statistica FOR 14 e usi una manovra di Grado B (che ti dà +6 di Bonus Grado):</p>
-                <div class="bg-gray-100 p-4 rounded-md mt-3 text-sm font-mono text-gray-800 example-box">
-                    <p>2D8 + (14 ÷ 5 + 6) = 2D8 + (2 + 6) = <strong>2D8 + 8</strong></p>
-                    <p class="mt-2">Questo significa che lancerai due dadi a 8 facce e aggiungerai 8 al risultato totale per il tuo danno fisico!</p>
-                </div>
-
-                <h5 id="calcolo-danno-magico" class="font-bold text-md text-[#6F6051] mt-8">Calcolo del Danno Magico</h5>
-                <p class="mt-2 text-gray-600">Il danno magico funziona in modo simile, ma si basa sulla tua Maestria Magica e sulla "Competenza" dell'incantesimo. Ecco la formula:</p>
-                <div class="bg-gray-100 p-4 rounded-md mt-3 text-sm font-mono text-gray-800 formula-box">
-                    <p><strong>Danno Magico = MaestriaMagica × Competenza + (Statistica ÷ 5 + Bonus Grado)</strong></p>
-                </div>
-                <ul class="list-disc list-inside mt-4 text-gray-700 space-y-2">
-                    <li><strong>Maestria Magica:</strong> Il numero di dadi che tiri per il danno magico.</li>
-                    <li><strong>Competenza:</strong> Il tipo di dado usato per il danno magico (solitamente D4, D6, D8, D10, D12).</li>
-                    <li><strong>Statistica:</strong> Di solito Sensi o Spirito. Anche qui, il valore viene diviso per 5.</li>
-                    <li><strong>Bonus Grado:</strong> Un bonus fisso basato sul grado dell'incantesimo. Puoi consultare la <a href="#bonus-system" class="text-blue-600 hover:underline">tabella "Sistema Grado Bonus"</a> qui sotto per i valori esatti.</li>
-                </ul>
-                <p class="mt-4 text-gray-700"><strong>Esempio Pratico:</strong> Se hai Maestria Magica 3, Competenza D6, Statistica INT 17 e usi un incantesimo di Grado A (che ti dà +8 di Bonus Grado):</p>
-                <div class="bg-gray-100 p-4 rounded-md mt-3 text-sm font-mono text-gray-800 example-box">
-                    <p>3D6 + (17 ÷ 5 + 8) = 3D6 + (3 + 8) = <strong>3D6 + 11</strong></p>
-                    <p class="mt-2">Questo significa che lancerai tre dadi a 6 facce e aggiungerai 11 al risultato totale per il tuo danno magico!</p>
-                </div>
-            </section>
-
-            <hr class="my-12 border-t-2 border-gray-300">
-
-            <section id="character-progression" class="max-w-4xl mx-auto calculator-card p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">✨ Progressione del Personaggio</h2>
-                <p class="mt-2 text-gray-600 mb-6">In questa sezione, scoprirai come il tuo personaggio cresce e si evolve attraverso i punti esperienza (EXP) guadagnati.</p>
-
-                <h3 class="font-bold text-xl text-[#6F6051] mt-8 mb-4">Tabella Progressione del Personaggio</h3>
-                <div class="overflow-x-auto mb-8">
-                    <table class="min-w-full divide-y divide-gray-200 calculator-card">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CategoriaLivello / Tipo</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Costo in EXP</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Effetto</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Statistiche Base (1→20)</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>1→10: 75 EXP / punto</li>
-                                        <li>11→15: 150 EXP / punto</li>
-                                        <li>16→20: 300 EXP / punto</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Miglioramento iniziale</li>
-                                        <li>Maggiore impatto</li>
-                                        <li>Elite, massimizza il potenziale</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Maestria (1→5)</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>1 → 2: 200 EXP</li>
-                                        <li>2 → 3: 300 EXP</li>
-                                        <li>3 → 4: 500 EXP</li>
-                                        <li>4 → 5: 750 EXP</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">Aumenta numero di dadi</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Competenza (1→5)</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>1 → 2: 150 EXP</li>
-                                        <li>2 → 3: 300 EXP</li>
-                                        <li>3 → 4: 450 EXP</li>
-                                        <li>4 → 5: 700 EXP</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">Aumenta dimensione del dado</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Dado Vita (1d4→1d12)</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>1d4 → 1d6: 150 EXP</li>
-                                        <li>1d6 → 1d8: 300 EXP</li>
-                                        <li>1d8 → 1d10: 500 EXP</li>
-                                        <li>1d10 → 1d12: 750 EXP</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">Incrementa PF totali</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Manovre (1→4 ST / CO)</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Leggera (1-2 ST/CO): 200 EXP</li>
-                                        <li>Media (3 ST/CO): 350 EXP</li>
-                                        <li>Avanzata (4 ST/CO): 500 EXP</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Nuova manovra fisica o magica</li>
-                                        <li>Potente o situazionale</li>
-                                        <li>Ad alto impatto, spesso unica</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Talenti (da Equip)</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Primo Talento: 300 EXP</li>
-                                        <li>Talento avanzato: 500 EXP</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Passiva semplice</li>
-                                        <li>Sinergia con classe o specializzazione</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Arti Combattimento / Rituali</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Comune o minore: 400 EXP</li>
-                                        <li>Raro o complesso: 700 EXP</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Tecniche o magie speciali</li>
-                                        <li>Estremamente potente, legato a oggetti</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Sblocco Specializzazione</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Prima specializzazione: 1000 EXP + Quest</li>
-                                        <li>Seconda specializzazione: 1500 EXP + Quest</li>
-                                    </ul>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Requisito: oggetto, storia o missione</li>
-                                        <li>Solo se previsto dalla campagna</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3 class="font-bold text-xl text-[#6F6051] mt-8 mb-4">📅 EXP per Sessione (Suggerito per il Master)</h3>
-                <div class="overflow-x-auto mb-8">
-                    <table class="min-w-full divide-y divide-gray-200 calculator-card">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo di Sessione</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">EXP Consigliato / Giocatore</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Esplorazione, interpretazione</td><td class="px-6 py-4 whitespace-nowrap">150 – 250 EXP</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Combattimenti, eventi importanti</td><td class="px-6 py-4 whitespace-nowrap">250 – 400 EXP</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Boss, svolte narrative, climax</td><td class="px-6 py-4 whitespace-nowrap">500 – 700 EXP</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Premi extra (ruolo, imprese straordinarie)</td><td class="px-6 py-4 whitespace-nowrap">+50 – 100 EXP</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3 class="font-bold text-xl text-[#6F6051] mt-8 mb-4">🔢 Esempio di Spesa</h3>
-                <p class="mt-2 text-gray-600 mb-4">Qui trovi un esempio pratico di come i punti esperienza possono essere distribuiti per migliorare il tuo personaggio.</p>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 calculator-card">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spesa</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Costo</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Totale EXP guadagnato in 5 sessioni: ~1200 EXP</td><td class="px-6 py-4 whitespace-nowrap"></td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Statistica da 10 → 11</td><td class="px-6 py-4 whitespace-nowrap">150 EXP</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Nuova manovra da 3 ST</td><td class="px-6 py-4 whitespace-nowrap">350 EXP</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Competenza da 2 → 3</td><td class="px-6 py-4 whitespace-nowrap">300 EXP</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">Primo talento passivo</td><td class="px-6 py-4 whitespace-nowrap">300 EXP</td></tr>
-                            <tr class="font-bold bg-gray-100"><td class="px-6 py-4 whitespace-nowrap">Totale</td><td class="px-6 py-4 whitespace-nowrap">1100 EXP</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <hr class="my-12 border-t-2 border-gray-300">
-
-            <section id="bonus-system" class="max-w-2xl mx-auto">
-                <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">Sistema Grado Bonus</h2>
-                 <p class="text-center text-gray-600 mb-6">Questa tabella mostra il bonus da aggiungere al calcolo del danno in base al grado della manovra o dell'incantesimo.</p>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 calculator-card">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grado</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bonus al Danno</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rarità</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ricompensa Suggestion (per il Master)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr><td class="px-6 py-4 whitespace-nowrap">D</td><td class="px-6 py-4 whitespace-nowrap">+2</td><td class="px-6 py-4 whitespace-nowrap">Comune</td><td class="px-6 py-4 whitespace-nowrap">Nessuno</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">C</td><td class="px-6 py-4 whitespace-nowrap">+4</td><td class="px-6 py-4 whitespace-nowrap">Non Comune</td><td class="px-6 py-4 whitespace-normal">1 Talento Passivo (minore, non combattivo o difensivo semplice)</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">B</td><td class="px-6 py-4 whitespace-nowrap">+6</td><td class="px-6 py-4 whitespace-nowrap">Raro</td><td class="px-6 py-4 whitespace-normal">1 Talento minore oppure 1 Arte oppure 1 Rituale</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">A</td><td class="px-6 py-4 whitespace-nowrap">+8</td><td class="px-6 py-4 whitespace-nowrap">Epico</td><td class="px-6 py-4 whitespace-normal">1 Talento Minore o Maggiore + 1 Arte oppure 1 Rituale</td></tr>
-                            <tr><td class="px-6 py-4 whitespace-nowrap">S</td><td class="px-6 py-4 whitespace-nowrap">+10</td><td class="px-6 py-4 whitespace-nowrap">Leggendario</td><td class="px-6 py-4 whitespace-normal">1 Talento Maggiore + 1 Arte oppure 1 Rituale + Anti - Dogma (Sovrascrive determinate regole)</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <hr class="my-12 border-t-2 border-gray-300">
-
-            <section id="calculators" class="max-w-6xl mx-auto">
-                <h2 class="text-2xl font-bold text-center mb-8 text-[#8D7B68]">Calcolatore di Danno</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    
-                    <div id="physical-damage" class="calculator-card p-6 flex flex-col">
-                        <h3 class="text-xl font-semibold mb-6 text-center text-[#6F6051]">⚔️ Danno Fisico</h3>
-                        <div class="space-y-5 flex-grow">
-                            <div>
-                                <label for="physMastery" class="block text-sm font-medium text-gray-700">Maestria (Numero Dadi)</label>
-                                <div class="flex items-center space-x-4">
-                                    <input type="range" id="physMastery" min="1" max="10" value="2" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                                    <span id="physMasteryValue" class="font-bold text-[#A4907C] w-8 text-center">2</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="physCompetence" class="block text-sm font-medium text-gray-700">Competenza (Tipo Dado)</label>
-                                <select id="physCompetence" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#A4907C] focus:border-[#A4907C] sm:text-sm rounded-md">
-                                    <option value="4">D4</option>
-                                    <option value="6">D6</option>
-                                    <option value="8" selected>D8</option>
-                                    <option value="10">D10</option>
-                                    <option value="12">D12</option>
-                                    <option value="20">D20</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="physStat" class="block text-sm font-medium text-gray-700">Statistica (es. FOR, DES)</label>
-                                 <div class="flex items-center space-x-4">
-                                    <input type="range" id="physStat" min="1" max="20" value="14" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                                    <span id="physStatValue" class="font-bold text-[#A4907C] w-8 text-center">14</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Grado</label>
-                                <div id="physGrade" class="mt-2 grid grid-cols-5 gap-2">
-                                    <button data-value="2" class="grade-btn border border-gray-300 rounded-md py-2 text-sm">D</button>
-                                    <button data-value="4" class="grade-btn border border-gray-300 rounded-md py-2 text-sm">C</button>
-                                    <button data-value="6" class="grade-btn border border-gray-300 rounded-md py-2 text-sm active">B</button>
-                                    <button data-value="8" class="grade-btn border border-gray-300 rounded-md py-2 text-sm">A</button>
-                                    <button data-value="10" class="grade-btn border border-gray-300 rounded-md py-2 text-sm">S</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="physResult" class="result-display mt-6 p-4 rounded-b-lg -m-6 text-center">
-                            <p class="text-2xl font-bold text-[#6F6051]">2D8 + 8</p>
-                            <p class="text-xs text-gray-500 mt-1">Formula: Maestria × Competenza + (Statistica ÷ 5 + Bonus Grado)</p>
-                        </div>
-                    </div>
-
-                    <div id="magic-damage" class="calculator-card p-6 flex flex-col">
-                        <h3 class="text-xl font-semibold mb-6 text-center text-[#6F6051]">🔮 Danno Magico</h3>
-                        <div class="space-y-5 flex-grow">
-                             <div>
-                                <label for="magicMastery" class="block text-sm font-medium text-gray-700">Maestria Magica (Numero Dadi)</label>
-                                 <div class="flex items-center space-x-4">
-                                    <input type="range" id="magicMastery" min="1" max="10" value="3" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                                    <span id="magicMasteryValue" class="font-bold text-[#A4907C] w-8 text-center">3</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="magicGeometry" class="block text-sm font-medium text-gray-700">Competenza (Tipo Dado)</label>
-                                <select id="magicGeometry" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#A4907C] focus:border-[#A4907C] sm:text-sm rounded-md">
-                                    <option value="4">D4</option>
-                                    <option value="6" selected>D6</option>
-                                    <option value="8">D8</option>
-                                    <option value="10">D10</option>
-                                    <option value="12">D12</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="magicStat" class="block text-sm font-medium text-gray-700">Statistica (es. Sensi, Spirito)</label>
-                                 <div class="flex items-center space-x-4">
-                                    <input type="range" id="magicStat" min="1" max="20" value="17" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                                    <span id="magicStatValue" class="font-bold text-[#A4907C] w-8 text-center">17</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Grado</label>
-                                <div id="magicGrade" class="mt-2 grid grid-cols-5 gap-2">
-                                    <button data-value="2" class="grade-btn border border-gray-300 rounded-md py-2 text-sm">D</button>
-                                    <button data-value="4" class="grade-btn border border-gray-300 rounded-md py-2 text-sm">C</button>
-                                    <button data-value="6" class="grade-btn border border-gray-300 rounded-md py-2 text-sm">B</button>
-                                    <button data-value="8" class="grade-btn border border-gray-300 rounded-md py-2 text-sm active">A</button>
-                                    <button data-value="10" class="grade-btn border border-gray-300 rounded-md py-2 text-sm">S</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="magicResult" class="result-display mt-6 p-4 rounded-b-lg -m-6 text-center">
-                            <p class="text-2xl font-bold text-[#6F6051]">3D6 + 11</p>
-                             <p class="text-xs text-gray-500 mt-1">Formula: MaestriaMagica × Competenza + (Statistica ÷ 5 + Bonus Grado)</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <hr class="my-12 border-t-2 border-gray-300">
-
-            <section id="maneuvers" class="max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">Lista Manovre</h2>
-                 <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">Esplora le diverse tipologie di manovre disponibili, sia fisiche che magiche, e gli elementi integrabili.</p>
-
-                <div class="max-w-4xl mx-auto">
-                    <div class="mb-4 flex flex-wrap justify-center gap-2">
-                        <button class="tab-button active px-4 py-2 text-sm font-semibold border rounded-full" data-target="tab-arcane-geometries" data-category="Geometrie Arcane">Geometrie Arcane</button>
-                        <button class="tab-button px-4 py-2 text-sm font-semibold border rounded-full" data-target="tab-elements" data-category="Elementi">Elementi</button>
-                        <button class="tab-button px-4 py-2 text-sm font-semibold border rounded-full" data-target="tab-offensive" data-category="Attacchi Offensivi">Attacchi Offensivi</button>
-                        <button class="tab-button px-4 py-2 text-sm font-semibold border rounded-full" data-target="tab-area-attacks" data-category="Attacchi Ad Area">Attacchi Ad Area</button>
-                        <button class="tab-button px-4 py-2 text-sm font-semibold border rounded-full" data-target="tab-agile-tactical" data-category="Manovre Agili & Tattiche">Manovre Agili & Tattiche</button>
-                        <button class="tab-button px-4 py-2 text-sm font-semibold border rounded-full" data-target="tab-support-control" data-category="Manovre di Supporto & Controllo">Manovre di Supporto & Controllo</button>
-                        <button class="tab-button px-4 py-2 text-sm font-semibold border rounded-full" data-target="tab-reactions-defense" data-category="Reazioni & Difesa">Reazioni & Difesa</button>
-                    </div>
-
-                    <div class="calculator-card p-6 md:p-8 min-h-[450px] flex flex-col">
-                        <div id="tab-arcane-geometries" class="tab-content flex-grow">
-                            <h3 class="text-xl font-semibold mb-4 text-center text-[#6F6051]">🔮 Geometrie Arcane</h3>
-                            <p class="text-center text-gray-600 mb-6">Le Geometrie Arcane definiscono la potenza e la forma dei tuoi incantesimi, influenzando come si manifestano e colpiscono i bersagli.</p>
-                            <div class="maneuver-table-container">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome Manovra</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Costo Concentrazione</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrizione</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200" id="arcaneManeuversTableBody">
-                                        </tbody>
-                                </table>
-                            </div>
-                            <div class="loading-indicator">Caricamento...</div>
-                        </div>
-
-                        <div id="tab-elements" class="tab-content hidden flex-grow">
-                            <h3 class="text-xl font-semibold mb-4 text-center text-[#6F6051]">🧪 Elementi</h3>
-                            <p class="text-center text-gray-600 mb-6">Gli Elementi possono essere accoppiati a Geometrie Arcane per creare incantesimi personalizzati o agli attacchi fisici per creare delle Arti di Combattimento.</p>
-                            <div class="maneuver-table-container">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elemento</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Effetto Integrabile</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Fuoco</td><td class="px-6 py-4 whitespace-nowrap">Offensivo</td><td class="px-6 py-4">Brucia il bersaglio, infliggendo danni prolungati.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Ghiaccio</td><td class="px-6 py-4 whitespace-nowrap">Controllo</td><td class="px-6 py-4">Rallenta o immobilizza temporaneamente.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Fulmine</td><td class="px-6 py-4 whitespace-nowrap">Offensivo/Chain</td><td class="px-6 py-4">Colpisce più bersagli vicini e può stordire.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Vento</td><td class="px-6 py-4 whitespace-nowrap">Controllo</td><td class="px-6 py-4">Spinge o sbilancia, utile per controllo di posizione.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Terra</td><td class="px-6 py-4 whitespace-nowrap">Difensivo</td><td class="px-6 py-4">Aggiunge protezione temporanea (es. corazza).</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Acido</td><td class="px-6 py-4 whitespace-nowrap">Debuff</td><td class="px-6 py-4">Corrode armatura/scudo, –1 CA o RD per 1 turno.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Luce</td><td class="px-6 py-4 whitespace-nowrap">Supporto</td><td class="px-6 py-4">Cura lieve, disperde ombre, può accecare.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Ombra</td><td class="px-6 py-4 whitespace-nowrap">Utility</td><td class="px-6 py-4">Oscura la visuale, utile per furtività o fuga.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Vita</td><td class="px-6 py-4 whitespace-nowrap">Cura</td><td class="px-6 py-4">Cura istantanea o rianimazione leggera.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Natura</td><td class="px-6 py-4 whitespace-nowrap">Cura Over Time</td><td class="px-6 py-4">Rigenera PF ogni turno, finché permane.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Forza</td><td class="px-6 py-4 whitespace-nowrap">Offensivo Fisico</td><td class="px-6 py-4">Colpo potenziato: +1 dado danno o sfonda ostacoli.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Sonoro</td><td class="px-6 py-4 whitespace-nowrap">Debuff/AOE</td><td class="px-6 py-4">Stordisce, rompe la concentrazione, danno ad area.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Lacerante</td><td class="px-6 py-4 whitespace-nowrap">Offensivo</td><td class="px-6 py-4">Provoca sanguinamento continuo o bypassa scudi.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Concussivo</td><td class="px-6 py-4 whitespace-nowrap">Offensivo/Controllo</td><td class="px-6 py-4">Rompe armature, spinge o stordisce da impatto.</td></tr>
-                                        <tr><td class="px-6 py-4 whitespace-nowrap">Psichico</td><td class="px-6 py-4 whitespace-nowrap">Debuff</td><td class="px-6 py-4">Confusione, sbalzo mentale o perdita temporanea d’azione.</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="loading-indicator">Caricamento...</div>
-                        </div>
-
-                        <div id="tab-offensive" class="tab-content hidden flex-grow">
-                            <h4 class="font-bold text-lg text-[#6F6051]">Attacchi Offensivi</h4>
-                            <p class="mt-2 text-gray-600">Questa categoria include le manovre dirette per infliggere danno: attacchi base, combo rapide, colpi potenti, affondi penetranti e tecniche a mani nude.</p>
-                            <div class="flex gap-2 mt-4">
-                                <button class="generate-btn" data-category="Attacchi Offensivi">Genera Descrizione ✨</button>
-                                <button class="suggest-btn" data-category="Attacchi Offensivi">Genera Manovra Casuale ✨</button>
-                            </div>
-                            <div class="maneuver-description mt-4 text-gray-700 leading-relaxed"></div>
-                            <div class="suggested-maneuver-output mt-4"></div>
-                            <div class="loading-indicator">Caricamento...</div>
-                            <div class="maneuver-table-container"></div>
-                        </div>
-                        <div id="tab-area-attacks" class="tab-content hidden flex-grow">
-                             <h4 class="font-bold text-lg text-[#6F6051]">Attacchi Ad Area</h4>
-                            <p class="mt-2 text-gray-600">Manovre pensate per colpire più nemici contemporaneamente, ideali per controllare il campo di battaglia o affrontare gruppi di avversari.</p>
-                            <div class="flex gap-2 mt-4">
-                                <button class="generate-btn" data-category="Attacchi Ad Area">Genera Descrizione ✨</button>
-                                <button class="suggest-btn" data-category="Attacchi Ad Area">Genera Manovra Casuale ✨</button>
-                            </div>
-                            <div class="maneuver-description mt-4 text-gray-700 leading-relaxed"></div>
-                            <div class="suggested-maneuver-output mt-4"></div>
-                            <div class="loading-indicator">Caricamento...</div>
-                            <div class="maneuver-table-container"></div>
-                        </div>
-                        <div id="tab-agile-tactical" class="tab-content hidden flex-grow">
-                             <h4 class="font-bold text-lg text-[#6F6051]">Manovre Agili & Tattiche</h4>
-                            <p class="mt-2 text-gray-600">Azioni che combinano movimento, agilità ed evasione, permettendo di riposizionarsi, schivare attacchi e sorprendere i nemici da angolazioni inaspettate.</p>
-                            <div class="flex gap-2 mt-4">
-                                <button class="generate-btn" data-category="Manovre Agili & Tattiche">Genera Descrizione ✨</button>
-                                <button class="suggest-btn" data-category="Attacchi Agili & Tattiche">Genera Manovra Casuale ✨</button>
-                            </div>
-                            <div class="maneuver-description mt-4 text-gray-700 leading-relaxed"></div>
-                            <div class="suggested-maneuver-output mt-4"></div>
-                            <div class="loading-indicator">Caricamento...</div>
-                            <div class="maneuver-table-container"></div>
-                        </div>
-                        <div id="tab-support-control" class="tab-content hidden flex-grow">
-                            <h4 class="font-bold text-lg text-[#6F6051]">Manovre di Supporto & Controllo</h4>
-                            <p class="mt-2 text-gray-600">Manovre focalizzate sull'aiuto agli alleati, sulla gestione del posizionamento sul campo di battaglia e sul controllo dei movimenti nemici.</p>
-                            <div class="flex gap-2 mt-4">
-                                <button class="generate-btn" data-category="Manovre di Supporto & Controllo">Genera Descrizione ✨</button>
-                                <button class="suggest-btn" data-category="Manovre di Supporto & Controllo">Genera Manovra Casuale ✨</button>
-                            </div>
-                            <div class="maneuver-description mt-4 text-gray-700 leading-relaxed"></div>
-                            <div class="suggested-maneuver-output mt-4"></div>
-                            <div class="loading-indicator">Caricamento...</div>
-                            <div class="maneuver-table-container"></div>
-                        </div>
-                        <div id="tab-reactions-defense" class="tab-content hidden flex-grow">
-                            <h4 class="font-bold text-lg text-[#6F6051]">Reazioni & Difesa</h4>
-                            <p class="mt-2 text-gray-600">Include le manovre che puoi eseguire in risposta agli attacchi nemici, come parate e schivate, e le tecniche difensive con lo scudo.</p>
-                            <div class="flex gap-2 mt-4">
-                                <button class="generate-btn" data-category="Reazioni & Difesa">Genera Descrizione ✨</button>
-                                <button class="suggest-btn" data-category="Reazioni & Difesa">Genera Manovra Casuale ✨</button>
-                            </div>
-                            <div class="maneuver-description mt-4 text-gray-700 leading-relaxed"></div>
-                            <div class="suggested-maneuver-output mt-4"></div>
-                            <div class="loading-indicator">Caricamento...</div>
-                            <div class="maneuver-table-container"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <hr class="my-12 border-t-2 border-gray-300">
-
-            <section id="esempio-di-gioco" class="max-w-4xl mx-auto calculator-card p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">🎲 Esempio di Gioco</h2>
-                <h3 class="font-bold text-xl text-[#6F6051] mt-8 mb-4">Mini Esempio di Sessione — “La Cripta del Primo Sigillo”</h3>
-                <p class="mt-2 text-gray-700">Giocatori: 3 personaggi</p>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-2">
-                    <li><strong>Kara (Guerriera):</strong> Potenza 14, Vigore 13, Maestria 2, Competenza 2</li>
-                    <li><strong>Elrin (Ladro):</strong> Agilità 16, Maestria 3, Competenza 2</li>
-                    <li><strong>Mira (Incantatrice):</strong> Spirito 15, Maestria 2, Competenza 3</li>
-                </ul>
-
-                <h4 class="font-bold text-lg text-[#6F6051] mt-6">📍 SCENA 1 — Ingresso nella Cripta</h4>
-                <p class="mt-2 text-gray-700">Il gruppo si trova davanti a una porta di pietra antica, leggermente socchiusa. Appena varcata, una trappola scatta, facendo rotolare un grosso masso dall’alto.</p>
-                <p class="mt-2 text-gray-700">Master: “Elrin, sei in prima fila. Vedi il masso piombare verso di te. Fai una prova di Schivata!”</p>
-                <h5 class="font-bold text-md text-[#6F6051] mt-4">🎯 📌 Schivare un masso (Prova Abilità)</h5>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Stat usata: Agilità 16</li>
-                    <li>Maestria: 3</li>
-                    <li>Competenza: 2 → tiri 2d10</li>
-                    <li>Risultato: 6 + 7 = 13</li>
-                    <li>Totale: 13 + 16 = 29</li>
-                </ul>
-                <p class="mt-2 text-gray-700">Master: “CD era 20. Ti butti di lato e rotoli via con agilità felina, atterrando con stile. Hai evitato completamente il danno!”</p>
-
-                <h4 class="font-bold text-lg text-[#6F6051] mt-6">⚔️ SCENA 2 — Combattimento: 2 Guardie Scheletriche</h4>
-                <h5 class="font-bold text-md text-[#6F6051] mt-4">Iniziativa:</h5>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Migliore Agilità del gruppo: Elrin 16</li>
-                    <li>Migliore Agilità nemici: Scheletro 10</li>
-                </ul>
-                <p class="mt-2 text-gray-700">Master: “Voi agite per primi questo turno. Ogni round, agiscono prima tutti i PG, poi i nemici.”</p>
-                <h5 class="font-bold text-md text-[#6F6051] mt-4">🧙‍♂️ Dichiarazione delle manovre</h5>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Kara: Colpisce con la spada due volte. Usa 2 Stamina</li>
-                    <li>Elrin: Attacco con pugnale + Schivata. Spende 2 Stamina</li>
-                    <li>Mira: Lancia una magia: Fiamma Spirale. Spende 2 Concentrazione</li>
-                </ul>
-
-                <h5 class="font-bold text-md text-[#6F6051] mt-4">🔪 Attacco di Kara</h5>
-                <h6 class="font-bold text-sm text-[#6F6051] mt-2">Formula Danno:</h6>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Potenza: 14 → 14 ÷ 5 = +2</li>
-                    <li>Grado arma: B = +6</li>
-                    <li>Maestria 2, Competenza 2 = 2d8</li>
-                    <li>Totale = 2d8 + 8</li>
-                </ul>
-                <p class="mt-2 text-gray-700">Tiro: 6 + 5 = 11 → <strong>Totale 19 Danni</strong></p>
-                <p class="mt-2 text-gray-700">Il nemico non dichiara Parry né Schivata, quindi prende il colpo.</p>
-                <p class="mt-2 text-gray-700">Master: “L’armatura dello scheletro è di grado C (+4), quindi riduce il danno: 19 - 4 = <strong>15 danni netti</strong>. L’osso si spezza fragorosamente.”</p>
-
-                <h5 class="font-bold text-md text-[#6F6051] mt-4">🗡️ Attacco di Elrin</h5>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Agilità: 16 → +3</li>
-                    <li>Grado arma: B (+6)</li>
-                    <li>Maestria 3, Competenza 2 = 2d10</li>
-                    <li>Totale = 2d10 + 9</li>
-                    <li>Tiro: 7 + 8 = 15 → <strong>Totale = 24 danni</strong></li>
-                </ul>
-                <p class="mt-2 text-gray-700">Lo scheletro tenta una Schivata!</p>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Usa 1 stamina</li>
-                    <li>Fa una prova: Agilità 10 + 2d6 → Tiro: 4 + 3 = 7 → Totale = 17</li>
-                </ul>
-                <p class="mt-2 text-gray-700">Fallisce! Viene colpito in pieno.</p>
-                <p class="mt-2 text-gray-700">Master: “Subisce 24 - 4 = <strong>20 danni</strong>. Distrutto in mille ossa.”</p>
-
-                <h5 class="font-bold text-md text-[#6F6051] mt-4">🔥 Mira lancia una magia</h5>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Spirito: 15 → +3</li>
-                    <li>Grado: A = +8</li>
-                    <li>Maestria 2, Competenza 3 = 3d8</li>
-                    <li>Totale: 3d8 + 11</li>
-                    <li>Tiro: 6 + 5 + 4 = 15 → <strong>Totale = 26 danni magici</strong></li>
-                </ul>
-                <p class="mt-2 text-gray-700">Nessun parry o schivata possibile (è magia ad area). Lo scheletro brucia tra fiamme arcane.</p>
-
-                <h4 class="font-bold text-lg text-[#6F6051] mt-6">🧭 SCENA 3 — ESPORAZIONE (Prova di gruppo)</h4>
-                <p class="mt-2 text-gray-700">I PG vogliono scoprire un passaggio segreto.</p>
-                <p class="mt-2 text-gray-700">Mira tenta un rituale di percezione, usa:</p>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Statistica: Spirito 15</li>
-                    <li>Maestria 2, Competenza 2 → 2d8</li>
-                    <li>Tiro: 6 + 5 = 11</li>
-                </ul>
-                <p class="mt-2 text-gray-700">Totale: 15 + 11 = <strong>26</strong></p>
-                <p class="mt-2 text-gray-700">Master: “CD era 20. Scopri un’intercapedine magica nel muro e apri un passaggio segreto!”</p>
-
-                <h4 class="font-bold text-lg text-[#6F6051] mt-6">✅ Riepilogo Didattico per Neofiti</h4>
-                <p class="mt-2 text-gray-700">Ogni azione è basata su:</p>
-                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
-                    <li>Una Statistica (1–20)</li>
-                    <li>Maestria = quanti dadi tiri</li>
-                    <li>Competenza = tipo di dado (d4–d12)</li>
-                    <li>Iniziativa è di gruppo: PG vs Nemici</li>
-                    <li>Parry → blocca tutto, Schivata → evita e ti riposizioni</li>
-                    <li>Tiri Danno = Maestria + Competenza + bonus da Stat/arma</li>
-                    <li>Prove abilità = Stat + Maestria + Competenza</li>
-                    <li>Danno subito = Danno Totale – Armatura</li>
-                </ul>
-            </section>
-
-            <section id="user-maneuvers" class="max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">Manovre Utente</h2>
-                <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">Crea le tue manovre personalizzate e condividile con la community!</p>
-                
-                <div class="flex justify-center mb-6">
-                    <button id="createManeuverBtn" class="create-maneuver-btn px-6 py-3 text-lg">Crea Nuova Manovra ✨</button>
-                </div>
-
-                <div id="currentUserId" class="text-sm text-gray-500 text-center mb-4">ID Utente: Caricamento...</div>
-
-                <div class="calculator-card p-6 md:p-8">
-                    <h3 class="font-bold text-lg text-[#6F6051] mb-4">Manovre Inventate dagli Utenti</h3>
-                    <div id="userManeuversTableContainer" class="maneuver-table-container">
-                        <div class="loading-indicator" id="userManeuversLoading">Caricamento manovre utente...</div>
-                    </div>
-                </div>
-            </section>
-
-             <section id="strategic-interactions" class="max-w-3xl mx-auto text-center">
-                <h2 class="text-2xl font-bold mb-6 text-[#8D7B68]">Interazioni Strategiche</h2>
-                <p class="text-gray-600 leading-relaxed">
-                    Il sistema di combattimento valorizza la tattica e la sinergia di gruppo. Oltre al calcolo del danno, considera l'importanza di manovre con scudo, colpi difensivi, azioni di copertura e provocazioni. Il movimento sul campo, le schivate e le parate non sono solo azioni passive, ma opportunità per attivare manovre reattive e creare vantaggi posizionali. Alcune azioni possono avere anche un impatto psicologico, come un urlo di guerra per intimidire i nemici.
-                </p>
-            </section>
-
-        </main>
-
-        <div class="text-center mt-12 mb-8">
-            <a href="regole_estese_page.html" class="nav-button inline-block px-6 py-3 text-lg">Vai alle Regole Estese ✨</a>
-        </div>
-
-        <footer class="text-center mt-12 md:mt-16 pt-8 border-t border-gray-200">
-            <p class="text-sm text-gray-500">Applicazione interattiva creata per esplorare le meccaniche di gioco.</p>
-        </footer>
-    </div>
-
-    <div id="createManeuverModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <h3 class="text-xl font-semibold mb-6 text-center text-[#6F6051]">Crea la Tua Manovra</h3>
-            <form id="maneuverForm" class="space-y-4">
-                <div>
-                    <label for="maneuverName" class="block text-sm font-medium text-gray-700">Nome Manovra</label>
-                    <input type="text" id="maneuverName" class="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A4907C] focus:border-[#A4907C] sm:text-sm" required>
-                </div>
-                <div>
-                    <label for="maneuverCostST" class="block text-sm font-medium text-gray-700">Costo ST (Stamina)</label>
-                    <input type="number" id="maneuverCostST" min="1" max="5" value="1" class="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A4907C] focus:border-[#A4907C] sm:text-sm" required>
-                </div>
-                <div>
-                    <label for="maneuverEffect" class="block text-sm font-medium text-gray-700">Effetto / Descrizione</label>
-                    <textarea id="maneuverEffect" rows="4" class="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A4907C] focus:border-[#A4907C] sm:text-sm" required></textarea>
-                </div>
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" id="cancelManeuverBtn" class="modal-btn bg-gray-500 hover:bg-gray-600">Annulla</button>
-                    <button type="submit" id="saveManeuverBtn" class="modal-btn">Salva Manovra</button>
-                </div>
-            </form>
-            <div id="maneuverFormLoading" class="loading-indicator">Salvataggio...</div>
-            <div id="maneuverFormMessage" class="text-center mt-4 text-sm text-red-600"></div>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // 🚨 SOSTITUISCI QUESTO OGGETTO con la tua configurazione Firebase dalla console! 🚨
-        const firebaseConfig = {
-              apiKey: "AIzaSyDY-WBqZoNVyNDJ-n6Zm-FhPjWTyeYDEVM",
-              authDomain: "forsakeneonsrpg.firebaseapp.com",
-              projectId: "forsakeneonsrpg",
-              storageBucket: "forsakeneonsrpg.firebasestorage.app",
-              messagingSenderId: "257142197785",
-              appId: "1:257142197785:web:0257fe18626057194aa488",
-              measurementId: "G-GKN3W5EXHN"
-}
-
-        // Usa un ID app fisso per GitHub Pages, o il tuo Project ID di Firebase
-        const appId = "forsaken-eons-manual-app"; // Puoi cambiarlo con un valore unico per il tuo progetto
-        // In alternativa, puoi usare: const appId = firebaseConfig.projectId;
-
-        let app;
-        let db;
-        let auth;
-        let currentUserId = 'anonymous';
-        let currentUserDisplayName = 'Anonimo';
-
-        // Inizializza Firebase solo se la configurazione è valida
-        if (firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId) {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    currentUserId = user.uid;
-                    currentUserDisplayName = user.displayName || 'Anonimo';
-                    document.getElementById('currentUserId').textContent = `ID Utente: ${currentUserDisplayName} (${currentUserId})`;
-                    console.log("Authenticated with Firebase UID:", currentUserId, "Display Name:", currentUserDisplayName);
-                    listenForUserManeuvers();
-                } else {
-                    console.log("No user signed in. Attempting anonymous sign-in.");
-                    try {
-                        // Per GitHub Pages, ci autentichiamo anonimamente
-                        await signInAnonymously(auth);
-                        // Il listener onAuthStateChanged si attiverà di nuovo con l'utente anonimo
-                    } catch (error) {
-                        console.error("Firebase authentication failed:", error);
-                        document.getElementById('currentUserId').textContent = `ID Utente: Errore di autenticazione`;
-                    }
-                }
-            });
-        } else {
-            console.warn("Firebase config not found or incomplete. User maneuvers feature will not be available.");
-            document.getElementById('currentUserId').textContent = `ID Utente: Non disponibile (Firebase non configurato)`;
-            const createManeuverBtn = document.getElementById('createManeuverBtn');
-            if (createManeuverBtn) createManeuverBtn.disabled = true;
-            const userManeuversTableContainer = document.getElementById('userManeuversTableContainer');
-            if (userManeuversTableContainer) userManeuversTableContainer.innerHTML = '<p class="text-center text-gray-500">Funzionalità manovre utente non disponibile senza configurazione Firebase.</p>';
-            const userManeuversLoading = document.getElementById('userManeuversLoading');
-            if (userManeuversLoading) userManeuversLoading.style.display = 'none';
-        }
-
-        function listenForUserManeuvers() {
-            if (!db) {
-                console.error("Firestore is not initialized. Cannot listen for user maneuvers.");
-                return;
-            }
-
-            const userManeuversCollectionRef = collection(db, `artifacts/${appId}/public/data/user_maneuvers`);
-            const q = userManeuversCollectionRef; // Nessun orderBy per evitare problemi di indice in Firestore
-
-            onSnapshot(q, (snapshot) => {
-                const userManeuvers = [];
-                snapshot.forEach((doc) => {
-                    userManeuvers.push({ id: doc.id, ...doc.data() });
-                });
-                displayUserManeuvers(userManeuvers);
-                const userManeuversLoading = document.getElementById('userManeuversLoading');
-                if (userManeuversLoading) userManeuversLoading.style.display = 'none';
-            }, (error) => {
-                console.error("Error listening to user maneuvers:", error);
-                const userManeuversLoading = document.getElementById('userManeuversLoading');
-                if (userManeuversLoading) userManeuversLoading.textContent = "Errore nel caricamento delle manovre utente.";
-            });
-        }
-
-        function displayUserManeuvers(maneuvers) {
-            const userManeuversTableContainer = document.getElementById('userManeuversTableContainer');
-            if (!userManeuversTableContainer) {
-                console.error("User maneuvers table container not found.");
-                return;
-            }
-
-            let tableHtml = `
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead>
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome Manovra</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Costo ST</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrizione</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creato da</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-            `;
-
-            if (maneuvers.length > 0) {
-                maneuvers.sort((a, b) => {
-                    const dateA = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate() : new Date(0);
-                    const dateB = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate() : new Date(0);
-                    return dateB - dateA; // Dal più recente al meno recente
-                });
-
-                maneuvers.forEach(maneuver => {
-                    const creatorName = maneuver.creatorDisplayName || maneuver.userId || 'Sconosciuto';
-                    tableHtml += `
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${maneuver.name}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${maneuver.costST}</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">${maneuver.description}</td>
-                            <td class="px-6 py-4 text-sm text-gray-500 break-all">${creatorName}</td>
-                        </tr>
-                    `;
-                });
-            } else {
-                tableHtml += `
-                    <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">Nessuna manovra utente trovata. Sii il primo a crearne una!</td>
-                    </tr>
-                `;
-            }
-
-            tableHtml += `
-                    </tbody>
-                </table>
-            `;
-            userManeuversTableContainer.innerHTML = tableHtml;
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const gradeBonuses = { 'D': 2, 'C': 4, 'B': 6, 'A': 8, 'S': 10 };
-
-            const maneuversData = [
-                { name: "Proiettile Magico", type: "Arcane", costST: 1, description: "Un singolo colpo diretto verso un bersaglio, rapido e preciso." },
-                { name: "Doppio Proiettile", type: "Arcane", costST: 2, description: "Due colpi in rapida successione, anche verso bersagli diversi." },
-                { name: "Sfera", type: "Arcane", costST: 2, description: "Un’esplosione centrata su un punto, colpisce in un raggio." },
-                { name: "Sfera Potenziata", type: "Arcane", costST: 3, description: "Una sfera più ampia e intensa, può spingere o far cadere i nemici." },
-                { name: "Cono", type: "Arcane", costST: 2, description: "Un’area a ventaglio davanti a sé, utile per colpire più nemici in linea." },
-                { name: "Onda d’Energia", type: "Arcane", costST: 2, description: "Un’onda si propaga dal mago, spingendo via chiunque sia vicino." },
-                { name: "Linea Energetica", type: "Arcane", costST: 1, description: "Una traiettoria dritta, come un raggio tagliente." },
-                { name: "Doppia Linea", type: "Arcane", costST: 2, description: "Due linee in direzioni diverse (es. fronte e retro o incrociate)." },
-                { name: "Aura Temporanea", type: "Arcane", costST: 3, description: "Un effetto costante intorno a sé per un turno (protezione o luce, ecc.)." },
-                { name: "Aura Persistente", type: "Arcane", costST: 4, description: "Effetto duraturo per più turni, può includere vantaggi tattici." },
-                { name: "Sigillo", type: "Arcane", costST: 2, description: "Una runa sul terreno o su un oggetto che si attiva al passaggio." },
-                { name: "Campo", type: "Arcane", costST: 3, description: "Una zona fissa che modifica l’ambiente (es. blocca passaggio, zona silenzio)." },
-                { name: "Globo di Controllo", type: "Arcane", costST: 4, description: "Una sfera mobile o fissa che emette energia controllata a ogni turno." },
-                { name: "Gabbia di Energia", type: "Arcane", costST: 4, description: "Una barriera che imprigiona, blocca movimenti o proiettili." },
-                { name: "Portale", type: "Arcane", costST: 3, description: "Apre un varco per spostarsi o per far passare qualcosa o qualcuno." },
-                { name: "Corrente Astrale", type: "Arcane", costST: 2, description: "Ti muovi con la magia lungo una direzione scelta, anche su superfici verticali." },
-                { name: "Barriera Frontale", type: "Arcane", costST: 2, description: "Un muro di energia che blocca proiettili o nemici per breve tempo." },
-                { name: "Sigillo Remoto", type: "Arcane", costST: 3, description: "Può essere attivato a distanza con un comando magico." },
-                { name: "Impulso Radiale", type: "Arcane", costST: 2, description: "Un’esplosione istantanea che parte dal mago e si diffonde." },
-                { name: "Infusione", type: "Arcane", costST: 1, description: "Infonde l'equipaggiamento con l'elemento posseduto." },
-                { name: "Minion", type: "Arcane", costST: 1, description: "Crea una piccola creatura elementale, grandezza e abilità aggiungono costi superiori alla Concentrazione." },
-                { name: "Colpo Semplice", type: "Base", costST: 1, description: "Un singolo attacco base con arma o mani nude." },
-                { name: "Doppio Colpo", type: "Combo", costST: 2, description: "Due attacchi rapidi consecutivi." },
-                { name: "Attacco Pesante", type: "Potente", costST: 3, description: "Un colpo più lento ma devastante." },
-                { name: "Colpo Rotante", type: "Ad Area", costST: 3, description: "Attacco circolare che colpisce tutti i nemici vicini con un’arma tagliente." },
-                { name: "Fendente Laterale", type: "Ad Area", costST: 2, description: "Colpisce due nemici in linea orizzontale con lama." },
-                { name: "Spazzata", type: "Ad Area", costST: 2, description: "Colpo basso con arma contundente per far inciampare o far cadere i nemici." },
-                { name: "Onda d’Urto", type: "Ad Area", costST: 3, description: "Colpo al suolo con arma contundente che genera una scossa, sbilanciando i nemici intorno." },
-                { name: "Trapano in Carica", type: "Ad Area", costST: 4, description: "Carica lineare con arma perforante che trafigge i nemici sulla traiettoria." },
-                { name: "Stoccata", type: "Penetrante", costST: 2, description: "Affondo mirato con arma da punta che ignora parte dell’armatura." },
-                { name: "Doppia Stoccata", type: "Penetrante", costST: 3, description: "Due affondi rapidi con arma corta, ideali per bucare le difese leggere." },
-                { name: "Gancio", type: "Mani Nude", costST: 1, description: "Pugno diretto con possibilità di stordire leggermente il nemico." },
-                { name: "Diretto", type: "Mani Nude", costST: 1, description: "Colpo frontale veloce a mani nude, ideale nelle combo." },
-                { name: "Proiezione", type: "Mani Nude", costST: 2, description: "Afferro e scaglio l’avversario a terra, utile per interrompere attacchi nemici." },
-                { name: "Colpo in Salto", type: "Acrobatiche", costST: 2, description: "Balzo in aria per colpire con maggior impeto dall’alto." },
-                { name: "Acrobazia Offensiva", type: "Acrobatiche", costST: 2, description: "Capriole e movimenti rapidi per aggirare le difese e colpire da angolazioni inaspettate." },
-                { name: "Rimbalzo Doppio", type: "Acrobatiche", costST: 2, description: "Rimbalzo su pareti o ostacoli per sorprendere da un’angolazione inattesa." },
-                { name: "Scatto Offensivo", type: "Movimento / Combo", costST: 1, description: "Avanzamento rapido che termina con un attacco immediato." },
-                { name: "Scarto Laterale", type: "Evasione", costST: 1, description: "Schivata rapida laterale per evitare un attacco in arrivo." },
-                { name: "Arretramento Tattico", type: "Supporto", costST: 1, description: "Passo indietro che ti allontana dal pericolo mantenendo lo status di combattimento pronto." },
-                { name: "Richiamo", type: "Supporto", costST: 2, description: "Provoco il nemico per attirare la sua attenzione e proteggere un alleato vicino." },
-                { name: "Copertura Veloce", type: "Supporto", costST: 2, description: "Ti frappongo tra un alleato e un nemico per assorbire il proiettile o il colpo." },
-                { name: "Spinta Strategica", type: "Controllo / Strategia", costST: 1, description: "Colpo breve per allontanare un nemico, guadagnando spazio sul campo di battaglia." },
-                { name: "Incrocio Difensivo", type: "Supporto", costST: 2, description: "Posiziono l’arma in modo da proteggere sia me che un alleato adiacente." },
-                { name: "Passaggio d’Intesa", type: "Controllo / Strategia", costST: 2, description: "Scambio di posizione rapido con un alleato per ottimizzare il posizionamento tattico." },
-                { name: "Intimidazione Fisica", type: "Supporto", costST: 1, description: "Gestaccio o colpo minaccioso per spaventare o distrarre un nemico." },
-                { name: "Contrattacco Rapido", type: "Reazione", costST: 2, description: "Subito dopo una parata o schivata, rispondo con un colpo rapido." },
-                { name: "Affondo Brusco", type: "Penetrante", costST: 2, description: "Corsa in avanti e colpo deciso con arma da punta, ideale per centrare il bersaglio a distanza ravvicinata." },
-                { name: "Colpo Ascendente", type: "Combo", costST: 2, description: "Colpo dal basso verso l’alto che solleva il nemico, esponendo i fianchi ad altri attacchi." },
-                { name: "Colpi Caricati", type: "Potente", costST: 2, description: "Concentro tutte le forze in un singolo colpo, aumentando di 1 dado il potenziale danno ma rinunciando ad attaccare il turno successivo." },
-                { name: "Parry", type: "Reazione", costST: 1, description: "Una parata precisa per deviare un attacco nemico, aprendo a un contrattacco." },
-                { name: "Schivata", type: "Reazione", costST: 1, description: "Un rapido movimento per evitare completamente un attacco in arrivo." }
-            ];
-
-            const categoryMappings = {
-                "Geometrie Arcane": ["Arcane"],
-                "Elementi": [],
-                "Attacchi Offensivi": ["Base", "Combo", "Potente", "Penetrante", "Mani Nude"],
-                "Attacchi Ad Area": ["Ad Area"],
-                "Manovre Agili & Tattiche": ["Acrobatiche", "Movimento / Combo", "Evasione"],
-                "Manovre di Supporto & Controllo": ["Supporto", "Controllo / Strategia"],
-                "Reazioni & Difesa": ["Reazione", "Con Scudo"]
-            };
-
-            function setupCalculator(type) {
-                const masteryInput = document.getElementById(`${type}Mastery`);
-                const masteryValue = document.getElementById(`${type}MasteryValue`);
-                const competenceInput = document.getElementById(type === 'phys' ? 'physCompetence' : 'magicGeometry');
-                const statInput = document.getElementById(`${type}Stat`);
-                const statValue = document.getElementById(`${type}StatValue`);
-                const gradeContainer = document.getElementById(`${type}Grade`);
-                const resultDisplay = document.getElementById(`${type}Result`).querySelector('p:first-child');
-                
-                let currentGradeBonus = type === 'phys' ? 6 : 8;
-
-                const updateResult = () => {
-                    if (masteryInput && competenceInput && statInput && resultDisplay) {
-                        const mastery = parseInt(masteryInput.value);
-                        const competence = parseInt(competenceInput.value);
-                        const stat = parseInt(statInput.value);
-                        
-                        const totalBonus = Math.floor(stat / 5) + currentGradeBonus;
-                        
-                        resultDisplay.textContent = `${mastery}D${competence} + ${totalBonus}`;
-                    } else {
-                        console.error(`One or more elements for ${type} calculator not found. Cannot update result.`);
-                    }
-                };
-                
-                if (masteryInput) {
-                    masteryInput.addEventListener('input', (e) => {
-                        if (masteryValue) masteryValue.textContent = e.target.value;
-                        updateResult();
-                    });
-                } else {
-                    console.error(`Element with ID ${type}Mastery not found.`);
-                }
-                
-                if (statInput) {
-                    statInput.addEventListener('input', (e) => {
-                        if (statValue) statValue.textContent = e.target.value;
-                        updateResult();
-                    });
-                } else {
-                    console.error(`Element with ID ${type}Stat not found.`);
-                }
-
-                if (competenceInput) {
-                    competenceInput.addEventListener('change', updateResult);
-                } else {
-                    console.error(`Element with ID ${type === 'phys' ? 'physCompetence' : 'magicGeometry'} not found.`);
-                }
-
-                if (gradeContainer) {
-                    gradeContainer.addEventListener('click', (e) => {
-                        if (e.target.tagName === 'BUTTON') {
-                            gradeContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                            e.target.classList.add('active');
-                            currentGradeBonus = parseInt(e.target.dataset.value);
-                            updateResult();
-                        }
-                    });
-                } else {
-                    console.error(`Element with ID ${type}Grade not found.`);
-                }
-                
-                if (resultDisplay) {
-                    updateResult();
-                } else {
-                    console.error(`Result display element for ${type} not found.`);
-                }
-            }
-
-            setupCalculator('phys');
-            setupCalculator('magic');
-
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('#maneuvers .tab-content');
-
-            const updateManeuversTable = (broadCategory, targetDiv) => {
-                if (broadCategory === "Elementi") {
-                    return; 
-                }
-
-                const specificTypes = categoryMappings[broadCategory] || [];
-                const filteredManeuvers = maneuversData.filter(maneuver => specificTypes.includes(maneuver.type));
-                
-                let tableHtml = `
-                    <div class="maneuver-table-container">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead>
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome Manovra</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Costo ${broadCategory === 'Geometrie Arcane' ? 'Concentrazione' : 'ST'}</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrizione</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                `;
-                
-                if (filteredManeuvers.length > 0) {
-                    filteredManeuvers.forEach(maneuver => {
-                        tableHtml += `
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${maneuver.name}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${maneuver.costST}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">${maneuver.description}</td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    tableHtml += `
-                        <tr>
-                            <td colspan="3" class="px-6 py-4 text-center text-sm text-gray-500">Nessuna manovra trovata per questa categoria.</td>
-                        </tr>
-                    `;
-                }
-
-                tableHtml += `
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                targetDiv.innerHTML = tableHtml;
-            };
-
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetId = button.dataset.target;
-                    const category = button.dataset.category;
-
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-
-                    tabContents.forEach(content => {
-                        if (content.id === targetId) {
-                            content.classList.remove('hidden');
-                            const maneuversTableContainer = content.querySelector('.maneuver-table-container');
-                            const generateBtn = content.querySelector('.generate-btn');
-                            const suggestBtn = content.querySelector('.suggest-btn');
-
-                            if (category === "Geometrie Arcane" || category === "Elementi") {
-                                if (generateBtn) generateBtn.style.display = 'none';
-                                if (suggestBtn) suggestBtn.style.display = 'none';
-                            } else {
-                                if (generateBtn) generateBtn.style.display = 'inline-block';
-                                if (suggestBtn) suggestBtn.style.display = 'inline-block';
-                            }
-
-                            if (maneuversTableContainer) {
-                                updateManeuversTable(category, maneuversTableContainer);
-                            }
-                            
-                            const descriptionDiv = content.querySelector('.maneuver-description');
-                            if (descriptionDiv) {
-                                descriptionDiv.textContent = '';
-                                descriptionDiv.classList.remove('show');
-                            }
-                            const suggestedManeuverOutput = content.querySelector('.suggested-maneuver-output');
-                            if (suggestedManeuverOutput) {
-                                suggestedManeuverOutput.innerHTML = '';
-                            }
-                        } else {
-                            content.classList.add('hidden');
-                        }
-                    });
-                });
-            });
-            
-            document.querySelectorAll('.grade-btn.active').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('#physGrade button[data-value="6"]').classList.add('active');
-            document.querySelector('#magicGrade button[data-value="8"]').classList.add('active');
-
-            const initialArcaneTabButton = document.querySelector('.tab-button[data-target="tab-arcane-geometries"]');
-            if (initialArcaneTabButton) {
-                initialArcaneTabButton.click();
-            } else {
-                console.warn("No initial 'Geometrie Arcane' tab found to activate.");
-            }
-
-            function cleanAndFormatMarkdown(text) {
-                text = text.replace(/^#+\s*.*$/gm, '');
-                text = text.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
-                text = text.replace(/(\*|_)(.*?)\1/g, '<em>$2</em>');
-                text = text.replace(/^[\s\t]*[-*]\s+/gm, '');
-                text = text.replace(/^>\s*/gm, '');
-                text = text.replace(/\n\s*\n/g, '<br><br>');
-                text = text.replace(/\n/g, ' ');
-                text = text.trim();
-                return text;
-            }
-
-            const generateButtons = document.querySelectorAll('.generate-btn');
-            generateButtons.forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    const category = e.target.dataset.category;
-                    const descriptionDiv = e.target.closest('.tab-content').querySelector('.maneuver-description');
-                    const loadingIndicator = e.target.closest('.tab-content').querySelector('.loading-indicator');
-
-                    if (!descriptionDiv || !loadingIndicator) {
-                        console.error("Description or loading indicator element not found for generate button.");
-                        return;
-                    }
-
-                    descriptionDiv.textContent = '';
-                    descriptionDiv.classList.remove('show');
-                    loadingIndicator.style.display = 'block';
-
-                    const prompt = `Genera una descrizione dettagliata e creativa di una manovra fisica di tipo '${category}' per un sistema di combattimento fantasy. Rendi il testo semplice da capire per giocatori neofiti. Inizia la descrizione enfatizzando la tipologia in grassetto. Descrivi l'azione, il suo scopo tattico e un breve esempio visivo. Assicurati che il testo sia ben spaziato con paragrafi chiari.`;
-
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = { contents: chatHistory };
-                    // Nota: Per il deploy su GitHub Pages, la chiave API non è necessaria in questo URL
-                    // Se usi modelli diversi da gemini-2.0-flash, dovresti considerare di gestire la chiave API in modo sicuro
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
-
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                // Se la chiave API fosse necessaria qui, la dovresti passare così:
-                                // 'x-goog-api-key': 'YOUR_GEMINI_API_KEY' // Sostituisci con la tua chiave API di Gemini se non è automatica
-                            },
-                            body: JSON.stringify(payload)
-                        });
-                        const result = await response.json();
-                        if (result.candidates && result.candidates.length > 0 &&
-                            result.candidates[0].content && result.candidates[0].content.parts &&
-                            result.candidates[0].content.parts.length > 0) {
-                            let text = result.candidates[0].content.parts[0].text;
-                            text = cleanAndFormatMarkdown(text);
-                            descriptionDiv.innerHTML = text;
-                            descriptionDiv.classList.add('show');
-                        } else {
-                            descriptionDiv.textContent = 'Errore: Impossibile generare la descrizione. Riprova.';
-                            console.error('Unexpected API response structure:', result);
-                        }
-                    } catch (error) {
-                        descriptionDiv.textContent = 'Errore di rete o API. Riprova più tardi.';
-                        console.error('Error fetching from Gemini API:', error);
-                    } finally {
-                        loadingIndicator.style.display = 'none';
-                    }
-                });
-            });
-
-            const suggestButtons = document.querySelectorAll('.suggest-btn');
-            suggestButtons.forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    const category = e.target.dataset.category;
-                    const outputDiv = e.target.closest('.tab-content').querySelector('.suggested-maneuver-output');
-                    const loadingIndicator = e.target.closest('.tab-content').querySelector('.loading-indicator');
-
-                    if (!outputDiv || !loadingIndicator) {
-                        console.error("Output or loading indicator element not found for suggest button.");
-                        return;
-                    }
-
-                    outputDiv.innerHTML = '';
-                    loadingIndicator.style.display = 'block';
-
-                    const prompt = `Genera una nuova manovra fisica per un sistema di combattimento fantasy. La manovra deve appartenere alla categoria generale di '${category}'. Fornisci il nome della manovra, il suo costo in Stamina (ST) come numero intero da 1 a 5, e una descrizione concisa ma evocativa. Rispondi in formato JSON con le chiavi 'nome', 'costoST', 'descrizione'.`;
-
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = {
-                        contents: chatHistory,
-                        generationConfig: {
-                            responseMimeType: "application/json",
-                            responseSchema: {
-                                type: "OBJECT",
-                                properties: {
-                                    "nome": { "type": "STRING" },
-                                    "costoST": { "type": "INTEGER" },
-                                    "descrizione": { "type": "STRING" }
-                                },
-                                propertyOrdering: ["nome", "costoST", "descrizione"]
-                            }
-                        }
-                    };
-                    // Nota: Per il deploy su GitHub Pages, la chiave API non è necessaria in questo URL
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
-
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                // 'x-goog-api-key': 'YOUR_GEMINI_API_KEY' // Sostituisci con la tua chiave API di Gemini se non è automatica
-                            },
-                            body: JSON.stringify(payload)
-                        });
-                        const result = await response.json();
-                        if (result.candidates && result.candidates.length > 0 &&
-                            result.candidates[0].content && result.candidates[0].content.parts &&
-                            result.candidates[0].content.parts.length > 0) {
-                            const jsonText = result.candidates[0].content.parts[0].text;
-                            const newManeuver = JSON.parse(jsonText);
-                            outputDiv.innerHTML = `
-                                <div class="suggested-maneuver">
-                                    <h5>Manovra Suggerita: ${newManeuver.nome}</h5>
-                                    <p>Costo ST: ${newManeuver.costoST}</p>
-                                    <p>${newManeuver.descrizione}</p>
-                                </div>
-                            `;
-                        } else {
-                            outputDiv.textContent = 'Errore: Impossibile suggerire una nuova manovra. Riprova.';
-                            console.error('Unexpected API response structure:', result);
-                        }
-                    } catch (error) {
-                        outputDiv.textContent = 'Errore di rete o API. Riprova più tardi.';
-                        console.error('Error fetching from Gemini API:', error);
-                    } finally {
-                        loadingIndicator.style.display = 'none';
-                    }
-                });
-            });
-
-            const createManeuverBtn = document.getElementById('createManeuverBtn');
-            const createManeuverModal = document.getElementById('createManeuverModal');
-            const cancelManeuverBtn = document.getElementById('cancelManeuverBtn');
-            const saveManeuverBtn = document.getElementById('saveManeuverBtn');
-            const maneuverForm = document.getElementById('maneuverForm');
-            const maneuverFormLoading = document.getElementById('maneuverFormLoading');
-            const maneuverFormMessage = document.getElementById('maneuverFormMessage');
-            const userManeuversTableContainer = document.getElementById('userManeuversTableContainer');
-            const userManeuversLoading = document.getElementById('userManeuversLoading');
-
-            if (createManeuverBtn) {
-                createManeuverBtn.addEventListener('click', () => {
-                    createManeuverModal.classList.remove('hidden');
-                    maneuverFormMessage.textContent = '';
-                    maneuverFormLoading.style.display = 'none';
-                });
-            }
-
-            if (cancelManeuverBtn) {
-                cancelManeuverBtn.addEventListener('click', () => {
-                    createManeuverModal.classList.add('hidden');
-                    maneuverForm.reset();
-                });
-            }
-
-            if (maneuverForm) {
-                maneuverForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-
-                    if (!db || !auth.currentUser) {
-                        maneuverFormMessage.textContent = "Errore: Utente non autenticato. Accedi o attendi l'autenticazione.";
-                        console.error("Firebase not configured or user not authenticated.");
-                        return;
-                    }
-
-                    maneuverFormLoading.style.display = 'block';
-                    maneuverFormMessage.textContent = '';
-
-                    const name = document.getElementById('maneuverName').value;
-                    const costST = parseInt(document.getElementById('maneuverCostST').value);
-                    const effect = document.getElementById('maneuverEffect').value;
-
-                    if (!name || !costST || !effect) {
-                        maneuverFormMessage.textContent = "Tutti i campi sono obbligatori.";
-                        maneuverFormLoading.style.display = 'none';
-                        return;
-                    }
-                    if (isNaN(costST) || costST < 1 || costST > 5) {
-                        maneuverFormMessage.textContent = "Costo ST deve essere un numero tra 1 e 5.";
-                        maneuverFormLoading.style.display = 'none';
-                        return;
-                    }
-
-                    try {
-                        const userManeuver = {
-                            name: name,
-                            costST: costST,
-                            description: effect,
-                            userId: auth.currentUser.uid,
-                            creatorDisplayName: auth.currentUser.displayName || 'Anonimo',
-                            createdAt: new Date()
-                        };
-
-                        const userManeuversCollectionRef = collection(db, `artifacts/${appId}/public/data/user_maneuvers`);
-                        await addDoc(userManeuversCollectionRef, userManeuver);
-
-                        maneuverFormMessage.textContent = "Manovra salvata con successo!";
-                        maneuverFormMessage.style.color = 'green';
-                        maneuverForm.reset();
-                        setTimeout(() => {
-                            createManeuverModal.classList.add('hidden');
-                            maneuverFormMessage.textContent = '';
-                        }, 1500);
-                    } catch (error) {
-                        maneuverFormMessage.textContent = `Errore durante il salvataggio: ${error.message}`;
-                        maneuverFormMessage.style.color = 'red';
-                        console.error("Error adding user maneuver:", error);
                     } finally {
                         maneuverFormLoading.style.display = 'none';
                     }
