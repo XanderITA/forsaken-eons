@@ -51,7 +51,7 @@
             cursor: pointer;
             border-radius: 50%;
         }
-        .generate-btn, .suggest-btn, .create-maneuver-btn, .modal-btn, .nav-button { /* Added .nav-button */
+        .generate-btn, .suggest-btn, .create-maneuver-btn, .modal-btn, .nav-button {
             background-color: #A4907C;
             color: white;
             padding: 0.5rem 1rem;
@@ -59,7 +59,7 @@
             font-weight: 500;
             transition: background-color 0.3s ease;
         }
-        .generate-btn:hover, .suggest-btn:hover, .create-maneuver-btn:hover, .modal-btn:hover, .nav-button:hover { /* Added .nav-button */
+        .generate-btn:hover, .suggest-btn:hover, .create-maneuver-btn:hover, .modal-btn:hover, .nav-button:hover {
             background-color: #8D7B68;
         }
         .loading-indicator {
@@ -70,8 +70,8 @@
         }
         .maneuver-table-container {
             margin-top: 1.5rem;
-            max-height: 300px; /* Limit height for scrollability */
-            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 300px;
+            overflow-y: auto;
             border: 1px solid #EAE3D9;
             border-radius: 0.5rem;
         }
@@ -108,20 +108,20 @@
             margin-bottom: 0.5rem;
         }
         .maneuver-description {
-            background-color: #F8F4EF; /* Light background */
-            padding: 1.5rem; /* More padding */
-            border-radius: 0.75rem; /* Rounded corners */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
-            border: 1px solid #EAE3D9; /* Light border */
-            color: #333; /* Slightly darker text for readability */
-            font-style: italic; /* Distinct style */
-            line-height: 1.6; /* Better line spacing */
-            margin-top: 1.5rem; /* Space from buttons */
-            transition: opacity 0.5s ease-in-out; /* Smooth fade-in */
-            opacity: 0; /* Initially hidden for fade-in */
+            background-color: #F8F4EF;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #EAE3D9;
+            color: #333;
+            font-style: italic;
+            line-height: 1.6;
+            margin-top: 1.5rem;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
         }
         .maneuver-description.show {
-            opacity: 1; /* Show when content is loaded */
+            opacity: 1;
         }
         .modal-overlay {
             position: fixed;
@@ -143,17 +143,14 @@
             width: 90%;
             max-width: 500px;
         }
-        /* Color scheme for rules section */
         .formula-box {
-            background-color: #F0F4F8; /* Light blue-gray for formulas */
-            border-left: 4px solid #60A5FA; /* Blue border */
+            background-color: #F0F4F8;
+            border-left: 4px solid #60A5FA;
         }
         .example-box {
-            background-color: #F0FDF4; /* Light green for examples */
-            border-left: 4px solid #34D399; /* Green border */
+            background-color: #F0FDF4;
+            border-left: 4px solid #34D399;
         }
-
-        /* Table of Contents specific styles */
         .toc-container {
             background-color: #FFFFFF;
             border-radius: 0.75rem;
@@ -196,13 +193,11 @@
         .toc-container li ul li {
             margin-bottom: 0.2rem;
         }
-
-        /* Chromatic system for classes table */
         .classes-table tbody tr:nth-child(odd) {
-            background-color: #F8F4EF; /* Lighter shade */
+            background-color: #F8F4EF;
         }
         .classes-table tbody tr:nth-child(even) {
-            background-color: #FFFFFF; /* Original white */
+            background-color: #FFFFFF;
         }
     </style>
 </head>
@@ -213,13 +208,11 @@
             <h1 class="text-3xl md:text-4xl font-bold text-[#6F6051]">Forsaken Eons - Gioco di Ruolo</h1>
         </header>
 
-        <!-- New button at the top -->
         <div class="text-center mb-8">
             <a href="regole_estese_page.html" class="nav-button inline-block px-6 py-3 text-lg">Vai alle Regole Estese ✨</a>
         </div>
 
         <main class="space-y-12">
-            <!-- Sommario -->
             <section id="table-of-contents" class="max-w-xl mx-auto toc-container">
                 <h2>Sommario</h2>
                 <ul>
@@ -242,13 +235,12 @@
                     </li>
                     <li><a href="#maneuvers">Lista Manovre</a></li>
                     <li><a href="#esempio-di-gioco">Esempio di Gioco</a></li>
-                    <li><a href="regole_estese_page.html">Regole Estese</a></li> <!-- Existing Link -->
+                    <li><a href="regole_estese_page.html">Regole Estese</a></li>
                     <li><a href="#user-maneuvers">Manovre Utente</a></li>
                     <li><a href="#strategic-interactions">Interazioni Strategiche</a></li>
                 </ul>
             </section>
 
-            <!-- Sezione Regolamento -->
             <section id="regolamento-section" class="max-w-4xl mx-auto calculator-card p-6 md:p-8">
                 <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">Regolamento</h2>
                 <p class="mt-2 text-gray-600">Questa sezione è pensata per aiutarti a capire come funziona il calcolo del danno e le meccaniche di base del sistema di combattimento.</p>
@@ -483,7 +475,7 @@
                 <h5 id="calcolo-danno-magico" class="font-bold text-md text-[#6F6051] mt-8">Calcolo del Danno Magico</h5>
                 <p class="mt-2 text-gray-600">Il danno magico funziona in modo simile, ma si basa sulla tua Maestria Magica e sulla "Competenza" dell'incantesimo. Ecco la formula:</p>
                 <div class="bg-gray-100 p-4 rounded-md mt-3 text-sm font-mono text-gray-800 formula-box">
-                    <p><strong>Danno Magico = Maestria Magica × Competenza + (Statistica ÷ 5 + Bonus Grado)</strong></p>
+                    <p><strong>Danno Magico = MaestriaMagica × Competenza + (Statistica ÷ 5 + Bonus Grado)</strong></p>
                 </div>
                 <ul class="list-disc list-inside mt-4 text-gray-700 space-y-2">
                     <li><strong>Maestria Magica:</strong> Il numero di dadi che tiri per il danno magico.</li>
@@ -500,7 +492,6 @@
 
             <hr class="my-12 border-t-2 border-gray-300">
 
-            <!-- Nuova Sezione: Progressione Personaggio -->
             <section id="character-progression" class="max-w-4xl mx-auto calculator-card p-6 md:p-8">
                 <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">✨ Progressione del Personaggio</h2>
                 <p class="mt-2 text-gray-600 mb-6">In questa sezione, scoprirai come il tuo personaggio cresce e si evolve attraverso i punti esperienza (EXP) guadagnati.</p>
@@ -935,7 +926,6 @@
 
             <hr class="my-12 border-t-2 border-gray-300">
 
-            <!-- Nuova Sezione: Esempio di Gioco -->
             <section id="esempio-di-gioco" class="max-w-4xl mx-auto calculator-card p-6 md:p-8">
                 <h2 class="text-2xl font-bold text-center mb-6 text-[#8D7B68]">🎲 Esempio di Gioco</h2>
                 <h3 class="font-bold text-xl text-[#6F6051] mt-8 mb-4">Mini Esempio di Sessione — “La Cripta del Primo Sigillo”</h3>
@@ -1063,7 +1053,6 @@
 
         </main>
 
-        <!-- New button at the bottom -->
         <div class="text-center mt-12 mb-8">
             <a href="regole_estese_page.html" class="nav-button inline-block px-6 py-3 text-lg">Vai alle Regole Estese ✨</a>
         </div>
@@ -1099,46 +1088,50 @@
         </div>
     </div>
 
-
     <script type="module">
-        // Firebase Imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global Firebase variables
+        // 🚨 SOSTITUISCI QUESTO OGGETTO con la tua configurazione Firebase dalla console! 🚨
+        const firebaseConfig = {
+          apiKey: "YOUR_FIREBASE_API_KEY",
+          authDomain: "YOUR_AUTH_DOMAIN",
+          projectId: "YOUR_PROJECT_ID",
+          storageBucket: "YOUR_STORAGE_BUCKET",
+          messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+          appId: "YOUR_APP_ID"
+        };
+
+        // Usa un ID app fisso per GitHub Pages, o il tuo Project ID di Firebase
+        const appId = "forsaken-eons-manual-app"; // Puoi cambiarlo con un valore unico per il tuo progetto
+        // In alternativa, puoi usare: const appId = firebaseConfig.projectId;
+
         let app;
         let db;
         let auth;
-        let currentUserId = 'anonymous'; // Default user ID (UID)
-        let currentUserDisplayName = 'Anonimo'; // Default display name
+        let currentUserId = 'anonymous';
+        let currentUserDisplayName = 'Anonimo';
 
-        // Initialize Firebase
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-
-        if (Object.keys(firebaseConfig).length > 0) {
+        // Inizializza Firebase solo se la configurazione è valida
+        if (firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId) {
             app = initializeApp(firebaseConfig);
             db = getFirestore(app);
             auth = getAuth(app);
 
-            // Authenticate user
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     currentUserId = user.uid;
-                    currentUserDisplayName = user.displayName || 'Anonimo'; // Use display name, fallback to 'Anonimo'
+                    currentUserDisplayName = user.displayName || 'Anonimo';
                     document.getElementById('currentUserId').textContent = `ID Utente: ${currentUserDisplayName} (${currentUserId})`;
                     console.log("Authenticated with Firebase UID:", currentUserId, "Display Name:", currentUserDisplayName);
-                    // Start listening to user maneuvers after authentication
                     listenForUserManeuvers();
                 } else {
                     console.log("No user signed in. Attempting anonymous sign-in.");
                     try {
-                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                            await signInWithCustomToken(auth, __initial_auth_token);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
+                        // Per GitHub Pages, ci autentichiamo anonimamente
+                        await signInAnonymously(auth);
+                        // Il listener onAuthStateChanged si attiverà di nuovo con l'utente anonimo
                     } catch (error) {
                         console.error("Firebase authentication failed:", error);
                         document.getElementById('currentUserId').textContent = `ID Utente: Errore di autenticazione`;
@@ -1146,9 +1139,8 @@
                 }
             });
         } else {
-            console.warn("Firebase config not found. User maneuvers feature will not be available.");
+            console.warn("Firebase config not found or incomplete. User maneuvers feature will not be available.");
             document.getElementById('currentUserId').textContent = `ID Utente: Non disponibile (Firebase non configurato)`;
-            // Disable related buttons/sections if Firebase is not configured
             const createManeuverBtn = document.getElementById('createManeuverBtn');
             if (createManeuverBtn) createManeuverBtn.disabled = true;
             const userManeuversTableContainer = document.getElementById('userManeuversTableContainer');
@@ -1157,7 +1149,6 @@
             if (userManeuversLoading) userManeuversLoading.style.display = 'none';
         }
 
-        // Function to listen for real-time updates on user maneuvers
         function listenForUserManeuvers() {
             if (!db) {
                 console.error("Firestore is not initialized. Cannot listen for user maneuvers.");
@@ -1165,9 +1156,7 @@
             }
 
             const userManeuversCollectionRef = collection(db, `artifacts/${appId}/public/data/user_maneuvers`);
-            // Order by creation date to show newest first, but avoid orderBy for now as per instructions
-            // const q = query(userManeuversCollectionRef, orderBy("createdAt", "desc")); 
-            const q = userManeuversCollectionRef; // No orderBy to avoid potential index issues
+            const q = userManeuversCollectionRef; // Nessun orderBy per evitare problemi di indice in Firestore
 
             onSnapshot(q, (snapshot) => {
                 const userManeuvers = [];
@@ -1184,7 +1173,6 @@
             });
         }
 
-        // Function to display user-invented maneuvers in a table
         function displayUserManeuvers(maneuvers) {
             const userManeuversTableContainer = document.getElementById('userManeuversTableContainer');
             if (!userManeuversTableContainer) {
@@ -1206,19 +1194,13 @@
             `;
 
             if (maneuvers.length > 0) {
-                // Sort maneuvers by creation date (if available) or name in JS
                 maneuvers.sort((a, b) => {
-                    if (a.createdAt && b.createdAt) {
-                        // Firebase Timestamps need to be converted to Date objects for comparison
-                        const dateA = a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
-                        const dateB = b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
-                        return dateB - dateA; // Newest first
-                    }
-                    return a.name.localeCompare(b.name); // Fallback to name
+                    const dateA = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate() : new Date(0);
+                    const dateB = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate() : new Date(0);
+                    return dateB - dateA; // Dal più recente al meno recente
                 });
 
                 maneuvers.forEach(maneuver => {
-                    // Use maneuver.creatorDisplayName if available, otherwise fallback to maneuver.userId
                     const creatorName = maneuver.creatorDisplayName || maneuver.userId || 'Sconosciuto';
                     tableHtml += `
                         <tr>
@@ -1244,12 +1226,10 @@
             userManeuversTableContainer.innerHTML = tableHtml;
         }
 
-
         document.addEventListener('DOMContentLoaded', () => {
             const gradeBonuses = { 'D': 2, 'C': 4, 'B': 6, 'A': 8, 'S': 10 };
 
             const maneuversData = [
-                // Arcane Geometries (now treated as a list of maneuvers within the "Arcane" type)
                 { name: "Proiettile Magico", type: "Arcane", costST: 1, description: "Un singolo colpo diretto verso un bersaglio, rapido e preciso." },
                 { name: "Doppio Proiettile", type: "Arcane", costST: 2, description: "Due colpi in rapida successione, anche verso bersagli diversi." },
                 { name: "Sfera", type: "Arcane", costST: 2, description: "Un’esplosione centrata su un punto, colpisce in un raggio." },
@@ -1271,7 +1251,6 @@
                 { name: "Impulso Radiale", type: "Arcane", costST: 2, description: "Un’esplosione istantanea che parte dal mago e si diffonde." },
                 { name: "Infusione", type: "Arcane", costST: 1, description: "Infonde l'equipaggiamento con l'elemento posseduto." },
                 { name: "Minion", type: "Arcane", costST: 1, description: "Crea una piccola creatura elementale, grandezza e abilità aggiungono costi superiori alla Concentrazione." },
-                // Physical Maneuvers
                 { name: "Colpo Semplice", type: "Base", costST: 1, description: "Un singolo attacco base con arma o mani nude." },
                 { name: "Doppio Colpo", type: "Combo", costST: 2, description: "Due attacchi rapidi consecutivi." },
                 { name: "Attacco Pesante", type: "Potente", costST: 3, description: "Un colpo più lento ma devastante." },
@@ -1306,8 +1285,8 @@
             ];
 
             const categoryMappings = {
-                "Geometrie Arcane": ["Arcane"], // Maps to the "Arcane" type in maneuversData
-                "Elementi": [], // Elements table is static HTML, not dynamically filtered from maneuversData
+                "Geometrie Arcane": ["Arcane"],
+                "Elementi": [],
                 "Attacchi Offensivi": ["Base", "Combo", "Potente", "Penetrante", "Mani Nude"],
                 "Attacchi Ad Area": ["Ad Area"],
                 "Manovre Agili & Tattiche": ["Acrobatiche", "Movimento / Combo", "Evasione"],
@@ -1327,7 +1306,6 @@
                 let currentGradeBonus = type === 'phys' ? 6 : 8;
 
                 const updateResult = () => {
-                    // Ensure all necessary elements are found before accessing their properties
                     if (masteryInput && competenceInput && statInput && resultDisplay) {
                         const mastery = parseInt(masteryInput.value);
                         const competence = parseInt(competenceInput.value);
@@ -1378,7 +1356,6 @@
                     console.error(`Element with ID ${type}Grade not found.`);
                 }
                 
-                // Call updateResult only if resultDisplay is found
                 if (resultDisplay) {
                     updateResult();
                 } else {
@@ -1390,14 +1367,10 @@
             setupCalculator('magic');
 
             const tabButtons = document.querySelectorAll('.tab-button');
-            // Select only the tab contents that are part of the maneuver guide
             const tabContents = document.querySelectorAll('#maneuvers .tab-content');
 
             const updateManeuversTable = (broadCategory, targetDiv) => {
-                // Special handling for "Elementi" as it's static HTML
                 if (broadCategory === "Elementi") {
-                    // The HTML for the elements table is already hardcoded in the tab-elements div.
-                    // No dynamic population needed here. Just ensure the div is visible.
                     return; 
                 }
 
@@ -1458,7 +1431,6 @@
                             const generateBtn = content.querySelector('.generate-btn');
                             const suggestBtn = content.querySelector('.suggest-btn');
 
-                            // Hide generate/suggest buttons for "Geometrie Arcane" and "Elementi" tabs
                             if (category === "Geometrie Arcane" || category === "Elementi") {
                                 if (generateBtn) generateBtn.style.display = 'none';
                                 if (suggestBtn) suggestBtn.style.display = 'none';
@@ -1471,14 +1443,13 @@
                                 updateManeuversTable(category, maneuversTableContainer);
                             }
                             
-                            // Clear previous LLM generations and hide description
                             const descriptionDiv = content.querySelector('.maneuver-description');
-                            if (descriptionDiv) { // Check if element exists
+                            if (descriptionDiv) {
                                 descriptionDiv.textContent = '';
-                                descriptionDiv.classList.remove('show'); // Hide for fade-in
+                                descriptionDiv.classList.remove('show');
                             }
                             const suggestedManeuverOutput = content.querySelector('.suggested-maneuver-output');
-                            if (suggestedManeuverOutput) { // Check if element exists
+                            if (suggestedManeuverOutput) {
                                 suggestedManeuverOutput.innerHTML = '';
                             }
                         } else {
@@ -1492,36 +1463,24 @@
             document.querySelector('#physGrade button[data-value="6"]').classList.add('active');
             document.querySelector('#magicGrade button[data-value="8"]').classList.add('active');
 
-            // Initialize the "Geometrie Arcane" tab's content and table on load
             const initialArcaneTabButton = document.querySelector('.tab-button[data-target="tab-arcane-geometries"]');
             if (initialArcaneTabButton) {
-                initialArcaneTabButton.click(); // Simulate a click to activate the tab and run its logic
+                initialArcaneTabButton.click();
             } else {
                 console.warn("No initial 'Geometrie Arcane' tab found to activate.");
             }
 
-
-            // Function to clean Markdown from text and convert bold to HTML <strong>
             function cleanAndFormatMarkdown(text) {
-                // Remove headers (##, ###, etc.)
                 text = text.replace(/^#+\s*.*$/gm, '');
-                // Convert bold/italic markers to HTML tags
-                // Convert **text** or __text__ to <strong>text</strong>
                 text = text.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
-                // Convert *text* or _text_ to <em>text</em> (if needed, currently not requested for emphasis)
                 text = text.replace(/(\*|_)(.*?)\1/g, '<em>$2</em>');
-                // Remove list markers (- , * )
                 text = text.replace(/^[\s\t]*[-*]\s+/gm, '');
-                // Remove blockquotes (>)
                 text = text.replace(/^>\s*/gm, '');
-                // Replace multiple newlines with double newlines for paragraph breaks
                 text = text.replace(/\n\s*\n/g, '<br><br>');
-                // Replace single newlines with a space if not already a paragraph break
                 text = text.replace(/\n/g, ' ');
-                text = text.trim(); // Trim leading/trailing whitespace
+                text = text.trim();
                 return text;
             }
-
 
             const generateButtons = document.querySelectorAll('.generate-btn');
             generateButtons.forEach(button => {
@@ -1530,14 +1489,13 @@
                     const descriptionDiv = e.target.closest('.tab-content').querySelector('.maneuver-description');
                     const loadingIndicator = e.target.closest('.tab-content').querySelector('.loading-indicator');
 
-                    // Ensure descriptionDiv exists before proceeding
                     if (!descriptionDiv || !loadingIndicator) {
                         console.error("Description or loading indicator element not found for generate button.");
                         return;
                     }
 
                     descriptionDiv.textContent = '';
-                    descriptionDiv.classList.remove('show'); // Hide for fade-in
+                    descriptionDiv.classList.remove('show');
                     loadingIndicator.style.display = 'block';
 
                     const prompt = `Genera una descrizione dettagliata e creativa di una manovra fisica di tipo '${category}' per un sistema di combattimento fantasy. Rendi il testo semplice da capire per giocatori neofiti. Inizia la descrizione enfatizzando la tipologia in grassetto. Descrivi l'azione, il suo scopo tattico e un breve esempio visivo. Assicurati che il testo sia ben spaziato con paragrafi chiari.`;
@@ -1545,13 +1503,18 @@
                     let chatHistory = [];
                     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                     const payload = { contents: chatHistory };
-                    const apiKey = "";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    // Nota: Per il deploy su GitHub Pages, la chiave API non è necessaria in questo URL
+                    // Se usi modelli diversi da gemini-2.0-flash, dovresti considerare di gestire la chiave API in modo sicuro
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
 
                     try {
                         const response = await fetch(apiUrl, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                // Se la chiave API fosse necessaria qui, la dovresti passare così:
+                                // 'x-goog-api-key': 'YOUR_GEMINI_API_KEY' // Sostituisci con la tua chiave API di Gemini se non è automatica
+                            },
                             body: JSON.stringify(payload)
                         });
                         const result = await response.json();
@@ -1559,9 +1522,9 @@
                             result.candidates[0].content && result.candidates[0].content.parts &&
                             result.candidates[0].content.parts.length > 0) {
                             let text = result.candidates[0].content.parts[0].text;
-                            text = cleanAndFormatMarkdown(text); // Clean and format the Markdown
-                            descriptionDiv.innerHTML = text; // Use innerHTML to render bold tags
-                            descriptionDiv.classList.add('show'); // Show with fade-in
+                            text = cleanAndFormatMarkdown(text);
+                            descriptionDiv.innerHTML = text;
+                            descriptionDiv.classList.add('show');
                         } else {
                             descriptionDiv.textContent = 'Errore: Impossibile generare la descrizione. Riprova.';
                             console.error('Unexpected API response structure:', result);
@@ -1582,13 +1545,12 @@
                     const outputDiv = e.target.closest('.tab-content').querySelector('.suggested-maneuver-output');
                     const loadingIndicator = e.target.closest('.tab-content').querySelector('.loading-indicator');
 
-                    // Ensure outputDiv exists before proceeding
                     if (!outputDiv || !loadingIndicator) {
                         console.error("Output or loading indicator element not found for suggest button.");
                         return;
                     }
 
-                    outputDiv.innerHTML = ''; // Clear previous suggestion
+                    outputDiv.innerHTML = '';
                     loadingIndicator.style.display = 'block';
 
                     const prompt = `Genera una nuova manovra fisica per un sistema di combattimento fantasy. La manovra deve appartenere alla categoria generale di '${category}'. Fornisci il nome della manovra, il suo costo in Stamina (ST) come numero intero da 1 a 5, e una descrizione concisa ma evocativa. Rispondi in formato JSON con le chiavi 'nome', 'costoST', 'descrizione'.`;
@@ -1610,13 +1572,16 @@
                             }
                         }
                     };
-                    const apiKey = "";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    // Nota: Per il deploy su GitHub Pages, la chiave API non è necessaria in questo URL
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
 
                     try {
                         const response = await fetch(apiUrl, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                // 'x-goog-api-key': 'YOUR_GEMINI_API_KEY' // Sostituisci con la tua chiave API di Gemini se non è automatica
+                            },
                             body: JSON.stringify(payload)
                         });
                         const result = await response.json();
@@ -1645,7 +1610,6 @@
                 });
             });
 
-            // --- User Maneuvers Section Logic ---
             const createManeuverBtn = document.getElementById('createManeuverBtn');
             const createManeuverModal = document.getElementById('createManeuverModal');
             const cancelManeuverBtn = document.getElementById('cancelManeuverBtn');
@@ -1659,23 +1623,23 @@
             if (createManeuverBtn) {
                 createManeuverBtn.addEventListener('click', () => {
                     createManeuverModal.classList.remove('hidden');
-                    maneuverFormMessage.textContent = ''; // Clear any previous messages
-                    maneuverFormLoading.style.display = 'none'; // Hide loading indicator initially
+                    maneuverFormMessage.textContent = '';
+                    maneuverFormLoading.style.display = 'none';
                 });
             }
 
             if (cancelManeuverBtn) {
                 cancelManeuverBtn.addEventListener('click', () => {
                     createManeuverModal.classList.add('hidden');
-                    maneuverForm.reset(); // Clear form fields
+                    maneuverForm.reset();
                 });
             }
 
             if (maneuverForm) {
                 maneuverForm.addEventListener('submit', async (e) => {
-                    e.preventDefault(); // Prevent default form submission
+                    e.preventDefault();
 
-                    if (!db || !auth.currentUser) { // Check for authenticated user
+                    if (!db || !auth.currentUser) {
                         maneuverFormMessage.textContent = "Errore: Utente non autenticato. Accedi o attendi l'autenticazione.";
                         console.error("Firebase not configured or user not authenticated.");
                         return;
@@ -1704,8 +1668,8 @@
                             name: name,
                             costST: costST,
                             description: effect,
-                            userId: auth.currentUser.uid, // Still store UID for internal reference/security rules
-                            creatorDisplayName: auth.currentUser.displayName || 'Anonimo', // Store display name
+                            userId: auth.currentUser.uid,
+                            creatorDisplayName: auth.currentUser.displayName || 'Anonimo',
                             createdAt: new Date()
                         };
 
@@ -1718,7 +1682,7 @@
                         setTimeout(() => {
                             createManeuverModal.classList.add('hidden');
                             maneuverFormMessage.textContent = '';
-                        }, 1500); // Hide modal after 1.5 seconds
+                        }, 1500);
                     } catch (error) {
                         maneuverFormMessage.textContent = `Errore durante il salvataggio: ${error.message}`;
                         maneuverFormMessage.style.color = 'red';
