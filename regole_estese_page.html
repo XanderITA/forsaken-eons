@@ -78,6 +78,40 @@
         .back-button:hover {
             background-color: #8D7B68;
         }
+        /* Stili per l'indice */
+        .index-nav {
+            background-color: #F8F4EF;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #EAE3D9;
+        }
+        .index-nav h3 {
+            text-align: center;
+            font-size: 1.75rem;
+            color: #8D7B68;
+            margin-bottom: 1.5rem;
+        }
+        .index-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .index-nav li {
+            margin-bottom: 0.75rem;
+        }
+        .index-nav a {
+            color: #A4907C;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            display: block;
+            padding: 0.25rem 0;
+        }
+        .index-nav a:hover {
+            color: #6F6051;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body class="antialiased py-8">
@@ -86,7 +120,60 @@
 
         <div class="content-card">
             <h1>Regole Estese di Forsaken Eons</h1>
-            <p class="text-center text-lg text-gray-600 mb-8">Qui puoi inserire il regolamento dettagliato del tuo gioco di ruolo.</p>
+
+            <hr class="my-8 border-t border-gray-300">
+
+            <nav class="index-nav">
+                <h3>Indice delle Regole</h3>
+                <ul>
+                    <li><a href="#caratteristiche-personaggio">Caratteristiche del Personaggio</a>
+                        <ul>
+                            <li><a href="#vigore">Vigore</a></li>
+                            <li><a href="#potenza">Potenza</a></li>
+                            <li><a href="#agilita">Agilità</a></li>
+                            <li><a href="#sensi">Sensi</a></li>
+                            <li><a href="#spirito">Spirito</a></li>
+                            <li><a href="#influenza">Influenza</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#cosa-sono-le-manovre">Cosa sono le Manovre</a>
+                        <ul>
+                            <li><a href="#scontro-coreografia-letale">Lo Scontro è una Coreografia Letale</a></li>
+                            <li><a href="#manovre-arte-strategia-stile">Le Manovre: Arte, Strategia, Stile</a></li>
+                            <li><a href="#difendere-arte-offendere">Difendere è un’Arte tanto quanto Offendere</a></li>
+                            <li><a href="#incantesimi-architettura-morte">Incantesimi Come Architettura di Morte</a></li>
+                            <li><a href="#sinergie-debolezze-tattica-gruppo">Sinergie, Debolezze e Tattica di Gruppo</a></li>
+                            <li><a href="#sistema-pensato-brillare">Un Sistema Pensato per Brillare</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <hr class="my-8 border-t border-gray-300">
+
+            <section id="caratteristiche-personaggio">
+                <h2>Caratteristiche del Personaggio</h2>
+                <p>In Forsaken Eons, ogni personaggio è definito da sei Caratteristiche fondamentali, che rappresentano le sue attitudini naturali, le sue capacità allenate e la sua influenza sul mondo che lo circonda. Queste caratteristiche non sono solo numeri: plasmano lo stile, le scelte e la sopravvivenza stessa del personaggio in ogni momento dell’avventura.</p>
+
+                <h3 id="vigore">Vigore</h3>
+                <p>Il <strong>Vigore</strong> rappresenta la resistenza fisica e la capacità di sopportare la fatica. È la misura della stamina, cioè di quante azioni fisiche intense un personaggio può compiere prima di cedere alla stanchezza. Il Vigore entra in gioco in ogni situazione che richiede tenacia, dal resistere a veleni e malattie, fino a mantenere la guardia alta in combattimenti prolungati.</p>
+
+                <h3 id="potenza">Potenza</h3>
+                <p>La <strong>Potenza</strong> esprime la forza bruta, la capacità di infliggere colpi devastanti, sollevare pesi, abbattere porte o compiere imprese atletiche. È il fulcro di chi vive di forza fisica, come guerrieri e combattenti frontali, ma è anche fondamentale in situazioni dove serve superare ostacoli con pura determinazione muscolare.</p>
+
+                <h3 id="agilita">Agilità</h3>
+                <p>L'<strong>Agilità</strong> determina la rapidità, la destrezza e la coordinazione del corpo. Serve a schivare colpi, muoversi silenziosamente, compiere acrobazie e maneggiare armi leggere o strumenti di precisione. È una caratteristica essenziale per chi vive di movimento, sorprese e colpi rapidi: ladri, schermidori, esploratori.</p>
+
+                <h3 id="sensi">Sensi</h3>
+                <p>I <strong>Sensi</strong> sono la rappresentazione della percezione mentale e fisica: vista acuta, intuito, capacità di leggere l’ambiente o le emozioni altrui. Ma vanno oltre, includendo anche la padronanza della manipolazione arcana e la conoscenza delle forze invisibili che attraversano il mondo. Maghi, alchimisti e studiosi della magia dipendono da questa caratteristica.</p>
+
+                <h3 id="spirito">Spirito</h3>
+                <p>Lo <strong>Spirito</strong> misura la connessione interiore con il proprio potere, sia esso magico, divino o marziale. È la forza d’animo, la concentrazione nelle arti rituali o la calma nel mezzo della tempesta. Spirito è il centro dei mistici, degli incantatori devoti e dei guerrieri che combattono con tecniche profonde e spirituali.</p>
+
+                <h3 id="influenza">Influenza</h3>
+                <p>L'<strong>Influenza</strong>, infine, rappresenta il carisma, la presenza e la capacità di persuasione del personaggio. È la voce che cambia il cuore degli uomini, lo sguardo che impone rispetto, l’arguzia che scardina trattative. È indispensabile per chi intende guidare, manipolare o semplicemente farsi seguire, dal nobile affascinante al ladro mellifluo.</p>
+                <p>Ogni caratteristica si riflette direttamente nei tiri, nelle manovre, nelle interazioni e nell'equipaggiamento del personaggio. Potenziarle significa espandere il proprio modo di affrontare il mondo e plasmare il proprio destino con stile, forza o pura presenza.</p>
+            </section>
 
             <hr class="my-8 border-t border-gray-300">
 
@@ -96,19 +183,19 @@
                 <p>In Forsaken Eons, il combattimento non è solo una meccanica, è un atto d'arte. È il battito del cuore dell’intero sistema, dove ogni gesto diventa racconto, ogni decisione plasma il ritmo stesso della battaglia. Le lame non si limitano a tagliare: danzano. I pugni non colpiscono: martellano l’aria come tuoni divini. Gli incantatori non lanciano incantesimi: scolpiscono realtà momentanee con geometrie arcane e fuoco liquido.</p>
                 <p>Qui, non basta sopravvivere. Devi sopravvivere con eleganza, con potenza, con precisione chirurgica. Devi affrontare il caos del mondo antico e danzare sulla lama del rasoio, perché la morte è ovunque… ma non è mai banale.</p>
 
-                <h3>Lo Scontro è una Coreografia Letale</h3>
+                <h3 id="scontro-coreografia-letale">Lo Scontro è una Coreografia Letale</h3>
                 <p>Ogni turno in Forsaken Eons si apre come una battaglia danzata. Le iniziative si confrontano tra i due lati: si lancia l’Agilità più alta del gruppo contro quella più alta dei nemici. Chi vince, prende il ritmo.</p>
                 <p>Ma attenzione: non c’è un “attacco base”. Non c’è un “colpo normale”. Esistono le <strong>Manovre</strong>, e ogni manovra è una dichiarazione di stile e intenti.</p>
                 <p>Vuoi fendere l’aria con un colpo rotante? Saltare da una sporgenza e atterrare con l’arma che esplode d’energia? Vuoi scivolare sotto una guardia avversaria e piantare la lama nella sua ombra? Puoi farlo. Devi farlo.</p>
                 <p>E per farlo, dichiari le manovre all’inizio del tuo turno, scegliendo come spendere la tua Stamina o Concentrazione. Più manovre, più fiato perso. E ogni mossa può essere annullata, parata, schivata. Il combattimento non è sicuro, mai. È una scommessa continua su chi colpirà per primo, chi resisterà fino alla fine.</p>
                 <p>Ma quando riesci, quando tutto fila perfettamente… è come guardare una scena scolpita nella leggenda.</p>
 
-                <h3>Le Manovre: Arte, Strategia, Stile</h3>
+                <h3 id="manovre-arte-strategia-stile">Le Manovre: Arte, Strategia, Stile</h3>
                 <p>Ogni classe, ogni personaggio, ha accesso a un repertorio unico di manovre. I duellanti possono lanciare fioriture acrobatiche. I mistici fondono attacchi con geometrie magiche. I predoni si spostano come ombre, lasciando morte dietro di sé. Eppure, tutti sono guidati dalle stesse regole: <strong>competenza, maestria e caratteristica</strong>.</p>
                 <p>Non lanci semplicemente un d20. Lanci 2d6, 3d10 o 5d8, in base alla tua <strong>Maestria</strong> (quanti dadi tiri) e <strong>Competenza</strong> (quale dado usi). A questi si somma la tua Caratteristica divisa per 5, più il <strong>Grado</strong> dell’arma o incantesimo usato. Il risultato è il danno, la potenza, la forza narrativa della tua azione.</p>
                 <p>Eppure, non è solo il “quanto” colpisci. È il “come”.</p>
 
-                <h3>Difendere è un’Arte tanto quanto Offendere</h3>
+                <h3 id="difendere-arte-offendere">Difendere è un’Arte tanto quanto Offendere</h3>
                 <p>Non esistono tiri per colpire in Forsaken Eons. Ogni attacco è un’azione vera, a meno che non venga interrotta. Il nemico può parare. Può schivare. Ma deve spendere stamina, deve scegliere il momento giusto. E se sbaglia? Non solo viene colpito, ma perde l’iniziativa narrativa del combattimento.</p>
                 <ul>
                     <li><strong>Parry:</strong> una parata potente, se riesce, blocca tutte le manovre del turno dell’avversario.</li>
@@ -116,17 +203,17 @@
                 </ul>
                 <p>Ogni difesa è un rischio, ogni azione un passo nella coreografia mortale.</p>
 
-                <h3>Incantesimi Come Architettura di Morte</h3>
+                <h3 id="incantesimi-architettura-morte">Incantesimi Come Architettura di Morte</h3>
                 <p>La magia in Forsaken Eons è viva, geometrica, personale. Ogni incantesimo nasce dalla combinazione tra un’<strong>architettura</strong> e un <strong>elemento</strong>. Una “geometria” determina la forma dell’incanto (una raffica, un raggio, una sfera esplosiva, un turbine). L’elemento invece – fuoco, gelo, tuono, ombra, luce, veleno, e altri – dona la sua essenza, con effetti unici offensivi, difensivi e di supporto.</p>
                 <p>Vuoi creare un arco di fulmini a spirale che si sposta tra i nemici come un serpente elettrico? Fallo. Vuoi evocare una lancia di fuoco che esplode al contatto, lasciando un’aura di calore attorno? È nelle tue mani.</p>
                 <p>Ma c’è di più: la magia può essere condivisa. Un incantatore può “infondere” un’arma alleata con un elemento. Se il nemico è vulnerabile al fuoco, il mago può convertire l’arma dell’amico in un catalizzatore rovente di distruzione.</p>
                 <p>La collaborazione è vitale. I personaggi non vivono in compartimenti stagni. I loro stili si intrecciano, si potenziano, si amplificano.</p>
 
-                <h3>Sinergie, Debolezze e Tattica di Gruppo</h3>
+                <h3 id="sinergie-debolezze-tattica-gruppo">Sinergie, Debolezze e Tattica di Gruppo</h3>
                 <p>Un guerriero può atterrare un nemico con una carica poderosa, lasciandolo vulnerabile. Un ladro può sfruttare quell’apertura per infliggere un colpo critico. Il mago, nel frattempo, può scolpire un campo d’energia che protegge entrambi… o distrugge tutti con un’esplosione controllata.</p>
                 <p>E se il nemico è un gigante infuso di ghiaccio eterno? Allora serve il fuoco. Ma non è solo “danno bonus”: il calore scioglie la sua armatura, lo rallenta, lo indebolisce. Il mondo di gioco risponde agli elementi. Ogni scelta ha un effetto reale. Ogni collaborazione può cambiare il corso dello scontro.</p>
 
-                <h3>Un Sistema Pensato per Brillare</h3>
+                <h3 id="sistema-pensato-brillare">Un Sistema Pensato per Brillare</h3>
                 <p>In Forsaken Eons, ogni giocatore ha la possibilità di splendere. Che tu sia un novizio che cerca il primo sangue, o un veterano che ama le meccaniche profonde, il sistema ti premia sempre con scelte vere, descrizioni potenti e risultati coerenti.</p>
                 <ul>
                     <li>Ogni dado che tiri ha peso.</li>
@@ -144,7 +231,6 @@
 
             <hr class="my-8 border-t border-gray-300">
 
-            <p class="text-center text-gray-500 text-sm">Questo è uno spazio per aggiungere tutte le regole e i dettagli che desideri per il tuo gioco.</p>
         </div>
         <a href="index.html#regolamento-section" class="back-button mt-8">← Torna al Regolamento</a>
     </div>
