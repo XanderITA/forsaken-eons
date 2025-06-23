@@ -14,23 +14,56 @@
             background-color: #FDFBF8;
             color: #4A4A4A;
         }
-        .tab-button {
-            transition: all 0.3s ease;
+        .container {
+            max-width: 960px; /* Max width for readability */
         }
-        .tab-button.active {
-            background-color: #8D7B68;
-            color: #FDFBF8;
-            border-color: #8D7B68;
-        }
-        .tab-button:not(.active):hover {
-            background-color: #EAE3D9;
-        }
-        .calculator-card {
+        .content-block {
             background-color: #FFFFFF;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             border: 1px solid #EAE3D9;
             padding: 2.5rem;
+            margin-bottom: 2rem; /* Spazio tra i blocchi */
+        }
+        h1, h2, h3, h4 {
+            color: #6F6051;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 2rem;
+            border-bottom: 2px solid #EAE3D9;
+            padding-bottom: 0.5rem;
+        }
+        h3 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+        }
+        h4 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        p {
+            margin-bottom: 1rem; /* Spazio tra i paragrafi */
+            line-height: 1.7;
+        }
+        ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        ol {
+            list-style: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
         }
         .modal {
             display: none; /* Hidden by default */
@@ -96,112 +129,60 @@
         </header>
 
         <main class="w-full max-w-4xl">
-            <div class="bg-white rounded-xl shadow-lg border border-gray-200">
-                <nav class="flex border-b border-gray-200">
-                    <button id="calculator-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium rounded-tl-xl border-r border-gray-200 active" onclick="showTab('calculator-section')">Calcolatore Danni</button>
-                    <button id="regolamento-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium border-l border-gray-200" onclick="showTab('regolamento-section')">Regolamento</button>
-                    <button id="maneuvers-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium rounded-tr-xl border-l border-gray-200" onclick="showTab('maneuvers-section')">Manovre Utente</button>
-                </nav>
+            <div class="content-block">
+                <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Regolamento di Gioco</h2>
 
-                <div id="calculator-section" class="tab-content p-8">
-                    <div class="calculator-card p-8">
-                        <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Calcola Danno Fisico</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="maestria" class="block text-sm font-medium text-gray-700">Maestria:</label>
-                                <input type="number" id="maestria" value="1" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border">
-                            </div>
-                            <div>
-                                <label for="competenza" class="block text-sm font-medium text-gray-700">Competenza (Dado):</label>
-                                <select id="competenza" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border">
-                                    <option value="4">D4</option>
-                                    <option value="6">D6</option>
-                                    <option value="8">D8</option>
-                                    <option value="10">D10</option>
-                                    <option value="12">D12</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="statistica" class="block text-sm font-medium text-gray-700">Statistica (es. Forza, Destrezza):</label>
-                                <input type="number" id="statistica" value="10" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border">
-                            </div>
-                            <div>
-                                <label for="grado" class="block text-sm font-medium text-gray-700">Bonus Grado:</label>
-                                <select id="grado" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border">
-                                    <option value="0">Nessuno (+0)</option>
-                                    <option value="2">D (+2)</option>
-                                    <option value="4">C (+4)</option>
-                                    <option value="6">B (+6)</option>
-                                    <option value="8">A (+8)</option>
-                                    <option value="10">S (+10)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button id="calculate-damage" class="mt-8 w-full bg-orange-700 text-white py-3 px-4 rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-700 focus:ring-opacity-50 font-semibold text-lg shadow-md">Calcola Danno</button>
-                        <div id="result" class="mt-6 p-4 bg-gray-100 rounded-md text-gray-800 text-center text-xl font-semibold">
-                            Il tuo danno sarà: -
-                        </div>
-                        <div id="roll-details" class="mt-4 p-4 bg-gray-50 rounded-md text-gray-700 text-sm">
-                            Dettagli del lancio: -
-                        </div>
-                    </div>
-                </div>
+                <section id="classi-specializzazioni">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">🎭 Le Classi</h3>
+                    <p class="text-gray-600 mb-4">In Forsaken Eons, scegliere una Classe non è solo decidere come combattere, ma definire il cuore del proprio personaggio. È una scelta identitaria, che influenza ogni azione, scelta narrativa e stile di gioco.</p>
 
-                <div id="regolamento-section" class="tab-content p-8 hidden">
-                    <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Regolamento di Gioco</h2>
-
-                    <section id="classi-specializzazioni">
-                        <h3 class="text-2xl font-semibold text-gray-700 mb-4">🎭 Le Classi</h3>
-                        <p class="text-gray-600 mb-4">In Forsaken Eons, scegliere una Classe non è solo decidere come combattere, ma definire il cuore del proprio personaggio. È una scelta identitaria, che influenza ogni azione, scelta narrativa e stile di gioco.</p>
-
-                        <h4 class="text-xl font-semibold text-gray-700 mb-2">📌 Cosa acquisisce un personaggio quando sceglie una Classe?</h4>
-                        <ul class="list-disc list-inside mb-4">
-                            <li>Un <strong>Bonus Unico:</strong> che rafforza una caratteristica chiave, come Stamina o Concentrazione, legata al ruolo della Classe.</li>
-                            <li>Una <strong>Meccanica di Classe:</strong> una regola esclusiva che cambia le dinamiche del gioco solo per quel personaggio. Può influenzare il combattimento, l’esplorazione o la magia.</li>
-                            <li>Quattro <strong>Manovre Uniche:</strong> azioni speciali dal forte impatto cinematografico e strategico, che il personaggio può usare sin da subito per distinguersi in ogni scena.</li>
-                        </ul>
-
-                        <h4 class="text-xl font-semibold text-gray-700 mb-2">⚙️ Esempi di Meccaniche di Classe</h4>
-                        <ul class="list-disc list-inside mb-4">
-                            <li>Lo <strong>Striker</strong> sfrutta la posizione sul campo per colpire con precisione letale grazie a “Imboscata”, attaccando senza consumare Stamina se coglie un nemico di sorpresa.</li>
-                            <li>Il <strong>Protector</strong> protegge i compagni grazie a “Scudo del Martire”, assorbendo danni altrui attraverso un’aura sacra dorata che si infrange come vetro divino.</li>
-                            <li>L’<strong>Arcanist</strong>, con “Codice degli Elementi”, può lanciare rituali anche senza possedere tutti gli elementi richiesti, piegando le regole della magia con la sola forza della conoscenza.</li>
-                        </ul>
-
-                        <h4 class="text-xl font-semibold text-gray-700 mb-2">🌀 Le Manovre Uniche</h4>
-                        <p class="text-gray-600 mb-4">Le Manovre Uniche sono abilità speciali pensate per esaltare lo stile di ogni Classe. Lo Striker esegue attacchi fulminei o combo a distanza, il Protector cura o si lancia in cariche sacre, l’Arcanist evoca famigli, disegna glifi annullamagia o fonde gli elementi in esplosioni fuori scala.</p>
-                        <p class="text-gray-600 mb-4">Queste mosse non richiedono un lungo apprendimento: si ottengono subito con la Classe, rendendo ogni giocatore già in grado di lasciare il segno dalla prima battaglia.</p>
-
-                        <p class="text-center text-gray-700 font-semibold italic mt-6 mb-2">“Scegliere una Classe è scegliere il proprio posto nel mito. Non sei solo un guerriero, un mago o un difensore. Sei il simbolo di una via, il riflesso di uno stile che plasma il mondo intorno a te.”</p>
-                    </section>
-                    
-                    <div class="text-center mt-8">
-                        <a href="regole_estese_page.html" class="inline-block bg-orange-700 text-white py-3 px-6 rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-700 focus:ring-opacity-50 font-semibold text-lg shadow-md">Vedi Regole Estese</a>
-                    </div>
-                </div>
-
-                <div id="maneuvers-section" class="tab-content p-8 hidden">
-                    <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Manovre Utente</h2>
-
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Manovre Generali</h3>
-                    <p class="text-gray-600 mb-4">Ogni personaggio può eseguire una varietà di manovre generali che non richiedono un addestramento specifico ma sono fondamentali in combattimento e nell'esplorazione. Queste manovre sono disponibili per chiunque e rappresentano le azioni base del sistema.</p>
-                    <ul class="list-disc list-inside mb-6">
-                        <li><strong>Attacco Standard:</strong> Un singolo colpo con l'arma equipaggiata o a mani nude.</li>
-                        <li><strong>Scatto:</strong> Muoviti fino a due volte la tua velocità.</li>
-                        <li><strong>Disimpegno:</strong> Ritirati dalla mischia senza provocare attacchi di opportunità.</li>
-                        <li><strong>Aiuto:</strong> Offri un bonus al tiro di un alleato vicino.</li>
-                        <li><strong>Ricerca:</strong> Cerca oggetti, trappole o indizi nascosti nell'ambiente.</li>
-                        <li><strong>Percepire:</strong> Usa i tuoi sensi per notare dettagli importanti.</li>
-                        <li><strong>Interagire:</strong> Apri una porta, sposta un oggetto, raccogli qualcosa.</li>
-                        <li><strong>Schivata (Azione Reattiva):</strong> Tenta di evitare un attacco in arrivo.</li>
-                        <li><strong>Parata (Azione Reattiva):</strong> Usa la tua arma o scudo per bloccare un attacco in arrivo.</li>
+                    <h4 class="text-xl font-semibold text-gray-700 mb-2">📌 Cosa acquisisce un personaggio quando sceglie una Classe?</h4>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Un <strong>Bonus Unico:</strong> che rafforza una caratteristica chiave, come Stamina o Concentrazione, legata al ruolo della Classe.</li>
+                        <li>Una <strong>Meccanica di Classe:</strong> una regola esclusiva che cambia le dinamiche del gioco solo per quel personaggio. Può influenzare il combattimento, l’esplorazione o la magia.</li>
+                        <li>Quattro <strong>Manovre Uniche:</strong> azioni speciali dal forte impatto cinematografico e strategico, che il personaggio può usare sin da subito per distinguersi in ogni scena.</li>
                     </ul>
 
-                    <button id="open-create-maneuver-modal" class="w-full bg-green-700 text-white py-3 px-4 rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-opacity-50 font-semibold text-lg shadow-md mb-4">Crea Nuova Manovra Personalizzata</button>
-                    <div id="maneuvers-list" class="space-y-4">
-                        <!-- User maneuvers will be loaded here -->
-                        <p class="text-center text-gray-500">Nessuna manovra personalizzata disponibile. Creane una!</p>
-                    </div>
+                    <h4 class="text-xl font-semibold text-gray-700 mb-2">⚙️ Esempi di Meccaniche di Classe</h4>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Lo <strong>Striker</strong> sfrutta la posizione sul campo per colpire con precisione letale grazie a “Imboscata”, attaccando senza consumare Stamina se coglie un nemico di sorpresa.</li>
+                        <li>Il <strong>Protector</strong> protegge i compagni grazie a “Scudo del Martire”, assorbendo danni altrui attraverso un’aura sacra dorata che si infrange come vetro divino.</li>
+                        <li>L’<strong>Arcanist</strong>, con “Codice degli Elementi”, può lanciare rituali anche senza possedere tutti gli elementi richiesti, piegando le regole della magia con la sola forza della conoscenza.</li>
+                    </ul>
+
+                    <h4 class="text-xl font-semibold text-gray-700 mb-2">🌀 Le Manovre Uniche</h4>
+                    <p class="text-gray-600 mb-4">Le Manovre Uniche sono abilità speciali pensate per esaltare lo stile di ogni Classe. Lo Striker esegue attacchi fulminei o combo a distanza, il Protector cura o si lancia in cariche sacre, l’Arcanist evoca famigli, disegna glifi annullamagia o fonde gli elementi in esplosioni fuori scala.</p>
+                    <p class="text-gray-600 mb-4">Queste mosse non richiedono un lungo apprendimento: si ottengono subito con la Classe, rendendo ogni giocatore già in grado di lasciare il segno dalla prima battaglia.</p>
+
+                    <p class="text-center text-gray-700 font-semibold italic mt-6 mb-2">“Scegliere una Classe è scegliere il proprio posto nel mito. Non sei solo un guerriero, un mago o un difensore. Sei il simbolo di una via, il riflesso di uno stile che plasma il mondo intorno a te.”</p>
+                </section>
+                
+                <div class="text-center mt-8">
+                    <a href="regole_estese_page.html" class="inline-block bg-orange-700 text-white py-3 px-6 rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-700 focus:ring-opacity-50 font-semibold text-lg shadow-md">Vedi Regole Estese</a>
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Manovre Utente</h2>
+
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Manovre Generali</h3>
+                <p class="text-gray-600 mb-4">Ogni personaggio può eseguire una varietà di manovre generali che non richiedono un addestramento specifico ma sono fondamentali in combattimento e nell'esplorazione. Queste manovre sono disponibili per chiunque e rappresentano le azioni base del sistema.</p>
+                <ul class="list-disc list-inside mb-6">
+                    <li><strong>Attacco Standard:</strong> Un singolo colpo con l'arma equipaggiata o a mani nude.</li>
+                    <li><strong>Scatto:</strong> Muoviti fino a due volte la tua velocità.</li>
+                    <li><strong>Disimpegno:</strong> Ritirati dalla mischia senza provocare attacchi di opportunità.</li>
+                    <li><strong>Aiuto:</strong> Offri un bonus al tiro di un alleato vicino.</li>
+                    <li><strong>Ricerca:</strong> Cerca oggetti, trappole o indizi nascosti nell'ambiente.</li>
+                    <li><strong>Percepire:</strong> Usa i tuoi sensi per notare dettagli importanti.</li>
+                    <li><strong>Interagire:</strong> Apri una porta, sposta un oggetto, raccogli qualcosa.</li>
+                    <li><strong>Schivata (Azione Reattiva):</strong> Tenta di evitare un attacco in arrivo.</li>
+                    <li><strong>Parata (Azione Reattiva):</strong> Usa la tua arma o scudo per bloccare un attacco in arrivo.</li>
+                </ul>
+
+                <button id="open-create-maneuver-modal" class="w-full bg-green-700 text-white py-3 px-4 rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-opacity-50 font-semibold text-lg shadow-md mb-4">Crea Nuova Manovra Personalizzata</button>
+                <div id="maneuvers-list" class="space-y-4">
+                    <!-- User maneuvers will be loaded here -->
+                    <p class="text-center text-gray-500">Nessuna manovra personalizzata disponibile. Creane una!</p>
                 </div>
             </div>
         </main>
@@ -311,18 +292,6 @@
 
 
         // --- UI Elements ---
-        const calculateDamageButton = document.getElementById('calculate-damage');
-        const resultDiv = document.getElementById('result');
-        const rollDetailsDiv = document.getElementById('roll-details');
-
-        const calculatorTabButton = document.getElementById('calculator-tab-button');
-        const rulesTabButton = document.getElementById('regolamento-tab-button');
-        const maneuversTabButton = document.getElementById('maneuvers-tab-button');
-
-        const calculatorSection = document.getElementById('calculator-section');
-        const regolamentoSection = document.getElementById('regolamento-section');
-        const maneuversSection = document.getElementById('maneuvers-section');
-
         const openCreateManeuverModalButton = document.getElementById('open-create-maneuver-modal');
         const createManeuverModal = document.getElementById('create-maneuver-modal');
         const closeCreateManeuverModalButton = document.getElementById('close-create-maneuver-modal');
@@ -337,63 +306,11 @@
         const saveNicknameButton = document.getElementById('save-nickname-button');
         const nicknameMessage = document.getElementById('nickname-message');
 
-        // --- Tab Switching Logic ---
-        window.showTab = function(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            // Deactivate all tab buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-
-            // Show the selected tab content
-            document.getElementById(tabId).classList.remove('hidden');
-            // Activate the selected tab button
-            document.getElementById(tabId.replace('-section', '-tab-button')).classList.add('active');
-
-            if (tabId === 'maneuvers-section' && userId) {
-                // Check if nickname is set before showing the section fully
-                checkAndPromptForNickname();
-            }
-        }
-
-        // --- Damage Calculator Logic ---
-        calculateDamageButton.addEventListener('click', () => {
-            const maestria = parseInt(document.getElementById('maestria').value);
-            const competenza = parseInt(document.getElementById('competenza').value);
-            const statistica = parseInt(document.getElementById('statistica').value);
-            const grado = parseInt(document.getElementById('grado').value);
-
-            if (isNaN(maestria) || isNaN(competenza) || isNaN(statistica) || isNaN(grado)) {
-                resultDiv.textContent = "Inserisci valori validi in tutti i campi.";
-                rollDetailsDiv.textContent = "";
-                return;
-            }
-
-            let totalRoll = 0;
-            let rolls = [];
-            for (let i = 0; i < maestria; i++) {
-                const roll = Math.floor(Math.random() * competenza) + 1;
-                rolls.push(roll);
-                totalRoll += roll;
-            }
-
-            const statisticaBonus = Math.floor(statistica / 5);
-            const finalDamage = totalRoll + statisticaBonus + grado;
-
-            resultDiv.textContent = `Il tuo danno sarà: ${finalDamage}`;
-            rollDetailsDiv.textContent = `Dettagli del lancio: ${maestria}d${competenza} (${rolls.join(' + ')}) + Bonus Statistica (${statisticaBonus}) + Bonus Grado (${grado})`;
-        });
-
         // --- Nickname Modal Logic ---
         async function checkAndPromptForNickname() {
             if (!userId) {
-                // If userId is not set, it means onAuthStateChanged hasn't completed or failed.
-                // Wait for authentication or prompt directly.
                 nicknameMessage.textContent = 'Autenticazione in corso... riprova tra un attimo.';
-                nicknameModal.style.display = 'flex'; // Show modal to indicate waiting or input
+                nicknameModal.style.display = 'flex';
                 return;
             }
 
@@ -401,13 +318,12 @@
             const userDocSnap = await getDoc(userDocRef);
 
             if (!userDocSnap.exists() || !userDocSnap.data().nickname) {
-                // If no nickname is set, show the modal
                 nicknameModal.style.display = 'flex';
-                nicknameInput.value = userDisplayName === 'Anonimo' ? '' : userDisplayName; // Pre-fill if not default
+                nicknameInput.value = userDisplayName === 'Anonimo' ? '' : userDisplayName;
                 nicknameInput.focus();
             } else {
                 userDisplayName = userDocSnap.data().nickname;
-                // If nickname exists, just load maneuvers (already called by onAuthStateChanged)
+                loadUserManeuvers();
             }
         }
 
@@ -433,7 +349,7 @@
                 setTimeout(() => {
                     nicknameModal.style.display = 'none';
                     nicknameMessage.textContent = '';
-                    loadUserManeuvers(); // Reload maneuvers with new display name
+                    loadUserManeuvers();
                 }, 1000);
             } catch (error) {
                 nicknameMessage.textContent = `Errore nel salvataggio del nickname: ${error.message}`;
@@ -444,25 +360,11 @@
 
         // --- Create Maneuver Modal Logic ---
         openCreateManeuverModalButton.addEventListener('click', () => {
-            if (!userId) {
-                // If not authenticated, prompt for nickname first
-                showTab('maneuvers-section'); // This will trigger checkAndPromptForNickname()
+            if (!userId || userDisplayName === 'Anonimo') { // Check if user is authenticated and has a nickname
+                checkAndPromptForNickname();
                 return;
             }
-            // Check if nickname is set before opening maneuver modal
-            const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
-            getDoc(userDocRef).then(userDocSnap => {
-                if (!userDocSnap.exists() || !userDocSnap.data().nickname) {
-                    showTab('maneuvers-section'); // Redirect to nickname prompt
-                } else {
-                    createManeuverModal.classList.remove('hidden');
-                    userDisplayName = userDocSnap.data().nickname; // Ensure display name is updated
-                }
-            }).catch(error => {
-                console.error("Error checking nickname:", error);
-                // Fallback to showing nickname modal if error occurs
-                showTab('maneuvers-section');
-            });
+            createManeuverModal.classList.remove('hidden');
         });
 
         closeCreateManeuverModalButton.addEventListener('click', () => {
@@ -494,12 +396,11 @@
                     type: type,
                     cost: cost,
                     description: description,
-                    userId: auth.currentUser.uid, // Still store UID for internal reference/security rules
-                    creatorDisplayName: userDisplayName, // Store display name
+                    userId: auth.currentUser.uid,
+                    creatorDisplayName: userDisplayName,
                     createdAt: new Date()
                 };
 
-                // Use public collection for shared maneuvers
                 const userManeuversCollectionRef = collection(db, `artifacts/${appId}/public/data/user_maneuvers`);
                 await addDoc(userManeuversCollectionRef, userManeuver);
 
@@ -509,7 +410,7 @@
                 setTimeout(() => {
                     createManeuverModal.classList.add('hidden');
                     maneuverFormMessage.textContent = '';
-                }, 1500); // Hide modal after 1.5 seconds
+                }, 1500);
             } catch (error) {
                 maneuverFormMessage.textContent = `Errore durante il salvataggio: ${error.message}`;
                 maneuverFormMessage.style.color = 'red';
@@ -522,30 +423,25 @@
         // --- Load User Maneuvers Logic ---
         function loadUserManeuvers() {
             if (!userId) {
-                // If not authenticated, do not attempt to load
-                maneuversList.innerHTML = '<p class="text-center text-gray-500">Effettua l\'accesso o imposta un nickname per vedere e creare manovre.</p>';
+                maneuversList.innerHTML = '<p class="text-center text-gray-500">Effettua l\'accesso o imposta un nickname per vedere e creare manovre personalizzate.</p>';
                 return;
             }
 
-            // Reference to the public user_maneuvers collection
             const userManeuversCollectionRef = collection(db, `artifacts/${appId}/public/data/user_maneuvers`);
-            const q = query(userManeuversCollectionRef, orderBy('createdAt', 'desc')); // Order by creation date
+            const q = query(userManeuversCollectionRef, orderBy('createdAt', 'desc'));
 
-            // Listen for real-time updates
             onSnapshot(q, (snapshot) => {
-                // Clear only the dynamically loaded part, not the static general maneuvers
-                const dynamicManeuversContainer = document.getElementById('maneuvers-list');
-                dynamicManeuversContainer.innerHTML = ''; 
+                maneuversList.innerHTML = ''; 
 
                 if (snapshot.empty) {
-                    dynamicManeuversContainer.innerHTML = '<p class="text-center text-gray-500">Nessuna manovra personalizzata disponibile. Creane una!</p>';
+                    maneuversList.innerHTML = '<p class="text-center text-gray-500">Nessuna manovra personalizzata disponibile. Creane una!</p>';
                     return;
                 }
 
                 snapshot.forEach((doc) => {
                     const maneuver = doc.data();
                     const maneuverId = doc.id;
-                    const isCreator = maneuver.userId === userId; // Check if current user is the creator
+                    const isCreator = maneuver.userId === userId;
 
                     const maneuverCard = document.createElement('div');
                     maneuverCard.className = 'bg-gray-50 p-4 rounded-md shadow-sm border border-gray-200 relative';
@@ -555,14 +451,12 @@
                         <p class="text-xs text-gray-500 mt-2">Creato da: ${maneuver.creatorDisplayName || 'Anonimo'} il ${maneuver.createdAt ? new Date(maneuver.createdAt.seconds * 1000).toLocaleDateString() : 'N/D'}</p>
                         ${isCreator ? `<button class="delete-maneuver-button absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full text-xs hover:bg-red-600" data-id="${maneuverId}">X</button>` : ''}
                     `;
-                    dynamicManeuversContainer.appendChild(maneuverCard);
+                    maneuversList.appendChild(maneuverCard);
                 });
 
-                // Add event listeners for delete buttons
                 document.querySelectorAll('.delete-maneuver-button').forEach(button => {
                     button.addEventListener('click', async (e) => {
                         const idToDelete = e.target.dataset.id;
-                        // Using a custom modal instead of alert/confirm as per instructions
                         const userConfirmed = window.confirm('Sei sicuro di voler eliminare questa manovra?');
                         if (userConfirmed) {
                             try {
@@ -581,10 +475,18 @@
             });
         }
 
-
-        // Initialize the first tab on page load
+        // Initial check for nickname when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            showTab('calculator-section');
+            // No need for showTab logic, as it's a single page now.
+            // Just ensure Firebase auth is ready and then load maneuvers if nickname is set.
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    checkAndPromptForNickname();
+                } else {
+                    // If not signed in, the onAuthStateChanged will attempt signInAnonymously.
+                    // The loadUserManeuvers will be called once authenticated.
+                }
+            });
         });
     </script>
 </body>
