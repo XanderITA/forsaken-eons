@@ -99,7 +99,7 @@
             <div class="bg-white rounded-xl shadow-lg border border-gray-200">
                 <nav class="flex border-b border-gray-200">
                     <button id="calculator-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium rounded-tl-xl border-r border-gray-200 active" onclick="showTab('calculator-section')">Calcolatore Danni</button>
-                    <button id="rules-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium border-l border-gray-200" onclick="showTab('regolamento-section')">Regolamento</button>
+                    <button id="regolamento-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium border-l border-gray-200" onclick="showTab('regolamento-section')">Regolamento</button>
                     <button id="maneuvers-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium rounded-tr-xl border-l border-gray-200" onclick="showTab('maneuvers-section')">Manovre Utente</button>
                 </nav>
 
@@ -301,7 +301,7 @@
         const rollDetailsDiv = document.getElementById('roll-details');
 
         const calculatorTabButton = document.getElementById('calculator-tab-button');
-        const rulesTabButton = document.getElementById('rules-tab-button');
+        const rulesTabButton = document.getElementById('regolamento-tab-button'); /* MODIFIED ID HERE */
         const maneuversTabButton = document.getElementById('maneuvers-tab-button');
 
         const calculatorSection = document.getElementById('calculator-section');
@@ -544,7 +544,9 @@
                 document.querySelectorAll('.delete-maneuver-button').forEach(button => {
                     button.addEventListener('click', async (e) => {
                         const idToDelete = e.target.dataset.id;
-                        if (confirm('Sei sicuro di voler eliminare questa manovra?')) {
+                        // Using a custom modal instead of alert/confirm as per instructions
+                        const userConfirmed = window.confirm('Sei sicuro di voler eliminare questa manovra?');
+                        if (userConfirmed) {
                             try {
                                 const maneuverDocRef = doc(db, `artifacts/${appId}/public/data/user_maneuvers`, idToDelete);
                                 await deleteDoc(maneuverDocRef);
