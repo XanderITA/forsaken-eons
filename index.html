@@ -14,23 +14,55 @@
             background-color: #FDFBF8;
             color: #4A4A4A;
         }
-        .tab-button {
-            transition: all 0.3s ease;
+        .container {
+            max-width: 960px; /* Max width for readability */
         }
-        .tab-button.active {
-            background-color: #8D7B68;
-            color: #FDFBF8;
-            border-color: #8D7B68;
-        }
-        .tab-button:not(.active):hover {
-            background-color: #EAE3D9;
-        }
-        .calculator-card {
+        .content-card {
             background-color: #FFFFFF;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             border: 1px solid #EAE3D9;
             padding: 2.5rem;
+            line-height: 1.7; /* Improved line spacing for readability */
+        }
+        h1, h2, h3, h4 {
+            color: #6F6051;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 2rem;
+            border-bottom: 2px solid #EAE3D9;
+            padding-bottom: 0.5rem;
+        }
+        h3 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+        }
+        h4 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        p {
+            margin-bottom: 1rem; /* Spazio tra i paragrafi */
+        }
+        ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        ol {
+            list-style: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
         }
         .modal {
             display: none; /* Hidden by default */
@@ -86,9 +118,63 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .index-nav {
+            background-color: #F8F4EF;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #EAE3D9;
+        }
+        .index-nav h3 {
+            text-align: center;
+            font-size: 1.75rem;
+            color: #8D7B68;
+            margin-bottom: 1.5rem;
+        }
+        .index-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .index-nav li {
+            margin-bottom: 0.75rem;
+        }
+        .index-nav a {
+            color: #A4907C;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            display: block;
+            padding: 0.25rem 0;
+        }
+        .index-nav a:hover {
+            color: #6F6051;
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        th, td {
+            border: 1px solid #EAE3D9;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #F8F4EF;
+            font-weight: 600;
+            color: #6F6051;
+        }
+        tr:nth-child(even) {
+            background-color: #FDFBF8;
+        }
+        tr:hover {
+            background-color: #EAE3D9;
+        }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased py-8">
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
         <header class="text-center mb-8">
             <h1 class="text-5xl font-bold text-gray-800">Forsaken Eons</h1>
@@ -96,59 +182,41 @@
         </header>
 
         <main class="w-full max-w-4xl">
-            <div class="bg-white rounded-xl shadow-lg border border-gray-200">
-                <nav class="flex border-b border-gray-200">
-                    <button id="calculator-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium rounded-tl-xl border-r border-gray-200 active" onclick="showTab('calculator-section')">Calcolatore Danni</button>
-                    <button id="rules-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium border-l border-gray-200" onclick="showTab('regolamento-section')">Regolamento</button>
-                    <button id="maneuvers-tab-button" class="tab-button flex-1 py-3 px-4 text-center text-lg font-medium rounded-tr-xl border-l border-gray-200" onclick="showTab('maneuvers-section')">Manovre Utente</button>
+            <div class="content-card">
+                <h1>Guida Rapida a Forsaken Eons</h1>
+
+                <hr class="my-8 border-t border-gray-300">
+
+                <nav class="index-nav">
+                    <h3>Indice della Guida</h3>
+                    <ul>
+                        <li><a href="#introduzione-gioco">Introduzione al Gioco</a></li>
+                        <li><a href="#regolamento-generale">Regolamento di Gioco</a>
+                            <ul>
+                                <li><a href="#classi-specializzazioni">Le Classi</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#manovre">Manovre</a>
+                            <ul>
+                                <li><a href="#manovre-generali">Manovre Generali</a></li>
+                                <li><a href="#manovre-personalizzate">Manovre Personalizzate Utente</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#tabella-gradi-bonus">Tabella Gradi Bonus Statistiche</a></li>
+                    </ul>
                 </nav>
 
-                <div id="calculator-section" class="tab-content p-8">
-                    <div class="calculator-card p-8">
-                        <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Calcola Danno Fisico</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="maestria" class="block text-sm font-medium text-gray-700">Maestria:</label>
-                                <input type="number" id="maestria" value="1" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border">
-                            </div>
-                            <div>
-                                <label for="competenza" class="block text-sm font-medium text-gray-700">Competenza (Dado):</label>
-                                <select id="competenza" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border">
-                                    <option value="4">D4</option>
-                                    <option value="6">D6</option>
-                                    <option value="8">D8</option>
-                                    <option value="10">D10</option>
-                                    <option value="12">D12</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="statistica" class="block text-sm font-medium text-gray-700">Statistica (es. Forza, Destrezza):</label>
-                                <input type="number" id="statistica" value="10" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border">
-                            </div>
-                            <div>
-                                <label for="grado" class="block text-sm font-medium text-gray-700">Bonus Grado:</label>
-                                <select id="grado" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border">
-                                    <option value="0">Nessuno (+0)</option>
-                                    <option value="2">D (+2)</option>
-                                    <option value="4">C (+4)</option>
-                                    <option value="6">B (+6)</option>
-                                    <option value="8">A (+8)</option>
-                                    <option value="10">S (+10)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button id="calculate-damage" class="mt-8 w-full bg-orange-700 text-white py-3 px-4 rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-700 focus:ring-opacity-50 font-semibold text-lg shadow-md">Calcola Danno</button>
-                        <div id="result" class="mt-6 p-4 bg-gray-100 rounded-md text-gray-800 text-center text-xl font-semibold">
-                            Il tuo danno sarà: -
-                        </div>
-                        <div id="roll-details" class="mt-4 p-4 bg-gray-50 rounded-md text-gray-700 text-sm">
-                            Dettagli del lancio: -
-                        </div>
-                    </div>
-                </div>
+                <hr class="my-8 border-t border-gray-300">
 
-                <div id="regolamento-section" class="tab-content p-8 hidden">
-                    <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Regolamento di Gioco</h2>
+                <section id="introduzione-gioco">
+                    <h2>Introduzione al Gioco</h2>
+                    <p class="text-gray-600 mb-4">Benvenuto in Forsaken Eons, un gioco di ruolo dove ogni azione conta e ogni scelta definisce il tuo destino. Questa pagina offre un riassunto delle meccaniche fondamentali per iniziare la tua avventura. Per regole più dettagliate, consulta la pagina delle regole estese.</p>
+                </section>
+
+                <hr class="my-8 border-t border-gray-300">
+
+                <section id="regolamento-generale">
+                    <h2>Regolamento di Gioco</h2>
 
                     <section id="classi-specializzazioni">
                         <h3 class="text-2xl font-semibold text-gray-700 mb-4">🎭 Le Classi</h3>
@@ -178,16 +246,131 @@
                     <div class="text-center mt-8">
                         <a href="regole_estese_page.html" class="inline-block bg-orange-700 text-white py-3 px-6 rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-700 focus:ring-opacity-50 font-semibold text-lg shadow-md">Vedi Regole Estese</a>
                     </div>
-                </div>
+                </section>
 
-                <div id="maneuvers-section" class="tab-content p-8 hidden">
-                    <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Manovre Utente</h2>
-                    <button id="open-create-maneuver-modal" class="w-full bg-green-700 text-white py-3 px-4 rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-opacity-50 font-semibold text-lg shadow-md mb-4">Crea Nuova Manovra</button>
-                    <div id="maneuvers-list" class="space-y-4">
-                        <!-- User maneuvers will be loaded here -->
-                        <p class="text-center text-gray-500">Nessuna manovra utente disponibile. Creane una!</p>
-                    </div>
-                </div>
+                <hr class="my-8 border-t border-gray-300">
+
+                <section id="manovre">
+                    <h2>Manovre</h2>
+
+                    <section id="manovre-generali">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Manovre Generali</h3>
+                        <p class="text-gray-600 mb-4">Ogni personaggio può eseguire una varietà di manovre generali che non richiedono un addestramento specifico ma sono fondamentali in combattimento e nell'esplorazione. Queste manovre sono disponibili per chiunque e rappresentano le azioni base del sistema.</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome Manovra</th>
+                                    <th>Tipo</th>
+                                    <th>Costo (ST/CO)</th>
+                                    <th>Descrizione/Effetto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Attacco Standard</td>
+                                    <td>Base</td>
+                                    <td>2 ST</td>
+                                    <td>Un singolo colpo con l'arma equipaggiata o a mani nude.</td>
+                                </tr>
+                                <tr>
+                                    <td>Scatto</td>
+                                    <td>Movimento</td>
+                                    <td>1 ST</td>
+                                    <td>Muoviti fino a due volte la tua velocità.</td>
+                                </tr>
+                                <tr>
+                                    <td>Disimpegno</td>
+                                    <td>Tattica</td>
+                                    <td>1 ST</td>
+                                    <td>Ritirati dalla mischia senza provocare attacchi di opportunità.</td>
+                                </tr>
+                                <tr>
+                                    <td>Aiuto</td>
+                                    <td>Supporto</td>
+                                    <td>1 CO</td>
+                                    <td>Offri un bonus al tiro di un alleato vicino.</td>
+                                </tr>
+                                <tr>
+                                    <td>Ricerca</td>
+                                    <td>Esplorazione</td>
+                                    <td>1 CO</td>
+                                    <td>Cerca oggetti, trappole o indizi nascosti nell'ambiente.</td>
+                                </tr>
+                                <tr>
+                                    <td>Percepire</td>
+                                    <td>Esplorazione</td>
+                                    <td>1 CO</td>
+                                    <td>Usa i tuoi sensi per notare dettagli importanti.</td>
+                                </tr>
+                                <tr>
+                                    <td>Interagire</td>
+                                    <td>Base</td>
+                                    <td>Nessuno</td>
+                                    <td>Apri una porta, sposta un oggetto, raccogli qualcosa.</td>
+                                </tr>
+                                <tr>
+                                    <td>Schivata</td>
+                                    <td>Reazione</td>
+                                    <td>2 ST</td>
+                                    <td>Tenta di evitare un attacco in arrivo.</td>
+                                </tr>
+                                <tr>
+                                    <td>Parata</td>
+                                    <td>Reazione</td>
+                                    <td>2 ST</td>
+                                    <td>Usa la tua arma o scudo per bloccare un attacco in arrivo.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section id="manovre-personalizzate">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Manovre Personalizzate Utente</h3>
+                        <button id="open-create-maneuver-modal" class="w-full bg-green-700 text-white py-3 px-4 rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-opacity-50 font-semibold text-lg shadow-md mb-4">Crea Nuova Manovra Personalizzata</button>
+                        <div id="maneuvers-list" class="space-y-4">
+                            <!-- User maneuvers will be loaded here -->
+                            <p class="text-center text-gray-500">Nessuna manovra personalizzata disponibile. Creane una!</p>
+                        </div>
+                    </section>
+                </section>
+
+                <hr class="my-8 border-t border-gray-300">
+
+                <section id="tabella-gradi-bonus">
+                    <h2>Tabella Gradi Bonus Statistiche</h2>
+                    <p class="text-gray-600 mb-4">Questa tabella mostra i bonus applicati alle statistiche in base al Grado di Competenza in equipaggiamento o abilità.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Grado</th>
+                                <th>Bonus Statistica</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>D</td>
+                                <td>+2</td>
+                            </tr>
+                            <tr>
+                                <td>C</td>
+                                <td>+4</td>
+                            </tr>
+                            <tr>
+                                <td>B</td>
+                                <td>+6</td>
+                            </tr>
+                            <tr>
+                                <td>A</td>
+                                <td>+8</td>
+                            </tr>
+                            <tr>
+                                <td>S</td>
+                                <td>+10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
             </div>
         </main>
     </div>
@@ -296,17 +479,7 @@
 
 
         // --- UI Elements ---
-        const calculateDamageButton = document.getElementById('calculate-damage');
-        const resultDiv = document.getElementById('result');
-        const rollDetailsDiv = document.getElementById('roll-details');
-
-        const calculatorTabButton = document.getElementById('calculator-tab-button');
-        const rulesTabButton = document.getElementById('rules-tab-button');
-        const maneuversTabButton = document.getElementById('maneuvers-tab-button');
-
-        const calculatorSection = document.getElementById('calculator-section');
-        const regolamentoSection = document.getElementById('regolamento-section');
-        const maneuversSection = document.getElementById('maneuvers-section');
+        // Removed calculator related elements
 
         const openCreateManeuverModalButton = document.getElementById('open-create-maneuver-modal');
         const createManeuverModal = document.getElementById('create-maneuver-modal');
@@ -321,56 +494,6 @@
         const nicknameInput = document.getElementById('nickname-input');
         const saveNicknameButton = document.getElementById('save-nickname-button');
         const nicknameMessage = document.getElementById('nickname-message');
-
-        // --- Tab Switching Logic ---
-        window.showTab = function(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            // Deactivate all tab buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-
-            // Show the selected tab content
-            document.getElementById(tabId).classList.remove('hidden');
-            // Activate the selected tab button
-            document.getElementById(tabId.replace('-section', '-tab-button')).classList.add('active');
-
-            if (tabId === 'maneuvers-section' && userId) {
-                // Check if nickname is set before showing the section fully
-                checkAndPromptForNickname();
-            }
-        }
-
-        // --- Damage Calculator Logic ---
-        calculateDamageButton.addEventListener('click', () => {
-            const maestria = parseInt(document.getElementById('maestria').value);
-            const competenza = parseInt(document.getElementById('competenza').value);
-            const statistica = parseInt(document.getElementById('statistica').value);
-            const grado = parseInt(document.getElementById('grado').value);
-
-            if (isNaN(maestria) || isNaN(competenza) || isNaN(statistica) || isNaN(grado)) {
-                resultDiv.textContent = "Inserisci valori validi in tutti i campi.";
-                rollDetailsDiv.textContent = "";
-                return;
-            }
-
-            let totalRoll = 0;
-            let rolls = [];
-            for (let i = 0; i < maestria; i++) {
-                const roll = Math.floor(Math.random() * competenza) + 1;
-                rolls.push(roll);
-                totalRoll += roll;
-            }
-
-            const statisticaBonus = Math.floor(statistica / 5);
-            const finalDamage = totalRoll + statisticaBonus + grado;
-
-            resultDiv.textContent = `Il tuo danno sarà: ${finalDamage}`;
-            rollDetailsDiv.textContent = `Dettagli del lancio: ${maestria}d${competenza} (${rolls.join(' + ')}) + Bonus Statistica (${statisticaBonus}) + Bonus Grado (${grado})`;
-        });
 
         // --- Nickname Modal Logic ---
         async function checkAndPromptForNickname() {
@@ -430,23 +553,21 @@
         // --- Create Maneuver Modal Logic ---
         openCreateManeuverModalButton.addEventListener('click', () => {
             if (!userId) {
-                // If not authenticated, prompt for nickname first
-                showTab('maneuvers-section'); // This will trigger checkAndPromptForNickname()
+                checkAndPromptForNickname();
                 return;
             }
             // Check if nickname is set before opening maneuver modal
             const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
             getDoc(userDocRef).then(userDocSnap => {
                 if (!userDocSnap.exists() || !userDocSnap.data().nickname) {
-                    showTab('maneuvers-section'); // Redirect to nickname prompt
+                    checkAndPromptForNickname(); // Show nickname prompt if not set
                 } else {
                     createManeuverModal.classList.remove('hidden');
                     userDisplayName = userDocSnap.data().nickname; // Ensure display name is updated
                 }
             }).catch(error => {
                 console.error("Error checking nickname:", error);
-                // Fallback to showing nickname modal if error occurs
-                showTab('maneuvers-section');
+                checkAndPromptForNickname(); // Fallback to showing nickname modal if error occurs
             });
         });
 
