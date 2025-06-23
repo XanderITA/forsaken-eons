@@ -1,692 +1,115 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forsaken Eons - Gioco di Ruolo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #FDFBF8;
-            color: #4A4A4A;
-        }
-        .container {
-            max-width: 960px; /* Max width for readability */
-        }
-        .content-card {
-            background-color: #FFFFFF;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            border: 1px solid #EAE3D9;
-            padding: 2.5rem;
-            line-height: 1.7; /* Improved line spacing for readability */
-        }
-        h1, h2, h3, h4 {
-            color: #6F6051;
-            margin-bottom: 1rem;
-        }
-        h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-align: center;
-        }
-        h2 {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-top: 2rem;
-            border-bottom: 2px solid #EAE3D9;
-            padding-bottom: 0.5rem;
-        }
-        h3 {
-            font-size: 1.75rem;
-            font-weight: bold;
-            margin-top: 1.5rem;
-        }
-        h4 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-top: 1rem;
-        }
-        p {
-            margin-bottom: 1rem; /* Spazio tra i paragrafi */
-        }
-        ul {
-            list-style: disc;
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        ol {
-            list-style: decimal;
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            position: relative;
-        }
-        .close-button {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .loading-spinner {
-            border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid #A4907C; /* Brown */
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 2s linear infinite;
-            margin-left: 10px;
-            display: inline-block;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .index-nav {
-            background-color: #F8F4EF;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid #EAE3D9;
-        }
-        .index-nav h3 {
-            text-align: center;
-            font-size: 1.75rem;
-            color: #8D7B68;
-            margin-bottom: 1.5rem;
-        }
-        .index-nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .index-nav li {
-            margin-bottom: 0.75rem;
-        }
-        .index-nav a {
-            color: #A4907C;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            display: block;
-            padding: 0.25rem 0;
-        }
-        .index-nav a:hover {
-            color: #6F6051;
-            text-decoration: underline;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-        }
-        th, td {
-            border: 1px solid #EAE3D9;
-            padding: 0.75rem;
-            text-align: left;
-        }
-        th {
-            background-color: #F8F4EF;
-            font-weight: 600;
-            color: #6F6051;
-        }
-        tr:nth-child(even) {
-            background-color: #FDFBF8;
-        }
-        tr:hover {
-            background-color: #EAE3D9;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indice - Forsaken Eons</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1b1b1b;
+      color: #f0f0f0;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+    h1, h2 {
+      color: #f7d774;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+    a {
+      color: #94e3ff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+  </style>
 </head>
-<body class="antialiased py-8">
-    <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <header class="text-center mb-8">
-            <h1 class="text-5xl font-bold text-gray-800">Forsaken Eons</h1>
-            <p class="text-xl text-gray-600 mt-2">Gioco di Ruolo</p>
-        </header>
+<body>
+  <h1>Forsaken Eons - Indice del Regolamento</h1>
 
-        <main class="w-full max-w-4xl">
-            <div class="content-card">
-                <h1>Guida Rapida a Forsaken Eons</h1>
+  <div class="section">
+    <h2>1. Introduzione</h2>
+    <ul>
+      <li><a href="#ambientazione">1.1 Ambientazione</a></li>
+      <li><a href="#concetto">1.2 Concetto del Gioco</a></li>
+    </ul>
+  </div>
 
-                <hr class="my-8 border-t border-gray-300">
+  <div class="section">
+    <h2>2. Creazione del Personaggio</h2>
+    <ul>
+      <li><a href="#caratteristiche">2.1 Caratteristiche Base</a></li>
+      <li><a href="#derivate">2.2 Caratteristiche Derivate</a></li>
+      <li><a href="#classi">2.3 Scelta della Classe</a></li>
+      <li><a href="#equipaggiamento">2.4 Equipaggiamento</a></li>
+      <li><a href="#dogmi">2.5 Dogmi e Background</a></li>
+    </ul>
+  </div>
 
-                <nav class="index-nav">
-                    <h3>Indice della Guida</h3>
-                    <ul>
-                        <li><a href="#introduzione-gioco">Introduzione al Gioco</a></li>
-                        <li><a href="#regolamento-generale">Regolamento di Gioco</a>
-                            <ul>
-                                <li><a href="#classi-specializzazioni">Le Classi</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#manovre">Manovre</a>
-                            <ul>
-                                <li><a href="#manovre-generali">Manovre Generali</a></li>
-                                <li><a href="#manovre-personalizzate">Manovre Personalizzate Utente</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#tabella-gradi-bonus">Tabella Gradi Bonus Statistiche</a></li>
-                    </ul>
-                </nav>
+  <div class="section">
+    <h2>3. Sistema di Gioco</h2>
+    <ul>
+      <li><a href="#meccaniche">3.1 Meccaniche Base (Maestria e Competenza)</a></li>
+      <li><a href="#proveruolistiche">3.2 Prove Ruolistiche</a></li>
+      <li><a href="#stamina">3.3 Stamina e Concentrazione</a></li>
+      <li><a href="#iniziativa">3.4 Iniziativa e Turni</a></li>
+      <li><a href="#manovre">3.5 Manovre</a></li>
+      <li><a href="#critici">3.6 Colpi Critici</a></li>
+    </ul>
+  </div>
 
-                <hr class="my-8 border-t border-gray-300">
+  <div class="section">
+    <h2>4. Classi e Manovre Uniche</h2>
+    <ul>
+      <li><a href="#striker">4.1 Striker</a></li>
+      <li><a href="#protector">4.2 Protector</a></li>
+      <li><a href="#arcanist">4.3 Arcanist</a></li>
+    </ul>
+  </div>
 
-                <section id="introduzione-gioco">
-                    <h2>Introduzione al Gioco</h2>
-                    <p class="text-gray-600 mb-4">Benvenuto in Forsaken Eons, un gioco di ruolo dove ogni azione conta e ogni scelta definisce il tuo destino. Questa pagina offre un riassunto delle meccaniche fondamentali per iniziare la tua avventura. Per regole più dettagliate, consulta la pagina delle regole estese.</p>
-                </section>
+  <div class="section">
+    <h2>5. Magia, Geometrie ed Elementi</h2>
+    <ul>
+      <li><a href="#geometrie">5.1 Geometrie</a></li>
+      <li><a href="#elementi">5.2 Effetti Elementali (Offensivi, Difensivi, Supporto)</a></li>
+      <li><a href="#rituali">5.3 Rituali e Arti</a></li>
+    </ul>
+  </div>
 
-                <hr class="my-8 border-t border-gray-300">
+  <div class="section">
+    <h2>6. Esplorazione e Narrativa</h2>
+    <ul>
+      <li><a href="#esplorazione">6.1 Movimento, Pericoli e Ambientazione</a></li>
+      <li><a href="#dogmiuso">6.2 Uso dei Dogmi nella Narrazione</a></li>
+    </ul>
+  </div>
 
-                <section id="regolamento-generale">
-                    <h2>Regolamento di Gioco</h2>
+  <div class="section">
+    <h2>7. Combattimento Avanzato</h2>
+    <ul>
+      <li><a href="#parryschivata">7.1 Parate e Schivate</a></li>
+      <li><a href="#status">7.2 Condizioni, Debuff e Tag</a></li>
+      <li><a href="#boss">7.3 Boss, Strategie e Fasi</a></li>
+    </ul>
+  </div>
 
-                    <section id="classi-specializzazioni">
-                        <h3 class="text-2xl font-semibold text-gray-700 mb-4">🎭 Le Classi</h3>
-                        <p class="text-gray-600 mb-4">In Forsaken Eons, scegliere una Classe non è solo decidere come combattere, ma definire il cuore del proprio personaggio. È una scelta identitaria, che influenza ogni azione, scelta narrativa e stile di gioco.</p>
+  <div class="section">
+    <h2>8. Progressione</h2>
+    <ul>
+      <li><a href="#exp">8.1 Spesa di EXP</a></li>
+      <li><a href="#potenza">8.2 Calcolo della Potenza del Gruppo</a></li>
+    </ul>
+  </div>
 
-                        <h4 class="text-xl font-semibold text-gray-700 mb-2">📌 Cosa acquisisce un personaggio quando sceglie una Classe?</h4>
-                        <ul class="list-disc list-inside mb-4">
-                            <li>Un <strong>Bonus Unico:</strong> che rafforza una caratteristica chiave, come Stamina o Concentrazione, legata al ruolo della Classe.</li>
-                            <li>Una <strong>Meccanica di Classe:</strong> una regola esclusiva che cambia le dinamiche del gioco solo per quel personaggio. Può influenzare il combattimento, l’esplorazione o la magia.</li>
-                            <li>Quattro <strong>Manovre Uniche:</strong> azioni speciali dal forte impatto cinematografico e strategico, che il personaggio può usare sin da subito per distinguersi in ogni scena.</li>
-                        </ul>
-
-                        <h4 class="text-xl font-semibold text-gray-700 mb-2">⚙️ Esempi di Meccaniche di Classe</h4>
-                        <ul class="list-disc list-inside mb-4">
-                            <li>Lo <strong>Striker</strong> sfrutta la posizione sul campo per colpire con precisione letale grazie a “Imboscata”, attaccando senza consumare Stamina se coglie un nemico di sorpresa.</li>
-                            <li>Il <strong>Protector</strong> protegge i compagni grazie a “Scudo del Martire”, assorbendo danni altrui attraverso un’aura sacra dorata che si infrange come vetro divino.</li>
-                            <li>L’<strong>Arcanist</strong>, con “Codice degli Elementi”, può lanciare rituali anche senza possedere tutti gli elementi richiesti, piegando le regole della magia con la sola forza della conoscenza.</li>
-                        </ul>
-
-                        <h4 class="text-xl font-semibold text-gray-700 mb-2">🌀 Le Manovre Uniche</h4>
-                        <p class="text-gray-600 mb-4">Le Manovre Uniche sono abilità speciali pensate per esaltare lo stile di ogni Classe. Lo Striker esegue attacchi fulminei o combo a distanza, il Protector cura o si lancia in cariche sacre, l’Arcanist evoca famigli, disegna glifi annullamagia o fonde gli elementi in esplosioni fuori scala.</p>
-                        <p class="text-gray-600 mb-4">Queste mosse non richiedono un lungo apprendimento: si ottengono subito con la Classe, rendendo ogni giocatore già in grado di lasciare il segno dalla prima battaglia.</p>
-
-                        <p class="text-center text-gray-700 font-semibold italic mt-6 mb-2">“Scegliere una Classe è scegliere il proprio posto nel mito. Non sei solo un guerriero, un mago o un difensore. Sei il simbolo di una via, il riflesso di uno stile che plasma il mondo intorno a te.”</p>
-                    </section>
-                    
-                    <div class="text-center mt-8">
-                        <a href="regole_estese_page.html" class="inline-block bg-orange-700 text-white py-3 px-6 rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-700 focus:ring-opacity-50 font-semibold text-lg shadow-md">Vedi Regole Estese</a>
-                    </div>
-                </section>
-
-                <hr class="my-8 border-t border-gray-300">
-
-                <section id="manovre">
-                    <h2>Manovre</h2>
-
-                    <section id="manovre-generali">
-                        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Manovre Generali</h3>
-                        <p class="text-gray-600 mb-4">Ogni personaggio può eseguire una varietà di manovre generali che non richiedono un addestramento specifico ma sono fondamentali in combattimento e nell'esplorazione. Queste manovre sono disponibili per chiunque e rappresentano le azioni base del sistema.</p>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nome Manovra</th>
-                                    <th>Tipo</th>
-                                    <th>Costo (ST/CO)</th>
-                                    <th>Descrizione/Effetto</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Attacco Standard</td>
-                                    <td>Base</td>
-                                    <td>2 ST</td>
-                                    <td>Un singolo colpo con l'arma equipaggiata o a mani nude.</td>
-                                </tr>
-                                <tr>
-                                    <td>Scatto</td>
-                                    <td>Movimento</td>
-                                    <td>1 ST</td>
-                                    <td>Muoviti fino a due volte la tua velocità.</td>
-                                </tr>
-                                <tr>
-                                    <td>Disimpegno</td>
-                                    <td>Tattica</td>
-                                    <td>1 ST</td>
-                                    <td>Ritirati dalla mischia senza provocare attacchi di opportunità.</td>
-                                </tr>
-                                <tr>
-                                    <td>Aiuto</td>
-                                    <td>Supporto</td>
-                                    <td>1 CO</td>
-                                    <td>Offri un bonus al tiro di un alleato vicino.</td>
-                                </tr>
-                                <tr>
-                                    <td>Ricerca</td>
-                                    <td>Esplorazione</td>
-                                    <td>1 CO</td>
-                                    <td>Cerca oggetti, trappole o indizi nascosti nell'ambiente.</td>
-                                </tr>
-                                <tr>
-                                    <td>Percepire</td>
-                                    <td>Esplorazione</td>
-                                    <td>1 CO</td>
-                                    <td>Usa i tuoi sensi per notare dettagli importanti.</td>
-                                </tr>
-                                <tr>
-                                    <td>Interagire</td>
-                                    <td>Base</td>
-                                    <td>Nessuno</td>
-                                    <td>Apri una porta, sposta un oggetto, raccogli qualcosa.</td>
-                                </tr>
-                                <tr>
-                                    <td>Schivata</td>
-                                    <td>Reazione</td>
-                                    <td>2 ST</td>
-                                    <td>Tenta di evitare un attacco in arrivo.</td>
-                                </tr>
-                                <tr>
-                                    <td>Parata</td>
-                                    <td>Reazione</td>
-                                    <td>2 ST</td>
-                                    <td>Usa la tua arma o scudo per bloccare un attacco in arrivo.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
-
-                    <section id="manovre-personalizzate">
-                        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Manovre Personalizzate Utente</h3>
-                        <button id="open-create-maneuver-modal" class="w-full bg-green-700 text-white py-3 px-4 rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-opacity-50 font-semibold text-lg shadow-md mb-4">Crea Nuova Manovra Personalizzata</button>
-                        <div id="maneuvers-list" class="space-y-4">
-                            <!-- User maneuvers will be loaded here -->
-                            <p class="text-center text-gray-500">Nessuna manovra personalizzata disponibile. Creane una!</p>
-                        </div>
-                    </section>
-                </section>
-
-                <hr class="my-8 border-t border-gray-300">
-
-                <section id="tabella-gradi-bonus">
-                    <h2>Tabella Gradi Bonus Statistiche</h2>
-                    <p class="text-gray-600 mb-4">Questa tabella mostra i bonus applicati alle statistiche in base al Grado di Competenza in equipaggiamento o abilità.</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Grado</th>
-                                <th>Bonus Statistica</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>D</td>
-                                <td>+2</td>
-                            </tr>
-                            <tr>
-                                <td>C</td>
-                                <td>+4</td>
-                            </tr>
-                            <tr>
-                                <td>B</td>
-                                <td>+6</td>
-                            </tr>
-                            <tr>
-                                <td>A</td>
-                                <td>+8</td>
-                            </tr>
-                            <tr>
-                                <td>S</td>
-                                <td>+10</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-            </div>
-        </main>
-    </div>
-
-    <!-- Modals -->
-    <!-- Nickname Modal -->
-    <div id="nickname-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button" id="close-nickname-modal">&times;</span>
-            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Inserisci il tuo Nickname</h3>
-            <p class="text-gray-600 mb-4">Per creare e salvare manovre, è necessario un nickname. Sarà visibile a tutti gli utenti come "Creatore".</p>
-            <input type="text" id="nickname-input" placeholder="Il tuo nickname" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border mb-4">
-            <button id="save-nickname-button" class="w-full bg-blue-700 text-white py-2 px-4 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50">Salva Nickname</button>
-            <p id="nickname-message" class="mt-2 text-center text-sm"></p>
-        </div>
-    </div>
-
-    <!-- Create Maneuver Modal -->
-    <div id="create-maneuver-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button" id="close-create-maneuver-modal">&times;</span>
-            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Crea Nuova Manovra Utente</h3>
-            <form id="maneuver-form" class="space-y-4">
-                <div>
-                    <label for="maneuver-name" class="block text-sm font-medium text-gray-700">Nome Manovra:</label>
-                    <input type="text" id="maneuver-name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                </div>
-                <div>
-                    <label for="maneuver-type" class="block text-sm font-medium text-gray-700">Tipo:</label>
-                    <select id="maneuver-type" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                        <option value="">Seleziona Tipo</option>
-                        <option value="Mischia">Mischia</option>
-                        <option value="Distanza">Distanza</option>
-                        <option value="Magica">Magica</option>
-                        <option value="Difensiva">Difensiva</option>
-                        <option value="Supporto">Supporto</option>
-                        <option value="Acrobatica">Acrobatica</option>
-                        <option value="Tattica">Tattica</option>
-                        <option value="Altro">Altro</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="maneuver-cost" class="block text-sm font-medium text-gray-700">Costo (ST/CO):</label>
-                    <input type="text" id="maneuver-cost" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                </div>
-                <div>
-                    <label for="maneuver-description" class="block text-sm font-medium text-gray-700">Descrizione/Effetto:</label>
-                    <textarea id="maneuver-description" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-orange-700 text-white py-2 px-4 rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-700 focus:ring-opacity-50">
-                    Salva Manovra <span id="maneuver-form-loading" class="loading-spinner hidden"></span>
-                </button>
-                <p id="maneuver-form-message" class="mt-2 text-center text-sm"></p>
-            </form>
-        </div>
-    </div>
-
-
-    <script type="module">
-        // Firebase imports
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Firebase configuration (provided globally by the Canvas environment)
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // Use provided app ID
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        let userId = null; // Variable to store the current user's ID
-        let userDisplayName = 'Anonimo'; // Default display name
-
-        // Authenticate user on load
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                // User is signed in.
-                userId = user.uid;
-                // Try to get existing nickname
-                const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
-                const userDocSnap = await getDoc(userDocRef);
-                if (userDocSnap.exists() && userDocSnap.data().nickname) {
-                    userDisplayName = userDocSnap.data().nickname;
-                } else {
-                    userDisplayName = user.displayName || 'Anonimo'; // Fallback to Firebase display name or 'Anonimo'
-                }
-                loadUserManeuvers(); // Load maneuvers once authenticated
-            } else {
-                // User is signed out. Sign in anonymously.
-                try {
-                    if (typeof __initial_auth_token !== 'undefined') {
-                        // Use custom token if available (for authenticated Canvas users)
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        // Fallback to anonymous sign-in
-                        await signInAnonymously(auth);
-                    }
-                } catch (error) {
-                    console.error("Error during anonymous sign-in:", error);
-                }
-            }
-        });
-
-
-        // --- UI Elements ---
-        // Removed calculator related elements
-
-        const openCreateManeuverModalButton = document.getElementById('open-create-maneuver-modal');
-        const createManeuverModal = document.getElementById('create-maneuver-modal');
-        const closeCreateManeuverModalButton = document.getElementById('close-create-maneuver-modal');
-        const maneuverForm = document.getElementById('maneuver-form');
-        const maneuversList = document.getElementById('maneuvers-list');
-        const maneuverFormMessage = document.getElementById('maneuver-form-message');
-        const maneuverFormLoading = document.getElementById('maneuver-form-loading');
-
-        const nicknameModal = document.getElementById('nickname-modal');
-        const closeNicknameModalButton = document.getElementById('close-nickname-modal');
-        const nicknameInput = document.getElementById('nickname-input');
-        const saveNicknameButton = document.getElementById('save-nickname-button');
-        const nicknameMessage = document.getElementById('nickname-message');
-
-        // --- Nickname Modal Logic ---
-        async function checkAndPromptForNickname() {
-            if (!userId) {
-                // If userId is not set, it means onAuthStateChanged hasn't completed or failed.
-                // Wait for authentication or prompt directly.
-                nicknameMessage.textContent = 'Autenticazione in corso... riprova tra un attimo.';
-                nicknameModal.style.display = 'flex'; // Show modal to indicate waiting or input
-                return;
-            }
-
-            const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
-            const userDocSnap = await getDoc(userDocRef);
-
-            if (!userDocSnap.exists() || !userDocSnap.data().nickname) {
-                // If no nickname is set, show the modal
-                nicknameModal.style.display = 'flex';
-                nicknameInput.value = userDisplayName === 'Anonimo' ? '' : userDisplayName; // Pre-fill if not default
-                nicknameInput.focus();
-            } else {
-                userDisplayName = userDocSnap.data().nickname;
-                // If nickname exists, just load maneuvers (already called by onAuthStateChanged)
-            }
-        }
-
-        closeNicknameModalButton.addEventListener('click', () => {
-            nicknameModal.style.display = 'none';
-            nicknameMessage.textContent = '';
-        });
-
-        saveNicknameButton.addEventListener('click', async () => {
-            const nickname = nicknameInput.value.trim();
-            if (nickname.length < 3) {
-                nicknameMessage.textContent = 'Il nickname deve contenere almeno 3 caratteri.';
-                nicknameMessage.style.color = 'red';
-                return;
-            }
-
-            try {
-                const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
-                await setDoc(userDocRef, { nickname: nickname }, { merge: true });
-                userDisplayName = nickname;
-                nicknameMessage.textContent = 'Nickname salvato con successo!';
-                nicknameMessage.style.color = 'green';
-                setTimeout(() => {
-                    nicknameModal.style.display = 'none';
-                    nicknameMessage.textContent = '';
-                    loadUserManeuvers(); // Reload maneuvers with new display name
-                }, 1000);
-            } catch (error) {
-                nicknameMessage.textContent = `Errore nel salvataggio del nickname: ${error.message}`;
-                nicknameMessage.style.color = 'red';
-                console.error("Error saving nickname:", error);
-            }
-        });
-
-        // --- Create Maneuver Modal Logic ---
-        openCreateManeuverModalButton.addEventListener('click', () => {
-            if (!userId) {
-                checkAndPromptForNickname();
-                return;
-            }
-            // Check if nickname is set before opening maneuver modal
-            const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
-            getDoc(userDocRef).then(userDocSnap => {
-                if (!userDocSnap.exists() || !userDocSnap.data().nickname) {
-                    checkAndPromptForNickname(); // Show nickname prompt if not set
-                } else {
-                    createManeuverModal.classList.remove('hidden');
-                    userDisplayName = userDocSnap.data().nickname; // Ensure display name is updated
-                }
-            }).catch(error => {
-                console.error("Error checking nickname:", error);
-                checkAndPromptForNickname(); // Fallback to showing nickname modal if error occurs
-            });
-        });
-
-        closeCreateManeuverModalButton.addEventListener('click', () => {
-            createManeuverModal.classList.add('hidden');
-            maneuverFormMessage.textContent = '';
-            maneuverForm.reset();
-        });
-
-        maneuverForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            maneuverFormLoading.style.display = 'inline-block';
-            maneuverFormMessage.textContent = ''; // Clear previous messages
-
-            const name = document.getElementById('maneuver-name').value.trim();
-            const type = document.getElementById('maneuver-type').value.trim();
-            const cost = document.getElementById('maneuver-cost').value.trim();
-            const description = document.getElementById('maneuver-description').value.trim();
-
-            if (!name || !type || !cost || !description) {
-                maneuverFormMessage.textContent = 'Tutti i campi sono obbligatori.';
-                maneuverFormMessage.style.color = 'red';
-                maneuverFormLoading.style.display = 'none';
-                return;
-            }
-
-            try {
-                const userManeuver = {
-                    name: name,
-                    type: type,
-                    cost: cost,
-                    description: description,
-                    userId: auth.currentUser.uid, // Still store UID for internal reference/security rules
-                    creatorDisplayName: userDisplayName, // Store display name
-                    createdAt: new Date()
-                };
-
-                // Use public collection for shared maneuvers
-                const userManeuversCollectionRef = collection(db, `artifacts/${appId}/public/data/user_maneuvers`);
-                await addDoc(userManeuversCollectionRef, userManeuver);
-
-                maneuverFormMessage.textContent = "Manovra salvata con successo!";
-                maneuverFormMessage.style.color = 'green';
-                maneuverForm.reset();
-                setTimeout(() => {
-                    createManeuverModal.classList.add('hidden');
-                    maneuverFormMessage.textContent = '';
-                }, 1500); // Hide modal after 1.5 seconds
-            } catch (error) {
-                maneuverFormMessage.textContent = `Errore durante il salvataggio: ${error.message}`;
-                maneuverFormMessage.style.color = 'red';
-                console.error("Error adding user maneuver:", error);
-            } finally {
-                maneuverFormLoading.style.display = 'none';
-            }
-        });
-
-        // --- Load User Maneuvers Logic ---
-        function loadUserManeuvers() {
-            if (!userId) {
-                // If not authenticated, do not attempt to load
-                maneuversList.innerHTML = '<p class="text-center text-gray-500">Effettua l\'accesso o imposta un nickname per vedere e creare manovre.</p>';
-                return;
-            }
-
-            // Reference to the public user_maneuvers collection
-            const userManeuversCollectionRef = collection(db, `artifacts/${appId}/public/data/user_maneuvers`);
-            const q = query(userManeuversCollectionRef, orderBy('createdAt', 'desc')); // Order by creation date
-
-            // Listen for real-time updates
-            onSnapshot(q, (snapshot) => {
-                maneuversList.innerHTML = ''; // Clear existing list
-                if (snapshot.empty) {
-                    maneuversList.innerHTML = '<p class="text-center text-gray-500">Nessuna manovra utente disponibile. Creane una!</p>';
-                    return;
-                }
-
-                snapshot.forEach((doc) => {
-                    const maneuver = doc.data();
-                    const maneuverId = doc.id;
-                    const isCreator = maneuver.userId === userId; // Check if current user is the creator
-
-                    const maneuverCard = document.createElement('div');
-                    maneuverCard.className = 'bg-gray-50 p-4 rounded-md shadow-sm border border-gray-200 relative';
-                    maneuverCard.innerHTML = `
-                        <h3 class="text-lg font-semibold text-gray-800">${maneuver.name} <span class="text-sm text-gray-500">- ${maneuver.type} (${maneuver.cost})</span></h3>
-                        <p class="text-gray-700 mt-1">${maneuver.description}</p>
-                        <p class="text-xs text-gray-500 mt-2">Creato da: ${maneuver.creatorDisplayName || 'Anonimo'} il ${maneuver.createdAt ? new Date(maneuver.createdAt.seconds * 1000).toLocaleDateString() : 'N/D'}</p>
-                        ${isCreator ? `<button class="delete-maneuver-button absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full text-xs hover:bg-red-600" data-id="${maneuverId}">X</button>` : ''}
-                    `;
-                    maneuversList.appendChild(maneuverCard);
-                });
-
-                // Add event listeners for delete buttons
-                document.querySelectorAll('.delete-maneuver-button').forEach(button => {
-                    button.addEventListener('click', async (e) => {
-                        const idToDelete = e.target.dataset.id;
-                        if (confirm('Sei sicuro di voler eliminare questa manovra?')) {
-                            try {
-                                const maneuverDocRef = doc(db, `artifacts/${appId}/public/data/user_maneuvers`, idToDelete);
-                                await deleteDoc(maneuverDocRef);
-                                console.log("Manovra eliminata con successo!");
-                            } catch (error) {
-                                console.error("Errore durante l'eliminazione della manovra:", error);
-                            }
-                        }
-                    });
-                });
-            }, (error) => {
-                console.error("Error listening to maneuvers:", error);
-                maneuversList.innerHTML = '<p class="text-center text-red-500">Errore nel caricamento delle manovre.</p>';
-            });
-        }
-
-
-        // Initialize the first tab on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            showTab('calculator-section');
-        });
-    </script>
 </body>
 </html>
