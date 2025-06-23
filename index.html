@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forsaken Eons - Gioco di Ruolo</title>
+    <title>Regole Estese - Forsaken Eons</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,80 +23,519 @@
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             border: 1px solid #EAE3D9;
             padding: 2.5rem;
+            line-height: 1.7; /* Improved line spacing for readability */
         }
-        /* Stili per le sezioni interne */
+        h1, h2, h3, h4 {
+            color: #6F6051;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
         h2 {
             font-size: 2rem;
             font-weight: bold;
             margin-top: 2rem;
             border-bottom: 2px solid #EAE3D9;
             padding-bottom: 0.5rem;
-            color: #6F6051;
         }
         h3 {
             font-size: 1.75rem;
             font-weight: bold;
             margin-top: 1.5rem;
-            color: #6F6051;
         }
         h4 {
             font-size: 1.5rem;
             font-weight: bold;
             margin-top: 1rem;
-            color: #6F6051;
         }
         p {
-            margin-bottom: 1rem;
-            line-height: 1.7;
+            margin-bottom: 1rem; /* Spazio tra i paragrafi */
         }
         ul {
             list-style: disc;
             margin-left: 1.5rem;
             margin-bottom: 1rem;
         }
+        ol {
+            list-style: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .back-button {
+            background-color: #A4907C;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        .back-button:hover {
+            background-color: #8D7B68;
+        }
+        /* Stili per l'indice */
+        .index-nav {
+            background-color: #F8F4EF;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #EAE3D9;
+        }
+        .index-nav h3 {
+            text-align: center;
+            font-size: 1.75rem;
+            color: #8D7B68;
+            margin-bottom: 1.5rem;
+        }
+        .index-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .index-nav li {
+            margin-bottom: 0.75rem;
+        }
+        .index-nav a {
+            color: #A4907C;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            display: block;
+            padding: 0.25rem 0;
+        }
+        .index-nav a:hover {
+            color: #6F6051;
+            text-decoration: underline;
+        }
     </style>
 </head>
-<body class="antialiased">
-    <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <header class="text-center mb-8">
-            <h1 class="text-5xl font-bold text-gray-800">Forsaken Eons</h1>
-            <p class="text-xl text-gray-600 mt-2">Gioco di Ruolo</p>
-        </header>
+<body class="antialiased py-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <a href="index.html#regolamento-section" class="back-button">← Torna al Regolamento</a>
 
-        <main class="w-full max-w-4xl">
-            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                <h2 class="text-3xl font-semibold text-gray-700 mb-6 text-center">Regolamento di Gioco</h2>
+        <div class="content-card">
+            <h1>Regole Estese di Forsaken Eons</h1>
 
-                <section id="classi-specializzazioni">
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">🎭 Le Classi</h3>
-                    <p class="text-gray-600 mb-4">In Forsaken Eons, scegliere una Classe non è solo decidere come combattere, ma definire il cuore del proprio personaggio. È una scelta identitaria, che influenza ogni azione, scelta narrativa e stile di gioco.</p>
+            <hr class="my-8 border-t border-gray-300">
 
-                    <h4 class="text-xl font-semibold text-gray-700 mb-2">📌 Cosa acquisisce un personaggio quando sceglie una Classe?</h4>
-                    <ul class="list-disc list-inside mb-4">
-                        <li>Un <strong>Bonus Unico:</strong> che rafforza una caratteristica chiave, come Stamina o Concentrazione, legata al ruolo della Classe.</li>
-                        <li>Una <strong>Meccanica di Classe:</strong> una regola esclusiva che cambia le dinamiche del gioco solo per quel personaggio. Può influenzare il combattimento, l’esplorazione o la magia.</li>
-                        <li>Quattro <strong>Manovre Uniche:</strong> azioni speciali dal forte impatto cinematografico e strategico, che il personaggio può usare sin da subito per distinguere in ogni scena.</li>
-                    </ul>
+            <nav class="index-nav">
+                <h3>Indice delle Regole</h3>
+                <ul>
+                    <li><a href="#caratteristiche-personaggio">Caratteristiche del Personaggio</a>
+                        <ul>
+                            <li><a href="#vigore">Vigore</a></li>
+                            <li><a href="#potenza">Potenza</a></li>
+                            <li><a href="#agilita">Agilità</a></li>
+                            <li><a href="#sensi">Sensi</a></li>
+                            <li><a href="#spirito">Spirito</a></li>
+                            <li><a href="#influenza">Influenza</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#caratteristiche-derivate">Caratteristiche del Personaggio - Le Derivate</a>
+                        <ul>
+                            <li><a href="#stamina">Stamina</a></li>
+                            <li><a href="#concentrazione">Concentrazione</a></li>
+                            <li><a href="#velocita">Velocità</a></li>
+                            <li><a href="#punti-ferita">Punti Ferita (PF)</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#competenza-maestria">Competenza e Maestria</a></li>
+                    <li><a href="#dogma">Dogma</a>
+                        <ul>
+                            <li><a href="#esempi-dogmi">Esempi di Dogmi</a></li>
+                            <li><a href="#come-si-usano-dogmi">Come si Usano i Dogmi</a></li>
+                            <li><a href="#quando-dogma-si-compie">Quando un Dogma si Compie</a></li>
+                            <li><a href="#scene-emotive-roleplay">Scene Emotive & Roleplay</a></li>
+                            <li><a href="#evoluzione-dogma">Evoluzione del Dogma</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#colpo-critico-perfetto">Colpo Critico e Colpo Perfetto</a>
+                        <ul>
+                            <li><a href="#colpo-critico">Colpo Critico</a></li>
+                            <li><a href="#colpo-perfetto">Colpo Perfetto</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#cosa-sono-le-manovre">Cosa sono le Manovre</a>
+                        <ul>
+                            <li><a href="#scontro-coreografia-letale">Lo Scontro è una Coreografia Letale</a></li>
+                            <li><a href="#manovre-arte-strategia-stile">Le Manovre: Arte, Strategia, Stile</a></li>
+                            <li><a href="#difendere-arte-offendere">Difendere è un’Arte tanto quanto Offendere</a></li>
+                            <li><a href="#incantesimi-architettura-morte">Incantesimi Come Architettura di Morte</a></li>
+                            <li><a href="#sinergie-debolezze-tattica-gruppo">Sinergie, Debolezze e Tattica di Gruppo</a></li>
+                            <li><a href="#sistema-pensato-brillare">Un Sistema Pensato per Brillare</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#classi">Classi</a>
+                        <ul>
+                            <li><a href="#striker-class">Striker</a>
+                                <ul>
+                                    <li><a href="#versatilita-offensiva">Versatilità Offensiva</a></li>
+                                    <li><a href="#inafferrabile">Inafferrabile</a></li>
+                                    <li><a href="#tempesta-d-acciaio">Tempesta d’Acciaio</a></li>
+                                    <li><a href="#assassinio">Assassinio</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#protector-class">Protector</a>
+                                <ul>
+                                    <li><a href="#tocco-lenitivo">Tocco Lenitivo</a></li>
+                                    <li><a href="#grazia-redentrice">Grazia Redentrice</a></li>
+                                    <li><a href="#colpo-vendicativo">Colpo Vendicativo</a></li>
+                                    <li><a href="#ira-divina">Ira Divina</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#arcanist-class">Arcanist</a>
+                                <ul>
+                                    <li><a href="#dualismo-elementale">Dualismo Elementale</a></li>
+                                    <li><a href="#glifo-del-vuoto">Glifo del Vuoto</a></li>
+                                    <li><a href="#legame-del-famiglio">Legame del Famiglio</a></li>
+                                    <li><a href="#deviazione-arcana">Deviazione Arcana</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
 
-                    <h4 class="text-xl font-semibold text-gray-700 mb-2">⚙️ Esempi di Meccaniche di Classe</h4>
-                    <ul class="list-disc list-inside mb-4">
-                        <li>Lo <strong>Striker</strong> sfrutta la posizione sul campo per colpire con precisione letale grazie a “Imboscata”, attaccando senza consumare Stamina se coglie un nemico di sorpresa.</li>
-                        <li>Il <strong>Protector</strong> protegge i compagni grazie a “Scudo del Martire”, assorbendo danni altrui attraverso un’aura sacra dorata che si infrange come vetro divino.</li>
-                        <li>L’<strong>Arcanist</strong>, con “Codice degli Elementi”, può lanciare rituali anche senza possedere tutti gli elementi richiesti, piegando le regole della magia con la sola forza della conoscenza.</li>
-                    </ul>
+            <hr class="my-8 border-t border-gray-300">
 
-                    <h4 class="text-xl font-semibold text-gray-700 mb-2">🌀 Le Manovre Uniche</h4>
-                    <p class="text-gray-600 mb-4">Le Manovre Uniche sono abilità speciali pensate per esaltare lo stile di ogni Classe. Lo Striker esegue attacchi fulminei o combo a distanza, il Protector cura o si lancia in cariche sacre, l’Arcanist evoca famigli, disegna glifi annullamagia o fonde gli elementi in esplosioni fuori scala.</p>
-                    <p class="text-gray-600 mb-4">Queste mosse non richiedono un lungo apprendimento: si ottengono subito con la Classe, rendendo ogni giocatore già in grado di lasciare il segno dalla prima battaglia.</p>
+            <section id="caratteristiche-personaggio">
+                <h2>Caratteristiche del Personaggio</h2>
+                <p>In Forsaken Eons, ogni personaggio è definito da sei Caratteristiche fondamentali, che rappresentano le sue attitudini naturali, le sue capacità allenate e la sua influenza sul mondo che lo circonda. Queste caratteristiche non sono solo numeri: plasmano lo stile, le scelte e la sopravvivenza stessa del personaggio in ogni momento dell’avventura.</p>
 
-                    <p class="text-center text-gray-700 font-semibold italic mt-6 mb-2">“Scegliere una Classe è scegliere il proprio posto nel mito. Non sei solo un guerriero, un mago o un difensore. Sei il simbolo di una via, il riflesso di uno stile che plasma il mondo intorno a te.”</p>
-                </section>
-                
-                <div class="text-center mt-8">
-                    <a href="regole_estese_page.html" class="inline-block bg-orange-700 text-white py-3 px-6 rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-700 focus:ring-opacity-50 font-semibold text-lg shadow-md">Vedi Regole Estese</a>
-                </div>
-            </div>
-        </main>
+                <h3 id="vigore">Vigore</h3>
+                <p>Il <strong>Vigore</strong> rappresenta la resistenza fisica e la capacità di sopportare la fatica. È la misura della stamina, cioè di quante azioni fisiche intense un personaggio può compiere prima di cedere alla stanchezza. Il Vigore entra in gioco in ogni situazione che richiede tenacia, dal resistere a veleni e malattie, fino a mantenere la guardia alta in combattimenti prolungati.</p>
+
+                <h3 id="potenza">Potenza</h3>
+                <p>La <strong>Potenza</strong> esprime la forza bruta, la capacità di infliggere colpi devastanti, sollevare pesi, abbattere porte o compiere imprese atletiche. È il fulcro di chi vive di forza fisica, come guerrieri e combattenti frontali, ma è anche fondamentale in situazioni dove serve superare ostacoli con pura determinazione muscolare.</p>
+
+                <h3 id="agilita">Agilità</h3>
+                <p>L'<strong>Agilità</strong> determina la rapidità, la destrezza e la coordinazione del corpo. Serve a schivare colpi, muoversi silenziosamente, compiere acrobazie e maneggiare armi leggere o strumenti di precisione. È una caratteristica essenziale per chi vive di movimento, sorprese e colpi rapidi: ladri, schermidori, esploratori.</p>
+
+                <h3 id="sensi">Sensi</h3>
+                <p>I <strong>Sensi</strong> sono la rappresentazione della percezione mentale e fisica: vista acuta, intuito, capacità di leggere l’ambiente o le emozioni altrui. Ma vanno oltre, includendo anche la padronanza della manipolazione arcana e la conoscenza delle forze invisibili che attraversano il mondo. Maghi, alchimisti e studiosi della magia dipendono da questa caratteristica.</p>
+
+                <h3 id="spirito">Spirito</h3>
+                <p>Lo <strong>Spirito</strong> misura la connessione interiore con il proprio potere, sia esso magico, divino o marziale. È la forza d’animo, la concentrazione nelle arti rituali o la calma nel mezzo della tempesta. Spirito è il centro dei mistici, degli incantatori devoti e dei guerrieri che combattono con tecniche profonde e spirituali.</p>
+
+                <h3 id="influenza">Influenza</h3>
+                <p>L'<strong>Influenza</strong>, infine, rappresenta il carisma, la presenza e la capacità di persuasione del personaggio. È la voce che cambia il cuore degli uomini, lo sguardo che impone rispetto, l’arguzia che scardina trattative. È indispensabile per chi intende guidare, manipolare o semplicemente farsi seguire, dal nobile affascinante al ladro mellifluo.</p>
+                <p>Ogni caratteristica si riflette direttamente nei tiri, nelle manovre, nelle interazioni e nell'equipaggiamento del personaggio. Potenziarle significa espandere il proprio modo di affrontare il mondo e plasmare il proprio destino con stile, forza o pura presenza.</p>
+            </section>
+
+            <hr class="my-8 border-t border-gray-300">
+
+            <section id="caratteristiche-derivate">
+                <h2>Caratteristiche del Personaggio - Le Derivate</h2>
+                <p>In Forsaken Eons, ogni personaggio è definito non solo dalle sue qualità principali – come la forza, la mente o l’anima – ma anche da una serie di caratteristiche derivate che traducono queste qualità in effetti concreti durante il gioco. Si tratta di valori che regolano cosa puoi fare, quante volte puoi farlo e con quale libertà puoi agire, soprattutto nei momenti più intensi, come durante un combattimento o un momento critico in un’esplorazione.</p>
+
+                <h3 id="stamina">Stamina</h3>
+                <p>La <strong>Stamina</strong> rappresenta la resistenza fisica immediata di un personaggio, cioè quanta energia può spendere per compiere azioni fisiche come attaccare, parare o eseguire manovre acrobatiche. Ogni volta che utilizzi una manovra (un'azione speciale, come un fendente potente o una schivata complessa), consumi Stamina. È come l'energia di un atleta durante un combattimento: più manovre compi, più si riduce, e dovrai scegliere con attenzione quando attaccare e quando risparmiare forze.</p>
+                <p>La Stamina si calcola sommando il tuo <strong>Vigore</strong> (che misura la tua resistenza fisica di base) con un bonus derivato dalla tua razza. Ad esempio, se hai un Vigore di 12 e la tua razza ti conferisce un +3, la tua Stamina sarà pari a 15.</p>
+
+                <h3 id="concentrazione">Concentrazione</h3>
+                <p>La <strong>Concentrazione</strong> è simile alla Stamina, ma si applica a tutto ciò che è mentale, magico o spirituale. Se la Stamina alimenta i muscoli, la Concentrazione alimenta la mente e l’anima. Serve per lanciare incantesimi, attivare rituali, utilizzare geometrie e altre tecniche speciali legate alla spiritualità o alla manipolazione arcana. Anche in questo caso, ogni effetto ha un costo in Concentrazione, e imparare a gestirla è essenziale per chi vuole dominare l’arte della magia o delle discipline spirituali.</p>
+                <p>La Concentrazione si ottiene sommando il tuo <strong>Spirito</strong> (che rappresenta la tua forza interiore e connessione con l’energia mistica) al bonus fornito dalla tua classe. Un Arcanista, ad esempio, potrebbe avere uno Spirito pari a 14 e un bonus di classe di +3, ottenendo così 17 punti Concentrazione totali.</p>
+
+                <h3 id="velocita">Velocità</h3>
+                <p>La <strong>Velocità</strong> indica quanti metri può percorrere un personaggio in un singolo turno di combattimento. Si tratta di un valore diretto, semplice e importante, che stabilisce quanto ti puoi spostare sul campo di battaglia, quanto facilmente puoi inseguire o fuggire da un nemico, o se puoi raggiungere un obiettivo prima di qualcun altro.</p>
+                <p>Si calcola dividendo il valore di <strong>Agilità</strong> per 2 (arrotondando per difetto). Ad esempio, con Agilità 13, la Velocità sarà 6 metri per turno.</p>
+
+                <h3 id="punti-ferita">Punti Ferita (PF)</h3>
+                <p>I <strong>Punti Ferita</strong> rappresentano la capacità del personaggio di resistere ai danni, siano essi fisici, magici o mentali. Più PF hai, più a lungo potrai combattere prima di crollare. Quando i PF scendono a zero, il personaggio è fuori combattimento e rischia la morte. In Forsaken Eons, i PF non sono legati a un "livello", ma crescono in modo personalizzato spendendo punti esperienza (EXP) per potenziare il proprio valore base.</p>
+                <p>I PF si determinano inizialmente lanciando un <strong>dado Vita</strong> scelto in base alla tua specializzazione (es. d4 per personaggi fragili, d12 per tank), e aggiungendo eventuali bonus dati da razza, classe o altri miglioramenti acquistati.</p>
+
+                <p>In sintesi, queste caratteristiche derivate sono il cuore pratico delle azioni in gioco. Donde le caratteristiche principali (come Potenza, Spirito o Agilità) definiscono chi sei, queste indicano cosa puoi fare in ogni singolo momento. Un personaggio con alta Stamina potrà compiere molte manovre in combattimento; uno con alta Concentrazione potrà lanciare incantesimi senza esaurirsi troppo presto; uno con molta Velocità potrà coprire lunghe distanze in un attimo; e chi ha più PF sarà in grado di resistere più a lungo anche sotto pesanti attacchi.</p>
+                <p>Per i giocatori neofiti, pensare a queste caratteristiche come a barre di energia o capacità attive può aiutare molto: sono risorse che vanno spese con criterio, e che possono fare la differenza tra un’azione epica e un fallimento disastroso.</p>
+            </section>
+
+            <hr class="my-8 border-t border-gray-300">
+
+            <section id="competenza-maestria">
+                <h2>Competenza e Maestria</h2>
+                <p>In Forsaken Eons, ogni personaggio è definito non solo dalla sua forza o intelligenza, ma anche da quanto è esperto e quanto è capace di applicare le sue abilità in azioni concrete. Qui entrano in gioco due elementi fondamentali del sistema: Competenza e Maestria.</p>
+
+                <p>La <strong>Competenza</strong> rappresenta il grado di addestramento che un personaggio ha in un determinato campo, come l’uso di una spada, l’arte dell’inganno, il controllo delle magie o persino le capacità acrobatiche. Più un personaggio è competente, più “potente” è ciò che fa, ed è per questo che la Competenza determina la grandezza del dado che lancerai durante le azioni. Si parte da un piccolo d4 per i principianti, e si sale a d6, d8, d10 fino a un massimo di d12 per i veri maestri. Se immagini che ogni azione sia un colpo di pennello su una tela, la Competenza è la qualità del pennello: un attrezzo più preciso e potente può produrre un impatto più significativo.</p>
+
+                <p>La <strong>Maestria</strong>, invece, rappresenta quanto bene riesci a ripetere quell’azione, quanto è naturale per te compierla senza esitazioni. Indica quanti dadi lanci durante una prova. Una Maestria bassa significa che esegui quell’azione con cautela o minor sicurezza, mentre una Maestria alta simboleggia padronanza, pratica costante e istinto affinato. Per esempio, un personaggio con Maestria 3 lancerà tre dadi insieme, scegliendo i risultati migliori per le sue azioni. La Maestria è come la mano che tiene il pennello: può muoversi con precisione, sicurezza e fluidità se ben allenata.</p>
+
+                <p>Durante il gioco, quando si compie una qualsiasi azione che richiede un tiro, si combinano Competenza e Maestria con una Statistica rilevante (come Potenza, Agilità, Sensi, ecc.).</p>
+
+                <p>Per esempio: se un personaggio vuole sollevare una trave caduta, il Master chiede una prova su Potenza. Il giocatore controlla la sua Maestria e la sua Competenza in quella Statistica: mettiamo che abbia Maestria 2 e Competenza 3 (quindi tira 2d8) e somma il suo punteggio in Potenza (es. 12). Il totale del tiro andrà confrontato con una Difficoltà (CD) stabilita dal Master.</p>
+
+                <p>Questo sistema consente ai giocatori di visualizzare facilmente cosa sanno fare e con che efficacia: ogni statistica può avere accanto una linea di 5 pallini per la Competenza (che mostra il tipo di dado) e 5 per la Maestria (che mostra quanti dadi tirare). È un approccio visivo, intuitivo e facile da spiegare anche ai giocatori alle prime armi.</p>
+
+                <p>In sostanza, Competenza ti dice quanto è tagliente la tua lama, Maestria ti dice quanto bene la sai usare. Insieme, rendono ogni azione non solo efficace, ma anche spettacolare e unica — proprio come dovrebbe essere in un gioco che fa del duello coreografico, delle manovre acrobatiche e dell’eroismo elegante il suo cuore pulsante.</p>
+
+                <p><em>"Non conta solo colpire forte. Conta colpire giusto. Conta colpire con stile."</em></p>
+                <p class="text-right">— Saphin, Duellante delle Vele di Sangue</p>
+            </section>
+
+            <hr class="my-8 border-t border-gray-300">
+
+            <section id="dogma">
+                <h2>🌌 I Dogmi – Le Verità Incrollabili del Personaggio</h2>
+                <p>Ogni eroe, in Forsaken Eons, non è solo una serie di statistiche e poteri. È un'anima segnata da ideali, dolori, speranze o ossessioni. Queste scintille interiori sono i Dogmi: dichiarazioni narrative che definiscono chi sei… e chi potresti diventare.</p>
+                <p>Un Dogma è una frase, un giuramento o un principio che guida le scelte del personaggio. Può essere luminoso o oscuro, nobile o egoista, ma è incrollabile agli occhi del personaggio, anche se può evolversi nel tempo.</p>
+
+                <h3 id="esempi-dogmi">📖 Esempi di Dogmi</h3>
+                <ul>
+                    <li>“Non fallirò mai più come quella volta.”</li>
+                    <li>“Ogni segreto ha un prezzo, ed io sono disposto a pagarlo.”</li>
+                    <li>“Fino a che avrò fiato, combatterò per loro.”</li>
+                    <li>“La conoscenza è libertà. L’ignoranza è catena.”</li>
+                </ul>
+
+                <h3 id="come-si-usano-dogmi">🧭 Come si Usano i Dogmi</h3>
+                <p>Ogni personaggio sceglie 1 Dogma all'inizio, ma può arrivare ad averne fino a 3 nel corso della campagna.</p>
+                <p>Ogni Dogma è accompagnato da 3 slot di Attivazione (⚫⚫⚫), simili a una barra emotiva.</p>
+                <p>Quando una scena, decisione o evento tocca profondamente uno dei Dogmi (positivamente o negativamente), il Master o il Giocatore segnano 1 slot.</p>
+                <p>Il Dogma non deve essere solo citato, ma vissuto: le decisioni prese in suo nome devono avere un peso sulla storia, il gruppo o il personaggio.</p>
+
+                <h3 id="quando-dogma-si-compie">✨ Quando un Dogma si Compie</h3>
+                <p>Quando i 3 slot sono pieni, il Dogma può essere Innescato in un momento di forte impatto emotivo o narrativo. Il giocatore può farlo in qualsiasi scena, anche fuori dal combattimento.</p>
+                <h4>💥 Effetti dell’Innesco:</h4>
+                <ul>
+                    <li>🎲 Ottieni +2 dadi extra (del tuo livello di Competenza) su una prova strettamente connessa al Dogma.</li>
+                    <li>🌟 Puoi dichiarare una svolta narrativa: salvi un alleato, sfuggi a un pericolo, scopri una verità importante — purché coerente col tuo Dogma, e approvato dal Master.</li>
+                    <li>🛡️ Puoi resistere a una ferita o condizione che ti ucciderebbe o disabiliterebbe, se la scena lo giustifica narrativamente.</li>
+                </ul>
+                <p>Dopo l’attivazione, il Dogma torna a ⚪⚪⚪ e potrà essere riempito nuovamente.</p>
+
+                <h3 id="scene-emotive-roleplay">🎭 Scene Emotive & Roleplay</h3>
+                <p>I Dogmi danno al Master un gancio emotivo potente: le missioni, i nemici o i colpi di scena possono mettere in discussione, rafforzare o sfidare i Dogmi dei personaggi.</p>
+                <ul>
+                    <li>Un Arcanist con il Dogma “La magia è vita, non arma” potrebbe trovarsi davanti a un rituale devastante: attivarlo significherebbe rinnegare tutto ciò in cui crede… ma potrebbe salvare vite.</li>
+                    <li>Uno Striker con “Proteggere chi non può difendersi” potrebbe sacrificare la propria posizione per attirare un attacco su di sé.</li>
+                </ul>
+                <p>Ogni attivazione di un Dogma è una scena importante, un momento cinematografico in cui il giocatore entra al centro del palcoscenico.</p>
+
+                <h3 id="evoluzione-dogma">🔁 Evoluzione del Dogma</h3>
+                <p>Nel tempo, i Dogmi possono cambiare, mutare, o addirittura rompersi. Dopo eventi critici (fine atto, morte di un PNG caro, tradimento), il Master può proporre al giocatore di riscrivere uno dei suoi Dogmi, oppure trasformarlo in qualcosa di nuovo.</p>
+            </section>
+
+            <hr class="my-8 border-t border-gray-300">
+
+            <section id="colpo-critico-perfetto">
+                <h2>🎯 Colpo Critico e Colpo Perfetto</h2>
+                <p>Ogni azione può trasformarsi in un momento leggendario. Gli attacchi che raggiungono l’apice del potenziale scatenano <strong>Colpi Critici</strong> o, in rare occasioni, un devastante <strong>Colpo Perfetto</strong>.</p>
+
+                <h3 id="colpo-critico">🔥 Colpo Critico</h3>
+                <h4>Quando avviene:</h4>
+                <p>Se almeno la metà dei dadi lanciati (Maestria) ottiene il valore massimo del dado di Competenza.</p>
+                <p>Esempio: 3d6 → due o più risultati di “6”.</p>
+                <p>Il giocatore sceglie 1 effetto tra:</p>
+                <ul>
+                    <li>🎲 Lancia +2 dadi aggiuntivi dello stesso tipo (dado di Competenza), sommando il risultato.</li>
+                    <li>✨ Attiva un effetto speciale critico (scegline uno):
+                        <ul>
+                            <li><strong>Penetrazione:</strong> Ignora l’armatura nemica per questo attacco.</li>
+                            <li><strong>Tag Elementale Extra:</strong> Applica un effetto secondario coerente con l’elemento (Es. Ustione, Congelamento, Sanguinamento…).</li>
+                            <li><strong>Impulso Tattico:</strong> Spostati di 3 metri o agisci con una Manovra Minore gratuita.</li>
+                            <li><strong>Risonanza del Dogma:</strong> Se l’azione è coerente con uno dei tuoi Dogmi, ottieni 1 Punto Dogma.</li>
+                            <li><strong>Combo di Precisione:</strong> Il prossimo alleato che colpisce lo stesso bersaglio ottiene +1 dado al danno.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3 id="colpo-perfetto">🌟 Colpo Perfetto</h3>
+                <h4>Quando avviene:</h4>
+                <p>Se tutti i dadi ottengono il valore massimo (es. 3d8 = 8, 8, 8).</p>
+                <p>Il giocatore sceglie 1 effetto tra:</p>
+                <ul>
+                    <li>🎲 Rilancia tutti i dadi e aggiungi 1 dado extra per ciascuno (es. 3d8 → rilanci 6d8 totali).</li>
+                    <li>✨ Attiva 1 Effetto Critico dalla lista sopra + 1 Effetto Addizionale per ogni dado originario (fino a 5).</li>
+                </ul>
+                <h4>Effetti Addizionali possibili:</h4>
+                <ul>
+                    <li><strong>Vacillamento:</strong> Il nemico perde 1 azione nel prossimo round.</li>
+                    <li><strong>Esplosione Elementale:</strong> Il danno si propaga infliggendo metà dei danni a un secondo bersaglio entro 3 metri.</li>
+                    <li><strong>Armonia Runica:</strong> Il prossimo rituale o incantesimo lanciato costa 1 CO in meno.</li>
+                    <li><strong>Dominio Tattico:</strong> Sposta un alleato o nemico di 3 metri senza provocare reazioni.</li>
+                    <li><strong>Eco del Dogma:</strong> Attiva un effetto narrativo (a discrezione del Master) in sintonia con il tuo background.</li>
+                </ul>
+            </section>
+
+            <hr class="my-8 border-t border-gray-300">
+
+            <section id="cosa-sono-le-manovre">
+                <h2>Cosa sono le Manovre</h2>
+                <p>Nel cuore del tempo spezzato, si combatte con stile o si muore in silenzio.</p>
+                <p>In Forsaken Eons, il combattimento non è solo una meccanica, è un atto d'arte. È il battito del cuore dell’intero sistema, dove ogni gesto diventa racconto, ogni decisione plasma il ritmo stesso della battaglia. Le lame non si limitano a tagliare: danzano. I pugni non colpiscono: martellano l’aria come tuoni divini. Gli incantatori non lanciano incantesimi: scolpiscono realtà momentanee con geometrie arcane e fuoco liquido.</p>
+                <p>Qui, non basta sopravvivere. Devi sopravvivere con eleganza, con potenza, con precisione chirurgica. Devi affrontare il caos del mondo antico e danzare sulla lama del rasoio, perché la morte è ovunque… ma non è mai banale.</p>
+
+                <h3 id="scontro-coreografia-letale">Lo Scontro è una Coreografia Letale</h3>
+                <p>Ogni turno in Forsaken Eons si apre come una battaglia danzata. Le iniziative si confrontano tra i due lati: si lancia l’Agilità più alta del gruppo contro quella più alta dei nemici. Chi vince, prende il ritmo.</p>
+                <p>Ma attenzione: non c’è un “attacco base”. Non c’è un “colpo normale”. Esistono le <strong>Manovre</strong>, e ogni manovra è una dichiarazione di stile e intenti.</p>
+                <p>Vuoi fendere l’aria con un colpo rotante? Saltare da una sporgenza e atterrare con l’arma che esplode d’energia? Vuoi scivolare sotto una guardia avversaria e piantare la lama nella sua ombra? Puoi farlo. Devi farlo.</p>
+                <p>E per farlo, dichiari le manovre all’inizio del tuo turno, scegliendo come spendere la tua Stamina o Concentrazione. Più manovre, più fiato perso. E ogni mossa può essere annullata, parata, schivata. Il combattimento non è sicuro, mai. È una scommessa continua su chi colpirà per primo, chi resisterà fino alla fine.</p>
+                <p>Ma quando riesci, quando tutto fila perfettamente… è come guardare una scena scolpita nella leggenda.</p>
+
+                <h3 id="manovre-arte-strategia-stile">Le Manovre: Arte, Strategia, Stile</h3>
+                <p>Ogni classe, ogni personaggio, ha accesso a un repertorio unico di manovre. I duellanti possono lanciare fioriture acrobatiche. I mistici fondono attacchi con geometrie magiche. I predoni si spostano come ombre, lasciando morte dietro di sé. Eppure, tutti sono guidati dalle stesse regole: <strong>competenza, maestria e caratteristica</strong>.</p>
+                <p>Non lanci semplicemente un d20. Lanci 2d6, 3d10 o 5d8, in base alla tua <strong>Maestria</strong> (quanti dadi tiri) e <strong>Competenza</strong> (quale dado usi). A questi si somma la tua Caratteristica divisa per 5, più il <strong>Grado</strong> dell’arma o incantesimo usato. Il risultato è il danno, la potenza, la forza narrativa della tua azione.</p>
+                <p>Eppure, non è solo il “quanto” colpisci. È il “come”.</p>
+
+                <h3 id="difendere-arte-offendere">Difendere è un’Arte tanto quanto Offendere</h3>
+                <p>Non esistono tiri per colpire in Forsaken Eons. Ogni attacco è un’azione vera, a meno che non venga interrotta. Il nemico può parare. Può schivare. Ma deve spendere stamina, deve scegliere il momento giusto. E se sbaglia? Non solo viene colpito, ma perde l’iniziativa narrativa del combattimento.</p>
+                <ul>
+                    <li><strong>Parry:</strong> una parata potente, se riesce, blocca tutte le manovre del turno dell’avversario.</li>
+                    <li><strong>Schivata:
+</strong> un movimento fluido che evita un solo attacco ma consente di riposizionarsi, spesso guadagnando vantaggio tattico.</li>
+                </ul>
+                <p>Ogni difesa è un rischio, ogni azione un passo nella coreografia mortale.</p>
+
+                <h3 id="incantesimi-architettura-morte">Incantesimi Come Architettura di Morte</h3>
+                <p>La magia in Forsaken Eons è viva, geometrica, personale. Ogni incantesimo nasce dalla combinazione tra un’<strong>architettura</strong> e un <strong>elemento</strong>. Una “geometria” determina la forma dell’incanto (una raffica, un raggio, una sfera esplosiva, un turbine). L’elemento invece – fuoco, gelo, tuono, ombra, luce, veleno, e altri – dona la sua essenza, con effetti unici offensivi, difensivi e di supporto.</p>
+                <p>Vuoi creare un arco di fulmini a spirale che si sposta tra i nemici come un serpente elettrico? Fallo. Vuoi evocare una lancia di fuoco che esplode al contatto, lasciando un’aura di calore attorno? È nelle tue mani.</p>
+                <p>Ma c’è di più: la magia può essere condivisa. Un incantatore può “infondere” un’arma alleata con un elemento. Se il nemico è vulnerabile al fuoco, il mago può convertire l’arma dell’amico in un catalizzatore rovente di distruzione.</p>
+                <p>La collaborazione è vitale. I personaggi non vivono in compartimenti stagni. I loro stili si intrecciano, si potenziano, si amplificano.</p>
+
+                <h3 id="sinergie-debolezze-tattica-gruppo">Sinergie, Debolezze e Tattica di Gruppo</h3>
+                <p>Un guerriero può atterrare un nemico con una carica poderosa, lasciandolo vulnerabile. Un ladro può sfruttare quell’apertura per infliggere un colpo critico. Il mago, nel frattempo, può scolpire un campo d’energia che protegge entrambi… o distrugge tutti con un’esplosione controllata.</p>
+                <p>E se il nemico è un gigante infuso di ghiaccio eterno? Allora serve il fuoco. Ma non è solo “danno bonus”: il calore scioglie la sua armatura, lo rallenta, lo indebolisce. Il mondo di gioco risponde agli elementi. Ogni scelta ha un effetto reale. Ogni collaborazione può cambiare il corso dello scontro.</p>
+
+                <h3 id="sistema-pensato-brillare">Un Sistema Pensato per Brillare</h3>
+                <p>In Forsaken Eons, ogni giocatore ha la possibilità di splendere. Che tu sia un novizio che cerca il primo sangue, o un veterano che ama le meccaniche profonde, il sistema ti premia sempre con scelte vere, descrizioni potenti e risultati coerenti.</p>
+                <ul>
+                    <li>Ogni dado che tiri ha peso.</li>
+                    <li>Ogni manovra che dichiari crea aspettativa.</li>
+                    <li>Ogni riuscita o fallimento racconta una storia.</li>
+                </ul>
+                <p>Non stai solo giocando un combattimento. Stai creando una scena memorabile.</p>
+                <p>Non è solo questione di vincere. È questione di come lo fai.</p>
+                <p>Se vuoi un sistema dove i numeri fanno tutto da soli, guarda altrove.</p>
+                <p>Si invece vuoi un sistema dove ogni mossa è una danza, ogni tiro è un colpo di scena, e ogni battaglia è una storia epica che merita d’essere raccontata… allora Forsaken Eons ti aspetta.</p>
+                <p>Sporcati le mani. Affina la lama.</p>
+                <p>Dichiara la tua manovra.</p>
+                <p>E danzaci sopra.</p>
+            </section>
+
+            <hr class="my-8 border-t border-gray-300">
+
+            <section id="classi">
+                <h2>Classi</h2>
+
+                <h3 id="striker-class">⚔️ CLASSE: STRIKER</h3>
+                <p>Maestro dell’assalto, lo Striker incarna la grazia e la furia del combattimento ravvicinato. Specializzato in movimenti acrobatici, attacchi rapidi e letali, è il primo a colpire, l’ultimo a essere visto. Il suo stile predilige azioni serrate e offensive che lo rendono perfetto per disturbare le linee nemiche e sferrare colpi precisi nei momenti critici.</p>
+                <h4>Bonus di Classe:</h4>
+                <p>+1 <strong>Potenza</strong> oppure +1 <strong>Agilità</strong>, +1 <strong>Sensi</strong></p>
+                <h4>🌀 Meccanica di Classe – Imboscata:</h4>
+                <p>Se lo Striker non è visto o se è posizionato alle spalle del nemico, la prima manovra di attacco standard non costa Stamina. Se colpisce in queste condizioni, l’attacco è considerato un Colpo Furtivo, aggiungendo +1 dado Competenza. Se è già a d12, il dado diventa d20.</p>
+
+                <h3>Manovre Uniche dello Striker:</h3>
+                <h4 id="versatilita-offensiva">🎯 Versatilità Offensiva</h4>
+                <p>Tipo: <strong>Mista (Mischia + Distanza)</strong><br>
+                Costo: <strong>3 ST</strong></p>
+                <p>Dopo aver colpito con successo con una manovra standard in mischia, può lanciare un'arma da lancio contro un secondo bersaglio entro portata. Il secondo attacco non può essere parato, ma può essere schivato. Se effettuato in Imboscata, il secondo attacco ottiene automaticamente Colpo Furtivo.</p>
+                <p><em>"Una sola apertura, due fendenti. Non dare mai il tempo di reagire."</em></p>
+
+                <h4 id="inafferrabile">🌪️ Inafferrabile</h4>
+                <p>Tipo: <strong>Evasiva / Tattica</strong><br>
+                Costo: <strong>1 ST</strong> (ridotto)</p>
+                <p>Se tra le manovre dichiarate vi sono uno Scatto, un Salto Acrobatico e un Attacco Standard, ottiene per 1 round:</p>
+                <ul>
+                    <li>La prossima Schivata costa -1 ST</li>
+                    <li>Per 1 round, riduce di 2 i danni ricevuti da una singola fonte e può immediatamente riposizionarsi entro pochi metri, scegliendo una posizione più sicura o tatticamente vantaggiosa. Questo movimento non può essere bloccato, ma richiede visibilità della destinazione.</li>
+                </ul>
+                <p><em>"Sfumare nel vento, e colpire prima che se ne accorgano."</em></p>
+
+                <h4 id="tempesta-d-acciaio">🌩️ Tempesta d’Acciaio</h4>
+                <p>Tipo: <strong>Offensiva / Travolgente</strong><br>
+                Costo: <strong>4 ST</strong></p>
+                <p>Dopo uno Scatto o Salto Acrobatico, esegue 4 colpi consecutivi. Tutti ignorano metà dell’armatura del bersaglio. Se uno dei colpi colpisce in Imboscata, quell’attacco ottiene Colpo Furtivo.</p>
+                <p><em>"Lame danzanti, occhi fissi. Nessuna difesa può reggere l’assalto."</em></p>
+
+                <h4 id="assassinio">🩸 Assassinio</h4>
+                <p>Tipo: <strong>Letale / Silenziosa</strong><br>
+                Costo: <strong>3 ST</strong></p>
+                <p>Un colpo preciso e mirato a un punto vitale. Se non parato, infligge Sanguinamento 3 (3d4 danni per 3 turni). Se effettuato in Imboscata, l’effetto di sanguinamento dura 1 turno in più.</p>
+                <p><em>"Un respiro, un colpo. E il sangue comincia a parlare."</em></p>
+
+                <h3 id="protector-class">🛡️ CLASSE: PROTECTOR</h3>
+                <p>Il Protector è il baluardo incrollabile del gruppo, una figura di protezione e speranza. Armato di fede, resistenza e determinazione, si pone tra gli alleati e il pericolo, assorbendo colpi e rispondendo con la forza della luce sacra. È un pilastro della squadra, che protegge, cura e punisce chi osa minacciare i suoi compagni.</p>
+                <h4>Bonus di Classe:</h4>
+                <p>+3 <strong>Concentrazione</strong></p>
+                <h4>✨ Meccanica di Classe – Scudo del Martire:</h4>
+                <p>All’inizio di ogni turno, il Protector può evocare su sé stesso oppure su un alleato entro 6 metri un mantello dorato evanescente chiamato Scudo del Martire. Non consuma Stamina né richiede un’azione. Il primo attacco subito viene mitigato per un valore pari a <strong>Spirito</strong> ÷ 5 + Bonus Grado Armatura. Se il danno supera la protezione, l’eccesso viene trasferito al Protector.</p>
+                <p><em>"Meglio le mie ossa spezzate, che il tuo sangue versato."</em></p>
+
+                <h3>Manovre Uniche del Protector</h3>
+                <h4 id="tocco-lenitivo">🌟 Tocco Lenitivo</h4>
+                <p>Tipo: <strong>Sacra / Curativa / Geometria Arcana</strong><br>
+                Costo: <strong>3 CO</strong></p>
+                <p>Il Protector evoca un sigillo di luce che cura tutti gli alleati entro 6 metri per un valore pari a <strong>Spirito</strong> + <strong>Maestria</strong> + 1d6 per <strong>Competenza</strong>. La geometria può essere potenziata con elementi, infliggendo piccoli danni ad avversari oscuri.</p>
+                <p><em>"Le geometrie sacre sono il linguaggio della guarigione."</em></p>
+
+                <h4 id="grazia-redentrice">🕊️ Grazia Redentrice</h4>
+                <p>Tipo: <strong>Supporto / Sacra</strong><br>
+                Costo: <strong>2 CO</strong></p>
+                <p>Il Protector tocca un alleato e rimuove 1 Tag negativo attivo (es. Sanguinamento, Corruzione, Accecamento). Se usata in successione a una manovra difensiva, la rimozione non consuma Concentrazione.</p>
+                <p><em>"Non lascerò che la tua anima vacilli sotto il peso della rovina."</em></p>
+
+                <h4 id="colpo-vendicativo">🛠️ Colpo Vendicativo</h4>
+                <p>Tipo: <strong>Offensiva / Mischia</strong><br>
+                Costo: <strong>3 ST</strong></p>
+                <p>Un colpo potente infuso di volontà sacra. Infligge danno pari a <strong>Potenza</strong> + <strong>Maestria</strong> + 1d8 per <strong>Competenza</strong>. Se colpisce un nemico che ha ferito un alleato nel turno precedente, infligge +1d8 extra e il bersaglio non può effettuare schivate fino al prossimo round.</p>
+                <p><em>"Questo martello pesa come la giustizia divina."</em></p>
+
+                <h4 id="ira-divina">⚡ Ira Divina</h4>
+                <p>Tipo: <strong>Offensiva / Magica / Sacra / Area</strong><br>
+                Costo: <strong>4 CO</strong></p>
+                <p>Il Protector invoca un fulmine dorato che colpisce violentemente il suolo, irradiandosi in un’area di 3 metri attorno a sé. Infligge <strong>Spirito</strong> + <strong>Maestria</strong> + 1d10 per <strong>Competenza</strong> a tutti i nemici nell’area, ignorando metà dell’armatura. L’attacco non può essere parato. I nemici colpiti subiscono gli effetti Accecato e Rallentato (metà movimento) fino alla fine del prossimo round. Gli alleati nella stessa area subiscono solo metà dei danni.</p>
+                <p><em>"La collera divina non distingue tra chi colpisce: solo la fede protegge."</em></p>
+
+                <h3 id="arcanist-class">✨ CLASSE: ARCANIST</h3>
+                <p>L’Arcanist è il custode delle leggi arcane, colui che studia e piega le energie primordiali a suo volere. In battaglia controlla il campo con glifi, trappole e proiezioni magiche, mentre fuori dal combattimento si distingue per l'eccezionale conoscenza di rituali, geometrie e combinazioni elementali. Il suo potere non risiede solo nei danni che può infliggere, ma nella versatilità e intelligenza tattica che lo contraddistingue.</p>
+                <h4>Bonus di Classe:</h4>
+                <p>+3 <strong>Concentrazione</strong></p>
+                <h4>🧠 Meccanica di Classe – Codice degli Elementi</h4>
+                <p>L’Arcanist è in grado di forzare l’utilizzo di un rituale anche se non possiede uno o più degli elementi richiesti.</p>
+                <ul>
+                    <li>Può farlo 1 volta per rituale (non per round).</li>
+                    <li>Deve spendere 2 CO extra, più il costo originale del rituale.</li>
+                    <li>Inoltre, deve superare una prova di controllo (<strong>Sensi</strong> + <strong>Maestria</strong> + 1dX di <strong>Competenza</strong>) contro una CD 18 per rituali con 1 elemento mancante, oppure CD 22 con 2 elementi mancanti.</li>
+                    <li>Se fallisce, il rituale non ha effetto e la Concentrazione spesa è persa.</li>
+                </ul>
+                <p>Questa meccanica permette di adattarsi a situazioni complesse, rendendo l’Arcanist il perfetto studioso di magie dimenticate e di archetipi perduti.</p>
+                <p><em>"Where the world sees impossibility, I study the rules. And I rewrite them."</em></p>
+
+                <h3>Manovre Uniche dell'Arcanist</h3>
+                <h4 id="dualismo-elementale">🌪️ Dualismo Elementale</h4>
+                <p>Tipo: <strong>Supporto / Manipolazione Elementale</strong><br>
+                Costo: <strong>3 CO</strong></p>
+                <p>L’Arcanist applica un elemento secondario a una geometria già in corso (sua o di un alleato entro 6 metri), anche se non ne è originariamente parte. Se la geometria è offensiva, aggiunge un tag secondario (Es. Ustione, Congelamento, Lentezza, ecc.).</p>
+                <p>Se usata per sovraccaricare una geometria già elementale, l'effetto si amplifica e può causare sovraccarico arcano: il bersaglio nemico subisce +1d6 danni extra e subisce -2 dadi al prossimo tiro difensivo. Non si può applicare due volte lo stesso elemento.</p>
+                <p><em>"Perché scegliere un solo elemento, quando puoi trasgredire ogni regola?"</em></p>
+
+                <h4 id="glifo-del-vuoto">🕳️ Glifo del Vuoto</h4>
+                <p>Tipo: <strong>Difensiva / Controllo Arcano / Geometria</strong><br>
+                Costo: <strong>4 CO</strong></p>
+                <p>L’Arcanist disegna un glifo su una superficie entro 6 metri. Alla prima attivazione magica nemica nell’area, il glifo si attiva e tenta di interrompere il rituale o la manovra magica.</p>
+                <p>Tiro contrapposto: <strong>Sensi</strong> + <strong>Maestria</strong> + 1dX (<strong>Competenza</strong>) vs CD 10 + metà <strong>Spirito</strong> del nemico. Se vince, l’effetto viene annullato. Il glifo dura 2 round o finché non si attiva. Se assorbe un effetto, l’Arcanist recupera 2 CO nel round successivo.</p>
+                <p><em>"Quando le parole tacciano, i glifi parlano."</em></p>
+
+                <h4 id="legame-del-famiglio">🐾 Legame del Famiglio</h4>
+                <p>Tipo: <strong>Supporto / Geometria / Narrativa</strong><br>
+                Costo: <strong>1 CO</strong> (1 volta al giorno)</p>
+                <p>L’Arcanist evoca un piccolo famiglio etereo legato alla sua energia elementale. Il famiglio non combatte, ma fornisce supporto narrativo: può recuperare piccoli oggetti, attivare leve, percepire magie, leggere emozioni o guidare in zone sconosciute.</p>
+                <p>Se l’Arcanist usa un rituale in presenza del famiglio, ottiene +1 Competenza temporanea (solo per quel rituale). Dura finché non viene distrutto (1 HP, può essere ricreato dopo un riposo lungo).</p>
+                <p><em>"Non sei solo, finché la tua magia sogna con te."</em></p>
+
+                <h4 id="deviazione-arcana">🪞 Deviazione Arcana</h4>
+                <p>Tipo: <strong>Difensiva / Reazione / Geometria</strong><br>
+                Costo: <strong>3 CO</strong></p>
+                <p>Quando l’Arcanist viene colpito da una manovra magica diretta, può evocare un specchio runico istantaneo. Effettua un tiro: <strong>Sensi</strong> + <strong>Maestria</strong> + 1dX <strong>Competenza</strong> vs CD 10 + metà <strong>Spirito</strong> dell’avversario.</p>
+                <p>Se supera la prova, riflette metà del danno all’attaccante e nega gli effetti secondari.</p>
+                <p>Il riflesso si distrugge dopo l’attivazione. Può essere mantenuto 1 round preparandolo prima come azione.</p>
+                <p><em>"Lo specchio non giudica, risponde."</em></p>
+            </section>
+        </div>
+        <a href="index.html#regolamento-section" class="back-button mt-8">← Torna al Regolamento</a>
     </div>
 </body>
 </html>
